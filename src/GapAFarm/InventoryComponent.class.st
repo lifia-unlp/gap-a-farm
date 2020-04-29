@@ -60,6 +60,7 @@ InventoryComponent >> elementEditorClass [
 { #category : #accessing }
 InventoryComponent >> elements [
 	^ self session farm inventoryItems
+		asSortedCollection: [ :a :b | a substance comercialName < b substance comercialName ]
 ]
 
 { #category : #initialization }
