@@ -19,6 +19,12 @@ InventoryItemMovement >> date: anObject [
 	date := anObject
 ]
 
+{ #category : #initialization }
+InventoryItemMovement >> initialize [
+   super initialize. 
+	date := Date today.
+]
+
 { #category : #accessing }
 InventoryItemMovement >> quantity [
 	^ quantity
