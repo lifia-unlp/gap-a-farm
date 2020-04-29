@@ -1,0 +1,24 @@
+# gap-a-farm
+GAP-a-Farm es una herramienta de investigación que busca explorar el rol de las TIC en la implementación de Buenas Prácticas Agrícolas. Se trata de un prototipo experimental que explora el registro simplificado de actividades de la huerta como oportunidad para ofrecer recomendaciones y alertas para la aplicación de buenas prácticas agrícolas. 
+
+# ProyectoHuertas
+
+In your Pharo 7.0 image evaluate the following expresion to install the application.
+
+```Smalltalk
+Metacello new
+	baseline: 'GapAFarm';
+	repository: 'github://cientopolis/gap-a-farm';
+	onConflictUseLoaded;
+	load.
+  ```
+  
+To load the tests evaluate:
+  
+```Smalltalk
+Metacello new
+	baseline: 'GapAFarmTests';
+	repository: 'github://cientopolis/gap-a-farm';
+	onConflictUseLoaded;
+	load.
+```
