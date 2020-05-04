@@ -85,7 +85,7 @@ HarvestingCycle >> events [
 
 { #category : #accessing }
 HarvestingCycle >> harvestDate [
-	^self latestSowing date addDays: self latestSowing timeToHarvest
+	^self latestSowing harvestDate
 ]
 
 { #category : #accessing }

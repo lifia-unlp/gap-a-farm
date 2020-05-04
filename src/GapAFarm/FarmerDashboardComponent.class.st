@@ -56,9 +56,9 @@ FarmerDashboardComponent >> initializeComponents [
 
 { #category : #accessing }
 FarmerDashboardComponent >> widgets [ 
-	^{gapAlertComponent.
-	nextToHarvestComponent.
+	^{nextToHarvestComponent.
 	plotsInwithdrawalTimeComponent.
 	yieldReportsComponent.
+	gapAlertComponent.
 	newsDahboardComponent.}
 ]

@@ -29,6 +29,7 @@ DashboardCardDecorator >> imageUrl: aWAUrl [
 { #category : #rendering }
 DashboardCardDecorator >> renderCardOn: html [
 	html card
+		class: 'shadow';
 		style: 'margin-bottom: 20px;';
 		with: [ imageUrl
 				ifNotNil: [ html div
