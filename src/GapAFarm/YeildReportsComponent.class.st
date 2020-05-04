@@ -6,25 +6,47 @@ Class {
 
 { #category : #rendering }
 YeildReportsComponent >> columnHeadings [
-	^  {'Lote'. 'Cultivo' . 'Cosechado' . 'Esperado'.  'Restan'}
+	^  {'Cultivo' . 'Cosechado' . 'Esperado'.  'Restan'}
 ]
 
 { #category : #rendering }
 YeildReportsComponent >> columnValuesFor: element [
+	| cycles |
+	cycles:= self cyclesFor: element.
+	^ {element vulgarName.
+		(self harvestedIn: cycles) asString , ' Kg'.
+		(self expectedYieldIn: cycles) asString , ' Kg'.
+		(self daysToEndOfHarvestIn: cycles) asString , ' dias'}
+	
+		
+]
 
-	^ {element id.
-		element currentCrop vulgarName.
-		element currentCycle harvested.
-		element currentCycle latestSowing expectedYield.
-		(element currentCycle daysToEndOfHarvest asString), ' dias'}
+{ #category : #'as yet unclassified' }
+YeildReportsComponent >> cyclesFor: aCrop [
+	^ (self plotsInHarvesting select: [ :plot | plot currentCrop = aCrop ])
+		collect: #currentCycle
+]
+
+{ #category : #'as yet unclassified' }
+YeildReportsComponent >> daysToEndOfHarvestIn: cycles [
+	^ ((cycles collect: #daysToEndOfHarvest)
+		asSortedCollection: [ :a :b | a > b ]) first
 ]
 
 { #category : #accessing }
 YeildReportsComponent >> elements [
-	^ self session farm plotsWithSowing
-		select: [ :plot |  
-			(Date today isBefore: plot currentCycle endOfPeriod)
-				and: [ Date today isAfter: plot currentCycle harvestDate ] ]
+	^ (self plotsInHarvesting collect: #currentCrop) asSet
+]
+
+{ #category : #'as yet unclassified' }
+YeildReportsComponent >> expectedYieldIn: cycles [
+	^cycles inject: 0 into: [ :sum :cycle | sum + cycle latestSowing expectedYield ]
+]
+
+{ #category : #'as yet unclassified' }
+YeildReportsComponent >> harvestedIn: cycles [
+	^cycles inject: 0 into: [ :sum :cycle | sum + cycle harvested ]
+	
 ]
 
 { #category : #accessing }
