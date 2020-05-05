@@ -26,7 +26,7 @@ NextToHarvestComponent >> dateOfHarvestFor: aCrop [
 
 { #category : #accessing }
 NextToHarvestComponent >> elements [
-	^ (self plotsToHarvest collect: [ :each | each currentCrop ]) asSet
+	^ (self plotsToHarvest collect: [ :each | each currentCrop ]) asSet asOrderedCollection 
 ]
 
 { #category : #'as yet unclassified' }

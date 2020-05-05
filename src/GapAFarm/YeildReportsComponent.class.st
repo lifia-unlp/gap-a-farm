@@ -35,7 +35,7 @@ YeildReportsComponent >> daysToEndOfHarvestIn: cycles [
 
 { #category : #accessing }
 YeildReportsComponent >> elements [
-	^ (self plotsInHarvesting collect: #currentCrop) asSet
+	^ (self plotsInHarvesting collect: #currentCrop) asSet asOrderedCollection 
 ]
 
 { #category : #'as yet unclassified' }
