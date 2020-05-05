@@ -1,16 +1,16 @@
 Class {
-	#name : #YeildReportsComponent,
+	#name : #YieldReportsComponent,
 	#superclass : #GAFAbstractWidgetComponent,
 	#category : #'GapAFarm-ui-farmer-dashboard'
 }
 
 { #category : #rendering }
-YeildReportsComponent >> columnHeadings [
+YieldReportsComponent >> columnHeadings [
 	^  {'Cultivo' . 'Cosechado' . 'Esperado'.  'Restan'}
 ]
 
 { #category : #rendering }
-YeildReportsComponent >> columnValuesFor: element [
+YieldReportsComponent >> columnValuesFor: element [
 	| cycles |
 	cycles:= self cyclesFor: element.
 	^ {element vulgarName.
@@ -22,40 +22,40 @@ YeildReportsComponent >> columnValuesFor: element [
 ]
 
 { #category : #'as yet unclassified' }
-YeildReportsComponent >> cyclesFor: aCrop [
+YieldReportsComponent >> cyclesFor: aCrop [
 	^ (self plotsInHarvesting select: [ :plot | plot currentCrop = aCrop ])
 		collect: #currentCycle
 ]
 
 { #category : #'as yet unclassified' }
-YeildReportsComponent >> daysToEndOfHarvestIn: cycles [
+YieldReportsComponent >> daysToEndOfHarvestIn: cycles [
 	^ ((cycles collect: #daysToEndOfHarvest)
 		asSortedCollection: [ :a :b | a > b ]) first
 ]
 
 { #category : #accessing }
-YeildReportsComponent >> elements [
+YieldReportsComponent >> elements [
 	^ (self plotsInHarvesting collect: #currentCrop) asSet asOrderedCollection 
 ]
 
 { #category : #'as yet unclassified' }
-YeildReportsComponent >> expectedYieldIn: cycles [
+YieldReportsComponent >> expectedYieldIn: cycles [
 	^cycles inject: 0 into: [ :sum :cycle | sum + cycle latestSowing expectedYield ]
 ]
 
 { #category : #'as yet unclassified' }
-YeildReportsComponent >> harvestedIn: cycles [
-	^cycles inject: 0 into: [ :sum :cycle | sum + cycle harvested ]
-	
+YieldReportsComponent >> harvestedIn: cycles [
+	^ (cycles inject: 0 into: [ :sum :cycle | sum + cycle harvested ])
+		truncated
 ]
 
 { #category : #accessing }
-YeildReportsComponent >> parent [
+YieldReportsComponent >> parent [
 	^ parent
 ]
 
 { #category : #accessing }
-YeildReportsComponent >> plotsInHarvesting [
+YieldReportsComponent >> plotsInHarvesting [
 	^ self session farm plotsWithSowing
 		select: [ :plot | 
 			(Date today isBefore: plot currentCycle endOfPeriod)
@@ -63,5 +63,5 @@ YeildReportsComponent >> plotsInHarvesting [
 ]
 
 { #category : #'as yet unclassified' }
-YeildReportsComponent >> viewAll [
+YieldReportsComponent >> viewAll [
 ]

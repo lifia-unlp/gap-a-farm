@@ -33,9 +33,9 @@ FarmerDashboardComponent >> initializeComponents [
 				yourself).
 	yieldReportsComponent:=
 		(DashboardCardDecorator new
-				component: (YeildReportsComponent rows: 5);
+				component: (YieldReportsComponent rows: 5);
 				title: 'Progreso de la cosecha';
-				subtitle: 'Su rinde actual vs. el esperato y el óptimo.';
+				subtitle: 'Su rinde actual vs. el esperado';
 				size: 6; 
 				yourself).
 	newsDahboardComponent:=
