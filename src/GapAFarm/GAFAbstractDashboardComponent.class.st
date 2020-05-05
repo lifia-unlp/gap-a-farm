@@ -18,7 +18,7 @@ GAFAbstractDashboardComponent >> initializeComponents [
 { #category : #rendering }
 GAFAbstractDashboardComponent >> renderContentOn: html [
 	| widgets |
-	widgets := self sortedWigets.
+	[ widgets := self sortedWigets.
 	html
 		row: [ html
 				column: [ widgets
@@ -29,7 +29,11 @@ GAFAbstractDashboardComponent >> renderContentOn: html [
 				column: [ widgets size > 1
 						ifTrue: [ (2 to: widgets size by: 2)
 								do: [ :pos | html render: (widgets at: pos) ] ] ]
-				mediumSize: 6 ]
+				mediumSize: 6 ] ]
+		on: Error
+		do: [ html alert beDanger
+				with:
+					'No es posible mostrar su tablero de control en este momento debido a un error de sistema. Avise al administrador para que lo resuelva.' ]
 ]
 
 { #category : #'as yet unclassified' }
