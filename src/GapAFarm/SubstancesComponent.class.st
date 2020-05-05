@@ -6,7 +6,7 @@ Class {
 
 { #category : #rendering }
 SubstancesComponent >> columnHeadings [
-	^ {'Nombre comercial' . 'Principios activos' . 'Aptitud' . 'Períodos de carencia'}
+	^ {'Nombre comercial' . 'Principios activos' . 'Aptitud' . 'Períodos de carencia'. 'Usuarios'}
 		, super columnHeadings
 ]
 
@@ -18,7 +18,8 @@ SubstancesComponent >> columnValuesFor: substance [
 	(substance activeIngredients collect: #tradeName) asCommaString.
 	(SenasaCatalogue singleton applicabilitiesForSubstance: substance)
 		asCommaString.
-	(self withdrawalStringFor: substance)}
+	(self withdrawalStringFor: substance).
+	(self numberOfUsersFor: substance) printString}
 		, (super columnValuesFor: substance)
 ]
 
@@ -72,13 +73,13 @@ SubstancesComponent >> initialize [
 	removeEnabled := true.
 ]
 
-{ #category : #rendering }
+{ #category : #private }
 SubstancesComponent >> isExempt: aSubstance [
 	^ (aSubstance activeIngredients collect: #tradeName)
 		allSatisfy: [ :each | SenasaCatalogue singleton isExempt: each ]
 ]
 
-{ #category : #rendering }
+{ #category : #private }
 SubstancesComponent >> isIncomplete: aSubstance [
 	| namesOfCropsWithWithdrawalPeriod namesOfCropsThatRequireWithdrawal missing |
 	namesOfCropsWithWithdrawalPeriod := aSubstance
@@ -96,6 +97,11 @@ SubstancesComponent >> isIncomplete: aSubstance [
 	^ missing notEmpty
 ]
 
+{ #category : #rendering }
+SubstancesComponent >> numberOfUsersFor: aSubstance [
+	^ self session gapAFarm numberOfUsersForSubstance: aSubstance
+]
+
 { #category : #callbacks }
 SubstancesComponent >> removeElement: element [
 	"Just in case someone applied it since the menu was generated"
@@ -104,7 +110,7 @@ SubstancesComponent >> removeElement: element [
 		ifTrue: [ element remove ]
 ]
 
-{ #category : #testing }
+{ #category : #private }
 SubstancesComponent >> removeEnabledFor: element [
 	^ (super removeEnabledFor: element)
 		& (self session gapAFarm canRemoveSubstance: element)

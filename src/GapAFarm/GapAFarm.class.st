@@ -51,7 +51,7 @@ GapAFarm >> farms [
 	^ Farm selectAll asSortedCollection: [ :a :b | a name < b name ]
 ]
 
-{ #category : #'db-queries' }
+{ #category : #'db queries' }
 GapAFarm >> inventoryItems [
 	^ InventoryItem selectAll
 ]
@@ -62,6 +62,11 @@ GapAFarm >> isSubstanceCommercialNameInUse: aCommercialName byOtherThan: aSubsta
 	nameMatches := self substances
 		select: [ :each | each comercialName = aCommercialName ].
 	^ nameMatches anySatisfy: [ :each | each ~= aSubstance ]
+]
+
+{ #category : #'db queries' }
+GapAFarm >> numberOfUsersForSubstance: aSubstance [
+	^ self inventoryItems count: [ :each | each substance = aSubstance ]
 ]
 
 { #category : #'factory methods' }
