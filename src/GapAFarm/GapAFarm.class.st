@@ -25,7 +25,7 @@ GapAFarm >> applications [
 
 { #category : #'db queries' }
 GapAFarm >> canRemoveSubstance: aSubstance [
-	^ (self applications
+	^ (self applications , self inventoryItems
 		anySatisfy: [ :each | each substance = aSubstance ]) not
 ]
 
@@ -49,6 +49,11 @@ GapAFarm >> farmNamed: aName [
 { #category : #'db queries' }
 GapAFarm >> farms [
 	^ Farm selectAll asSortedCollection: [ :a :b | a name < b name ]
+]
+
+{ #category : #'db-queries' }
+GapAFarm >> inventoryItems [
+	^ InventoryItem selectAll
 ]
 
 { #category : #testing }
