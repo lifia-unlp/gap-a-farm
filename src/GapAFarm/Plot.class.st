@@ -144,7 +144,8 @@ Plot >> problems [
 { #category : #'current cycle' }
 Plot >> recomputeCurrentCycle [
 	currentCycle := HarvestingCycle new.
-	events do: [ :event | currentCycle addEvent: event ]
+	(events asSortedCollection: [ :a :b | a dateAndTime < b dateAndTime ])
+		do: [ :event | currentCycle addEvent: event ]
 ]
 
 { #category : #accessing }

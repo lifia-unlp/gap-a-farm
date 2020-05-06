@@ -55,6 +55,12 @@ PlotTest >> testCropAtDateAndTime [
 		equals: lettuce
 ]
 
+{ #category : #testing }
+PlotTest >> testRecomputeHarvestingCycle [
+  self fail: 'Test missing'
+
+]
+
 { #category : #running }
 PlotTest >> testRemoveEvent_Sowing [
 	"If removing one sowing, the plot's cycle must be recomputed"
