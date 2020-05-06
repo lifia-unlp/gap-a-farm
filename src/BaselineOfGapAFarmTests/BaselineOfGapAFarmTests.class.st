@@ -12,11 +12,18 @@ BaselineOfGapAFarmTests >> baseline: spec [
 		do: [ self
 				parasol: spec;
 				mocketry: spec;
-				proyectoHuertas: spec.
+				gapafarm: spec.
 			spec
 				package: 'GapAFarm-Tests'
 				with: [ spec requires: #('GapAFarm' 'Parasol' 'Mocketry') ].
 			spec postLoadDoIt: #postLoadActions ]
+]
+
+{ #category : #baselines }
+BaselineOfGapAFarmTests >> gapafarm: spec [
+	spec
+		baseline: 'GapAFarm'
+		with: [ spec repository: 'github://cientopolis/gap-a-farm' ]
 ]
 
 { #category : #baselines }
@@ -42,11 +49,4 @@ BaselineOfGapAFarmTests >> postLoadActions [
 		edit: ''
 	
 	label: 'Parasol/Selenium test instructions'.
-]
-
-{ #category : #baselines }
-BaselineOfGapAFarmTests >> proyectoHuertas: spec [
-	spec
-		baseline: 'ProyectoHuertas'
-		with: [ spec repository: 'github:/AndresMarconi/ProyectoHuertas' ]
 ]
