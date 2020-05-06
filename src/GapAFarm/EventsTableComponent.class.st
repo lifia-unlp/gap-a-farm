@@ -71,7 +71,9 @@ EventsTableComponent >> saveAddedElement: anEvent [
 	super saveAddedElement: anEvent.
 	self session dateAndTimeOfLastAddedEvent: anEvent dateAndTime.
 	anEvent plot addEvent: anEvent.
-	anEvent plot save
+	anEvent plot save.
+	"in case the plot changed it on add / not a good Idea anyway"
+	super saveAddedElement: anEvent
 ]
 
 { #category : #style }
