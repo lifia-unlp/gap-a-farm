@@ -38,7 +38,7 @@ GAFAbstractDashboardComponent >> renderContentCatchingErrorsOn: html [
 
 { #category : #rendering }
 GAFAbstractDashboardComponent >> renderContentOn: html [
-	self renderContentShowingErrorsOn: html
+	self renderContentCatchingErrorsOn: html
 ]
 
 { #category : #rendering }
