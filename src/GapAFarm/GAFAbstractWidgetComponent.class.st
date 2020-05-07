@@ -24,21 +24,20 @@ GAFAbstractWidgetComponent class >> rows: aRowQuantity parent: aParent [
 
 { #category : #rendering }
 GAFAbstractWidgetComponent >> renderButtonShowAllOn: html [
-	(self elements size > rows)
-		ifTrue: [ html
-				paragraph 
-					class: 'd-flex flex-row-reverse';
-					with: [ html anchor
-					   id: 'view-All-button';
+	self elements size > rows
+		ifTrue: [ html paragraph
+				class: 'd-flex flex-row-reverse';
+				with: [ html anchor
+						id: 'view-All-button';
 						callback: [ self viewAll ];
 						with: [ html formButton
 								bePrimary;
+								beSmall;
 								with: 'Ver todos' ] ] ]
 ]
 
 { #category : #rendering }
 GAFAbstractWidgetComponent >> renderContentOn: html [
-	paginator elementsPerPage: rows.
 	self renderElementsTableOn: html.
 	self renderButtonShowAllOn: html
 ]
