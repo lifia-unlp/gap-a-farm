@@ -44,9 +44,10 @@ DashboardCardDecorator >> renderCardOn: html [
 					subtitle
 						ifNotNil: [ html cardSubtitle
 								level6;
+								style: 'margin-bottom: 10px;';
 								mutedText;
 								with: subtitle ].
-					html cardText: [ html render: component ] ] ]
+					html render: component ] ]
 ]
 
 { #category : #rendering }
