@@ -37,7 +37,7 @@ ExpertHomeComponent >> renderLeftMenuOn: html [
 				listGroup: [ self
 						renderMenuBlock:
 							{('Tablero de control' -> ExpertDashboardComponent).
-							('Noticias' -> BlogPostsComponent)}
+							('Noticias' -> BlogPostsComponentForExperts)}
 						heading: 'Gestión'
 						on: html.
 					self

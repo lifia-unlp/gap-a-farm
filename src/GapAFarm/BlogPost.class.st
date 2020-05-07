@@ -74,6 +74,11 @@ BlogPost >> initialize [
 	likes := 0.
 ]
 
+{ #category : #testing }
+BlogPost >> isAlert [
+	^ type = 'Alerta'
+]
+
 { #category : #reactions }
 BlogPost >> like [
 	likes := likes + 1

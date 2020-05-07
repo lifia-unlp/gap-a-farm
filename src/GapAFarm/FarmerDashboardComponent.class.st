@@ -37,9 +37,10 @@ FarmerDashboardComponent >> initializeComponents [
 		size: 6;
 		yourself.
 	newsDahboardComponent := DashboardCardDecorator new
-		component: (NewsDahboardComponent rows: 5 parent: self);
+		component: (BlogPostsDahboardComponent rows: 5 parent: self);
 		title: 'Noticias';
 		subtitle: 'Ultimas noticias, seleccionadas para usted.';
+		imageUrl: GAFLibrary / #agriculturenewsJpg;
 		size: 6;
 		yourself.
 	gapAlertComponent := DashboardCardDecorator new
