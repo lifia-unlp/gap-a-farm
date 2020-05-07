@@ -18,7 +18,7 @@ Plot class >> id: anId surface: aSurface [
 		yourself
 ]
 
-{ #category : #testing }
+{ #category : #voyage }
 Plot class >> isVoyageRoot [
 	^ true
 ]
@@ -32,7 +32,7 @@ Plot >> addEvent: anEvent [
 
 { #category : #accessing }
 Plot >> aplications [
-	^ self events select: [ :event | event class = Application ]
+	^ self events select: [ :event | event species = Application ]
 ]
 
 { #category : #utility }
@@ -73,25 +73,25 @@ Plot >> events [
 
 { #category : #utility }
 Plot >> frequentelyApplied [
-	^ ((events select: [ :each | each class = Application ])
+	^ ((events select: [ :each | each species = Application ])
 		collect: #substance) asBag
 ]
 
 { #category : #utility }
 Plot >> frequentelyHarvested [
-	^ ((events select: [ :each | each class = Harvesting ])
+	^ ((events select: [ :each | each species = Harvesting ])
 		collect: #crop) asBag
 ]
 
 { #category : #utility }
 Plot >> frequentelyPlanted [
-	^ ((events select: [ :each | each class = Sowing ]) collect: #crop)
+	^ ((events select: [ :each | each species = Sowing ]) collect: #crop)
 		asBag
 ]
 
 { #category : #accessing }
 Plot >> harvests [
-	^ (self events) select: [ :event | event class = Harvesting ]
+	^ (self events) select: [ :event | event species = Harvesting ]
 ]
 
 { #category : #accessing }
@@ -138,12 +138,12 @@ Plot >> printOn: aStream [
 
 { #category : #accessing }
 Plot >> problems [
-	^ self events select: [ :event | event class = AdversityReport ]
+	^ self events select: [ :event | event species = AdversityReport ]
 ]
 
 { #category : #'current cycle' }
 Plot >> recomputeCurrentCycle [
-	currentCycle := HarvestingCycle new.
+	currentCycle restart.
 	(events asSortedCollection: [ :a :b | a dateAndTime < b dateAndTime ])
 		do: [ :event | currentCycle addEvent: event ]
 ]
@@ -159,7 +159,7 @@ Plot >> removeEvent: anEvent [
 
 { #category : #accessing }
 Plot >> sowings [
-	^ self events select: [ :event | event class = Sowing ]
+	^ self events select: [ :event | event species = Sowing ]
 ]
 
 { #category : #accessing }

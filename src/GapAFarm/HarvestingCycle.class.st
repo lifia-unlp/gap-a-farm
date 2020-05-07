@@ -25,12 +25,12 @@ HarvestingCycle >> addEvent: anEvent [
 
 { #category : #events }
 HarvestingCycle >> adversities [
-	^ events select: [ :each | each class = AdversityReport ]
+	^ events select: [ :each | each species = AdversityReport ]
 ]
 
 { #category : #events }
 HarvestingCycle >> aplications [
-	^ events select: [ :each | each class = Application ]
+	^ events select: [ :each | each species = Application ]
 ]
 
 { #category : #events }
@@ -100,7 +100,7 @@ HarvestingCycle >> harvested [
 
 { #category : #events }
 HarvestingCycle >> harvests [
-	^ events select: [ :each | each class = Harvesting ]
+	^ events select: [ :each | each species = Harvesting ]
 ]
 
 { #category : #initialization }
@@ -160,19 +160,19 @@ HarvestingCycle >> removeEvent: anEvent [
 	(events includes: anEvent)
 		ifFalse: [ ^ self ].
 	events remove: anEvent.
-	anEvent class == Sowing
+	anEvent species = Sowing
 		ifTrue: [ isOutOfSync := true ]
 ]
 
 { #category : #private }
 HarvestingCycle >> restart [
-	events ifEmpty: [ ^ self ].
+	isOutOfSync := false.
 	events := OrderedCollection new
 ]
 
 { #category : #events }
 HarvestingCycle >> sowings [
-	^ events select: [ :each | each class = Sowing ]
+	^ events select: [ :each | each species = Sowing ]
 ]
 
 { #category : #withdrawal }
