@@ -24,6 +24,11 @@ GapAFarm >> applications [
 ]
 
 { #category : #'db queries' }
+GapAFarm >> blogPosts [
+	^ BlogPost selectAll asSortedCollection: [ :a :b | a date > b date ]
+]
+
+{ #category : #'db queries' }
 GapAFarm >> canRemoveSubstance: aSubstance [
 	^ (self applications , self inventoryItems
 		anySatisfy: [ :each | each substance = aSubstance ]) not

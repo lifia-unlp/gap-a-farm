@@ -7,6 +7,7 @@ Class {
 { #category : #hooks }
 DatePropertyEditorComponent >> obtainValueFromString: aString [
 	| newDate |
+	aString ifEmpty: [ ^ nil ].
 	[ newDate := (DateParser
 		readingFrom: aString readStream
 		pattern: 'd/m/y') parse ]
