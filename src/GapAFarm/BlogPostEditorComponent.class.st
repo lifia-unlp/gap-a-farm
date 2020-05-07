@@ -99,7 +99,6 @@ BlogPostEditorComponent >> initializeDateEditorComponent [
 		selector: #date
 		label: 'Fecha'
 		required: true.
-	subject date ifNotNil: [ dateEditorComponent readOnly: true ]
 ]
 
 { #category : #initialization }

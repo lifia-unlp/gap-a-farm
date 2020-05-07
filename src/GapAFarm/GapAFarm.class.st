@@ -24,6 +24,11 @@ GapAFarm >> applications [
 ]
 
 { #category : #'db queries' }
+GapAFarm >> blogPostFor: aFarm [
+	^ BlogPost selectAll
+]
+
+{ #category : #'db queries' }
 GapAFarm >> blogPosts [
 	^ BlogPost selectAll asSortedCollection: [ :a :b | a date > b date ]
 ]
