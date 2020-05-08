@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 BlogPostsDahboardComponent >> elements [
-	^ self session gapAFarm blogPostFor: self session farm
+	^ (self session gapAFarm blogPostFor: self session farm) asOrderedCollection
 ]
 
 { #category : #rendering }
