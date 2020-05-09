@@ -6,7 +6,8 @@ Class {
 
 { #category : #accessing }
 BlogPostsDahboardComponent >> elements [
-	^ (self session gapAFarm blogPostFor: self session farm) asOrderedCollection
+	^ (self session gapAFarm blogPostFor: self session farm)
+		asSortedCollection: [ :a :b | a date > b date ]
 ]
 
 { #category : #rendering }
