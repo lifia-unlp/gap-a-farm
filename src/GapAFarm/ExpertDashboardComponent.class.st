@@ -2,7 +2,6 @@ Class {
 	#name : #ExpertDashboardComponent,
 	#superclass : #GAFAbstractDashboardComponent,
 	#instVars : [
-		'reactionsExpertDashboardComponent',
 		'cropsExpertDashboardComponent',
 		'problemsExpertDashboardComponent',
 		'substancesExpertDashboardComponent'
@@ -24,12 +23,6 @@ ExpertDashboardComponent >> initializeComponents [
 				title: 'Adversidades';
 				size: 6;
 				yourself).
-	reactionsExpertDashboardComponent:=
-		(DashboardCardDecorator new
-				component: ReactionsDashboardComponent new;
-				title: 'Reacciones';
-				size: 6;
-				yourself).
 	substancesExpertDashboardComponent:=
 		(DashboardCardDecorator new
 				component: SubstancesForExpertsDashboardComponent new;
@@ -39,9 +32,8 @@ ExpertDashboardComponent >> initializeComponents [
 ]
 
 { #category : #accessing }
-ExpertDashboardComponent >> widgets [ 
-	^{reactionsExpertDashboardComponent.
-	cropsExpertDashboardComponent.
+ExpertDashboardComponent >> widgets [
+	^ {cropsExpertDashboardComponent.
 	problemsExpertDashboardComponent.
-	substancesExpertDashboardComponent }
+	substancesExpertDashboardComponent}
 ]

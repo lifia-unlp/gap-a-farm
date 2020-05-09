@@ -5,8 +5,7 @@ Class {
 		'nextToHarvestComponent',
 		'plotsInwithdrawalTimeComponent',
 		'yieldReportsComponent',
-		'newsDahboardComponent',
-		'gapAlertComponent'
+		'newsDahboardComponent'
 	],
 	#category : #'GapAFarm-ui-farmer-dashboard'
 }
@@ -43,19 +42,13 @@ FarmerDashboardComponent >> initializeComponents [
 		imageUrl: GAFLibrary / #agriculturenewsJpg;
 		size: 6;
 		yourself.
-	gapAlertComponent := DashboardCardDecorator new
-		component: (GAPAlertDahboardComponent rows: 5 parent: self);
-		title: 'Alerta de buenas practicas';
-		subtitle: 'Se encontraron los siguientes incumplimiento en buenas practicas.';
-		size: 6;
-		yourself
+
 ]
 
 { #category : #accessing }
-FarmerDashboardComponent >> widgets [ 
-	^{nextToHarvestComponent.
+FarmerDashboardComponent >> widgets [
+	^ {newsDahboardComponent.
 	plotsInwithdrawalTimeComponent.
-	yieldReportsComponent.
-	gapAlertComponent.
-	newsDahboardComponent.}
+	nextToHarvestComponent.
+	yieldReportsComponent}
 ]

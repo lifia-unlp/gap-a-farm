@@ -18,7 +18,7 @@ GAFAbstractDashboardComponent >> initializeComponents [
 { #category : #rendering }
 GAFAbstractDashboardComponent >> renderContentCatchingErrorsOn: html [
 	| widgets |
-	[ widgets := self sortedWigets.
+	[ widgets := self sortedWidgets.
 	html
 		row: [ html
 				column: [ widgets
@@ -44,7 +44,7 @@ GAFAbstractDashboardComponent >> renderContentOn: html [
 { #category : #rendering }
 GAFAbstractDashboardComponent >> renderContentShowingErrorsOn: html [
 	| widgets |
-	widgets := self sortedWigets.
+	widgets := self sortedWidgets.
 	html
 		row: [ html
 				column: [ widgets
@@ -59,9 +59,8 @@ GAFAbstractDashboardComponent >> renderContentShowingErrorsOn: html [
 ]
 
 { #category : #'as yet unclassified' }
-GAFAbstractDashboardComponent >> sortedWigets [
-	^ (self widgets select: [ :each | each hasElementsToShow ])
-		asSortedCollection: [ :a :b | a sizeOfColumn <= b sizeOfColumn ]
+GAFAbstractDashboardComponent >> sortedWidgets [
+	^ self widgets select: [ :each | each hasElementsToShow ]
 ]
 
 { #category : #initialization }
