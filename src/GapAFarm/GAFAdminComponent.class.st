@@ -124,12 +124,12 @@ GAFAdminComponent >> renderToggleExpertFor: each on: html [
 						with: 'Otorgar experto' ] ]
 ]
 
-{ #category : #rendering }
+{ #category : #callbacks }
 GAFAdminComponent >> resetPasswordFor: each [
 	| newPassword |
 	newPassword := self request: 'Indique una contraseña temporal.'.
 	newPassword ifNil: [ ^ self ].
-	self session user
+	each
 		hashedPassword: (SHA256 new hashMessage: newPassword asByteArray) asString.
-	self session user save
+	each save
 ]
