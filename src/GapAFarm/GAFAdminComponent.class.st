@@ -57,13 +57,24 @@ GAFAdminComponent >> renderPermissionSwitchsOn: html [
 								tableData: 'Permisos' ] ].
 			html
 				tableBody: [ self session gapAFarm users
-						do: [ :each | html
-						tableRow:[
-							html tableData: [ html text: each email ].
+						do: [ :each | 
 							html
-								tableData: [ self renderToggleExpertFor: each on: html.
-									html space.
-									self renderToggleAdminFor: each on: html ] ] ] ] ]
+								tableRow: [ html tableData: [ html text: each email ].
+									html
+										tableData: [ self renderToggleExpertFor: each on: html.
+											html space.
+											self renderToggleAdminFor: each on: html.
+											html space.
+											self renderResetPasswordFor: each on: html ] ] ] ] ]
+]
+
+{ #category : #rendering }
+GAFAdminComponent >> renderResetPasswordFor: each on: html [
+	html anchor
+		callback: [ self resetPasswordFor: each ];
+		with: [ html formButton
+				beSecondary;
+				with: 'Establecer contraseña' ]
 ]
 
 { #category : #rendering }
@@ -83,7 +94,7 @@ GAFAdminComponent >> renderToggleAdminFor: each on: html [
 						isAdmin: false;
 						save ];
 				with: [ html formButton
-						bePrimary;
+						beWarning;
 						with: 'Quitar admin' ] ]
 		ifFalse: [ html anchor
 				callback: [ each
@@ -102,7 +113,7 @@ GAFAdminComponent >> renderToggleExpertFor: each on: html [
 						isExpert: false;
 						save ];
 				with: [ html formButton
-						bePrimary;
+						beWarning;
 						with: 'Quitar experto' ] ]
 		ifFalse: [ html anchor
 				callback: [ each
@@ -111,4 +122,14 @@ GAFAdminComponent >> renderToggleExpertFor: each on: html [
 				with: [ html formButton
 						bePrimary;
 						with: 'Otorgar experto' ] ]
+]
+
+{ #category : #rendering }
+GAFAdminComponent >> resetPasswordFor: each [
+	| newPassword |
+	newPassword := self request: 'Indique una contraseña temporal.'.
+	newPassword ifNil: [ ^ self ].
+	self session user
+		hashedPassword: (SHA256 new hashMessage: newPassword asByteArray) asString.
+	self session user save
 ]
