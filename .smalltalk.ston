@@ -6,5 +6,8 @@ SmalltalkCISpec {
       #onConflict : #useLoaded, 
       #platforms : [ #pharo ]
     }
-  ]
+  ],
+  #testing : {
+     #failOnZeroTests : false
+  }
 }
