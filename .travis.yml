@@ -1,0 +1,14 @@
+language: smalltalk
+
+# Select operating system(s)
+os:
+  - linux
+  - osx
+
+# Select virtual machine(s)
+smalltalk_vm:
+  - Pharo-7.0
+
+# Select compatible Smalltalk image(s)
+smalltalk:
+  - Pharo64-7.0
