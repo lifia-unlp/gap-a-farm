@@ -2,7 +2,7 @@ SmalltalkCISpec {
   #loading : [
     SCIMetacelloLoadSpec {
       #baseline : 'GapAFarm',
-      #repository: 'github://cientopolis/gap-a-farm'
+      #repository: 'github://cientopolis/gap-a-farm',
       #onConflict : #useLoaded, 
       #platforms : [ #pharo ]
     }
