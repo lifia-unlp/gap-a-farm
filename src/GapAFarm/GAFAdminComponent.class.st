@@ -1,13 +1,17 @@
 Class {
 	#name : #GAFAdminComponent,
 	#superclass : #GAFAbstractComponent,
-	#category : #'GapAFarm-ui-common'
+	#category : #'GapAFarm-ui-admin'
 }
 
 { #category : #rendering }
 GAFAdminComponent >> renderContentOn: html [
 	html
-		container: [ html heading: 'Panel de administración'.
+		container: [ html popupAnchor
+				callback: [ self show: UsersComponent new ];
+				with: 'Users'.
+			html break.
+			html heading: 'Panel de administración'.
 			self renderPermissionSwitchsOn: html.
 			self renderFarmSwithOn: html.
 			self renderReturnButtonOn: html ]

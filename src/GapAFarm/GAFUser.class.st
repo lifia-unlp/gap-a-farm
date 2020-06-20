@@ -7,7 +7,8 @@ Class {
 		'farms',
 		'hashedPassword',
 		'isAdmin',
-		'isExpert'
+		'isExpert',
+		'enabled'
 	],
 	#category : #'GapAFarm-model'
 }
@@ -43,6 +44,16 @@ GAFUser >> email [
 { #category : #accessing }
 GAFUser >> email: anObject [
 	email := anObject
+]
+
+{ #category : #accessing }
+GAFUser >> enabled [
+	^ enabled ifNil: [ ^ true ]
+]
+
+{ #category : #accessing }
+GAFUser >> enabled: anObject [
+	enabled := anObject
 ]
 
 { #category : #accessing }
