@@ -8,7 +8,8 @@ Class {
 		'hashedPassword',
 		'isAdmin',
 		'isExpert',
-		'enabled'
+		'enabled',
+		'lastConnectedDateAndTime'
 	],
 	#category : #'GapAFarm-model'
 }
@@ -112,4 +113,14 @@ GAFUser >> isExpert: anObject [
 { #category : #passwords }
 GAFUser >> isValidPassword: aHashedPassword [
 	^ aHashedPassword = hashedPassword
+]
+
+{ #category : #accessing }
+GAFUser >> lastConnectedDateAndTime [
+	^ lastConnectedDateAndTime
+]
+
+{ #category : #accessing }
+GAFUser >> lastConnectedDateAndTime: anObject [
+	lastConnectedDateAndTime := anObject
 ]

@@ -6,7 +6,7 @@ Class {
 
 { #category : #hooks }
 UsersAdminComponent >> columnHeadings [
-	^ {'Nombre completo' . 'Correo electrónico' . 'Notas' . 'Permisos'.
+	^ {'Nombre completo' . 'Correo electrónico' . 'Ultima conexión' . 'Permisos'.
 	'Estado'}
 ]
 
@@ -14,7 +14,7 @@ UsersAdminComponent >> columnHeadings [
 UsersAdminComponent >> columnValuesFor: aGAFUser [
 	^ {aGAFUser fullname.
 	aGAFUser email.
-	(self shorten: aGAFUser comment to: 50).
+	(self lastConnectedStringFor: aGAFUser).
 	(self permissionsFor: aGAFUser).
 	(self statusOf: aGAFUser)} , (super columnValuesFor: aGAFUser)
 ]
@@ -35,6 +35,13 @@ UsersAdminComponent >> elements [
 UsersAdminComponent >> initialize [
 	super initialize.
 	duplicateEnabled := false
+]
+
+{ #category : #hooks }
+UsersAdminComponent >> lastConnectedStringFor: aGAFUser [
+	^ aGAFUser lastConnectedDateAndTime
+		ifNil: [ 'Nunca' ]
+		ifNotNil: [ :it | it asStringYMDHM ]
 ]
 
 { #category : #hooks }
