@@ -73,19 +73,15 @@ FarmerHomeComponent >> renderLeftMenuOn: html [
 
 { #category : #rendering }
 FarmerHomeComponent >> renderRolesMenuBlockOn: html [
-	| roles |
-	roles := OrderedCollection new.
-	self session user isExpert
-		ifTrue: [ roles add: 'Experto' -> [ self call: ExpertHomeComponent new ] ].
-	self session user isAdmin
-		ifTrue: [ roles add: 'Administrador' -> [ self call: GAFAdminComponent new ] ].
-	roles ifEmpty: [ ^ self ].
 	html div
 		class: 'left-menu-heading';
 		with: 'Otros roles'.
-	roles
-		do: [ :ass | 
-			html listGroupLinkedItem
-				callback: ass value;
-				with: ass key ]
+	html listGroupLinkedItem
+		callback: [ self call: ExpertHomeComponent new ];
+		with: 'Experto'.
+	self session user isAdmin
+		ifTrue: [ html listGroupLinkedItem
+				callback: [ self call: GAFAdminComponent new ];
+				target: '_blank';
+				with: 'Administrador' ]
 ]
