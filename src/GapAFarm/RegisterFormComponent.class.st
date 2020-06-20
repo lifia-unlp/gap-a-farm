@@ -21,7 +21,8 @@ RegisterFormComponent >> accept [
 	self parent
 		register: email greaseString trimBoth
 		withHashedPassword: hashedPassword
-		andName: fullname
+		andName: fullname.
+		
 ]
 
 { #category : #'subclass-responsibility' }

@@ -57,21 +57,27 @@ GAFLandingComponent >> proceedWith: aUser [
 	self session user: aUser.
 	registerComponent := RegisterFormComponent new parent: self.
 	loginComponent := LoginFormComponent new parent: self.
-	self call: FarmerHomeComponent new
+	aUser enabled
+		ifTrue: [ self call: FarmerHomeComponent new ]
+		ifFalse: [ self call: UserDisabledNoticeComponent new ]
 ]
 
 { #category : #callbacks }
 GAFLandingComponent >> register: anEmailAddress withHashedPassword: aHashedPassword andName: aName [
+	| theNewUser |
 	(self session gapAFarm userWithEmail: anEmailAddress)
 		ifNotNil: [ activeComponent
 				problem: 'Ya existe un usuario con ese correo electrónico.'.
 			^ self ].
-	self
-		proceedWith:
-			(self session gapAFarm
-				register: anEmailAddress
-				withHashedPassword: aHashedPassword
-				andName: aName)
+	theNewUser := self session gapAFarm
+		register: anEmailAddress
+		withHashedPassword: aHashedPassword
+		andName: aName.
+	self session persistentConfiguration blockNewUsers
+		ifTrue: [ theNewUser
+				enabled: false;
+				save ].
+	self proceedWith: theNewUser
 ]
 
 { #category : #rendering }

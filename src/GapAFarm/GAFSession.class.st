@@ -53,6 +53,15 @@ GAFSession >> logout [
 	user := nil
 ]
 
+{ #category : #configuration }
+GAFSession >> persistentConfiguration [
+	^ PersistentConfiguration selectAll
+		ifEmpty: [ PersistentConfiguration new
+				save;
+				yourself ]
+		ifNotEmpty: [ :instances | instances first ]
+]
+
 { #category : #accessing }
 GAFSession >> user [ 
 	^ user

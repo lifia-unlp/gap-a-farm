@@ -66,6 +66,6 @@ ExpertHomeComponent >> renderRolesMenuBlockOn: html [
 	self session user isAdmin
 		ifTrue: [ html listGroupLinkedItem
 				callback: [ self call: GAFAdminComponent new ];
-				target: '_blank';
+				target: 'gaf-admin';
 				with: 'Administrador' ]
 ]

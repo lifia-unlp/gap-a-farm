@@ -1,17 +1,17 @@
 Class {
-	#name : #UsersComponent,
+	#name : #UsersAdminComponent,
 	#superclass : #GAFAbstractTableWithFilterAndActionsComponent,
 	#category : #'GapAFarm-ui-admin'
 }
 
 { #category : #hooks }
-UsersComponent >> columnHeadings [
+UsersAdminComponent >> columnHeadings [
 	^ {'Nombre completo' . 'Correo electrónico' . 'Notas' . 'Permisos'.
 	'Estado'}
 ]
 
 { #category : #hooks }
-UsersComponent >> columnValuesFor: aGAFUser [
+UsersAdminComponent >> columnValuesFor: aGAFUser [
 	^ {aGAFUser fullname.
 	aGAFUser email.
 	(self shorten: aGAFUser comment to: 50).
@@ -20,25 +20,25 @@ UsersComponent >> columnValuesFor: aGAFUser [
 ]
 
 { #category : #hooks }
-UsersComponent >> elementClass [
+UsersAdminComponent >> elementClass [
 	"Returns the class of elements to edit and add"
 
 	^ GAFUser
 ]
 
 { #category : #accessing }
-UsersComponent >> elements [
+UsersAdminComponent >> elements [
 	^ self session gapAFarm users
 ]
 
 { #category : #rendering }
-UsersComponent >> initialize [
+UsersAdminComponent >> initialize [
 	super initialize.
 	duplicateEnabled := false
 ]
 
 { #category : #hooks }
-UsersComponent >> permissionsFor: aGAFUser [
+UsersAdminComponent >> permissionsFor: aGAFUser [
 	| permissions |
 	permissions := OrderedCollection new.
 	aGAFUser isExpert
@@ -49,14 +49,14 @@ UsersComponent >> permissionsFor: aGAFUser [
 ]
 
 { #category : #rendering }
-UsersComponent >> renderContentOn: html [
+UsersAdminComponent >> renderContentOn: html [
 	html
 		container: [ html heading: 'Usuarios'.
 			super renderContentOn: html ]
 ]
 
 { #category : #hooks }
-UsersComponent >> renderSpecificActionsFor: user on: html [
+UsersAdminComponent >> renderSpecificActionsFor: user on: html [
 	html div class: 'dropdown-divider'.
 	html anchor
 		class: 'dropdown-item';
@@ -72,6 +72,10 @@ UsersComponent >> renderSpecificActionsFor: user on: html [
 			(user isExpert
 				ifTrue: [ 'Quitar experto' ]
 				ifFalse: [ 'Otorgar experto' ]).
+	html anchor
+		class: 'dropdown-item';
+		callback: [ self resetPasswordFor: user ];
+		with: 'Cambiar contraseña'.
 	user isAdmin
 		ifTrue: [ ^ self ].
 	html anchor
@@ -83,27 +87,37 @@ UsersComponent >> renderSpecificActionsFor: user on: html [
 				ifFalse: [ 'Activar' ])
 ]
 
+{ #category : #callbacks }
+UsersAdminComponent >> resetPasswordFor: each [
+	| newPassword |
+	newPassword := self request: 'Indique una nueva contraseña.'.
+	newPassword ifNil: [ ^ self ].
+	each
+		hashedPassword: (SHA256 new hashMessage: newPassword asByteArray) asString.
+	each save
+]
+
 { #category : #hooks }
-UsersComponent >> statusOf: aGAFUser [
+UsersAdminComponent >> statusOf: aGAFUser [
 	^ aGAFUser enabled
 		ifTrue: [ 'activo' ]
 		ifFalse: [ '<span style="color:red">inactivo</span>' ]
 ]
 
 { #category : #callbacks }
-UsersComponent >> toggleAdminFor: user [
+UsersAdminComponent >> toggleAdminFor: user [
 	user isAdmin: user isAdmin not.
 	user save
 ]
 
 { #category : #callbacks }
-UsersComponent >> toggleEnabledFor: user [
+UsersAdminComponent >> toggleEnabledFor: user [
 	user enabled: user enabled not.
 	user save
 ]
 
 { #category : #callbacks }
-UsersComponent >> toggleExpertFor: user [
+UsersAdminComponent >> toggleExpertFor: user [
 	user isExpert: user isExpert not.
 	user save
 ]
