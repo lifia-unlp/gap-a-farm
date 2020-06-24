@@ -59,7 +59,7 @@ GAFSession >> persistentConfiguration [
 		ifEmpty: [ PersistentConfiguration new
 				save;
 				yourself ]
-		ifNotEmpty: [ :instances | instances first ]
+		ifNotEmpty: [ :instances | instances asArray first ]
 ]
 
 { #category : #accessing }

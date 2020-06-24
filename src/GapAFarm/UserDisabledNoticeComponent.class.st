@@ -22,5 +22,10 @@ UserDisabledNoticeComponent >> renderContentOn: html [
 						with: 'Su usuario todavía no ha sido activado.'.
 					html paragraph
 						with:
-							'Este servicio requiere que todos los nuevos usuarios sean activados por alguno de los administradores del sistema - comuniquese con ellos para que lo hagan.' ] ]
+							'Este servicio requiere que todos los nuevos usuarios sean activados por alguno de los administradores del sistema - comuniquese con ellos para que lo hagan.'.
+					html anchor
+						url: GAFLandingComponent url;
+						with: [ html formButton
+								bePrimary;
+								with: 'Ok' ] ] ]
 ]

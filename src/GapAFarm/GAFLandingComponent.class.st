@@ -53,6 +53,7 @@ GAFLandingComponent >> proceedWith: aUser [
 	aUser email = (self application preferenceAt: #adminEmail) trimBoth
 		ifTrue: [ aUser
 				isAdmin: true;
+				enabled: true;
 				save ].
 	self session user: aUser.
 	registerComponent := RegisterFormComponent new parent: self.
