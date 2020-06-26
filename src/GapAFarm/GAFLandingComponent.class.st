@@ -60,6 +60,7 @@ GAFLandingComponent >> proceedWith: aUser [
 	loginComponent := LoginFormComponent new parent: self.
 	aUser enabled
 		ifTrue: [ aUser lastConnectedDateAndTime: DateAndTime now.
+			aUser save.
 			self call: FarmerHomeComponent new ]
 		ifFalse: [ self call: UserDisabledNoticeComponent new ]
 ]
