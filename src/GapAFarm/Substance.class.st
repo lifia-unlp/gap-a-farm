@@ -38,6 +38,11 @@ Substance >> addActiveIngredient: anActiveIngrediente [
 
 { #category : #'withdrawal-periods' }
 Substance >> addWithdrawalRecommendation: withdrawalPeriodRecommendation [
+	withdrawalPeriodRecommendation crop isNil
+		| withdrawalPeriodRecommendation daysToWait isNil
+		ifTrue: [ ^ self
+				error:
+					'Attemt to record an imcomplete widthdrawal period - if this should not happen, notify the admin. Go back to continue' ].
 	withdrawalPeriodRecommendations add: withdrawalPeriodRecommendation
 ]
 
@@ -53,6 +58,12 @@ Substance >> canBeSafelyAppliedTo: aCrop [
 	^ (SenasaCatalogue singleton isSubstanceExempt: self for: aCrop)
 		or: [ (withdrawalPeriodRecommendations
 				select: [ :wp | wp crop = aCrop & wp daysToWait notNil ]) notEmpty ]
+]
+
+{ #category : #'withdrawal-periods' }
+Substance >> cleanUpWithdrawalRecommendations [
+	withdrawalPeriodRecommendations := withdrawalPeriodRecommendations
+		reject: [ :each | each crop isNil | each daysToWait isNil ]
 ]
 
 { #category : #accessing }

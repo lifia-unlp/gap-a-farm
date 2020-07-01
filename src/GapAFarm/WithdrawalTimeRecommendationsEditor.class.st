@@ -24,6 +24,9 @@ WithdrawalTimeRecommendationsEditor >> accept [
 		on: Error
 		do: [ days := ''.
 			^ self ].
+	numberOfDays < 0
+		ifTrue: [ days := ''.
+			^ self ].
 	recommendation := substance withdrawalRecommendationFor: editing.
 	recommendation
 		ifNil: [ recommendation := WithdrawalRecommendation
