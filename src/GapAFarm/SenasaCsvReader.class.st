@@ -16,6 +16,9 @@ SenasaCsvReader class >> autoCorrectionDictionary [
 		at: 'tratamiento semillas' put: 'tratamiento de semillas';
 		at: 'tormiquicida' put: 'tormiguicida';
 		at: 'hidroxido de cobre' put: 'hidróxido de cobre';
+		at: '1,3 diclopropeno' put: '1,3 dicloropropeno';
+		at: '2,4 -  db' put: '2,4-DB';
+		at: '2,4-d' put: '2,4-D';
 		at: 'Alfafla' put: 'Alfalfa';
 		at: 'R. de bruselas' put: 'Repollito de bruselas';
 		at: 'pyriproxifen' put: 'pyriproxyfen';
