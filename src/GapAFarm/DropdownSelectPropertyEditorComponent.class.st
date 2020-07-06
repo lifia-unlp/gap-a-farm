@@ -36,7 +36,7 @@ DropdownSelectPropertyEditorComponent >> initialize [
 { #category : #rendering }
 DropdownSelectPropertyEditorComponent >> labelFor: each [
 	^ labelsBlock
-		ifNil: [ each printString ]
+		ifNil: [ each greaseString ]
 		ifNotNil: [ labelsBlock value: each ]
 ]
 
