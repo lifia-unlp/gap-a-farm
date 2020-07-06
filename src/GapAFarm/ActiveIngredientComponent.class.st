@@ -6,7 +6,7 @@ Class {
 
 { #category : #rendering }
 ActiveIngredientComponent >> columnHeadings [
-	^ {'Nombre' . 'URL de referencia'}, super columnHeadings
+	^ {'Nombre' . 'Notas'}, super columnHeadings
 ]
 
 { #category : #rendering }
@@ -16,7 +16,7 @@ ActiveIngredientComponent >> columnValuesFor: element [
 		ifTrue: [ (element tradeName copyFrom: 1 to: 30) , ' ...' ]
 		ifFalse: [ element tradeName ].
 	^ {tradeName.
-	element referenceUrl} , (super columnValuesFor: element)
+	element comment} , (super columnValuesFor: element)
 ]
 
 { #category : #hooks }
