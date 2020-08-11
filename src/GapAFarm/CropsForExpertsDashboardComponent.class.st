@@ -5,23 +5,31 @@ Class {
 }
 
 { #category : #accessing }
-CropsForExpertsDashboardComponent >> elements [ 
-	^((self session gapAFarm users flatCollect: [ :user | user farms ]) flatCollect: [ :farm | farm sowings ]) select: [ :each | each date isAfter: ((Date today) subtractDays: 30) ]
+CropsForExpertsDashboardComponent >> elements [
+	^ ((self session gapAFarm users flatCollect: [ :user | user farms ])
+		flatCollect: [ :farm | farm sowings ])
+		select: [ :each | each date isAfter: (Date today subtractDays: 30) ]
 ]
 
 { #category : #'as yet unclassified' }
-CropsForExpertsDashboardComponent >> inThisMonth: elements of: crop [
-	^ (elements
-		inject: 0
-		into: [ :sum :sowing | sum + sowing quantity magnitude ]) truncated
+CropsForExpertsDashboardComponent >> inThisMonth: sowingsPerCrop [
+	| quantity surface |
+	quantity:= 
+		(sowingsPerCrop inject: 0 into: [ :sum :sowing | sum + sowing quantity magnitude ]) truncated.
+	surface:= 
+		(sowingsPerCrop inject: 0 into: [ :sum :sowing | sum + sowing plot surface ]) truncated.
+	^quantity asString , ' ', (sowingsPerCrop at: 1) quantity unit ,' en ', surface asString , ' Mts2'
 ]
 
 { #category : #'as yet unclassified' }
-CropsForExpertsDashboardComponent >> inThisWeek: elements of: crop [
-	^ ((elements
-		select: [ :sowing | sowing date isAfter: (Date today subtractDays: 7) ])
-		inject: 0
-		into: [ :sum :sowing | sum + sowing quantity magnitude ]) truncated
+CropsForExpertsDashboardComponent >> inThisWeek: sowingsPerCrop [
+	| sowingsInWeek quantity surface |
+	sowingsInWeek:= sowingsPerCrop select: [ :sowing | sowing date isAfter:(Date today subtractDays:7)].
+	quantity:=
+		(sowingsInWeek inject: 0 into:[ :sum :sowing | sum + sowing quantity magnitude ]) truncated.
+	surface:= 
+		(sowingsInWeek inject: 0 into: [ :sum :sowing | sum + sowing plot surface ]) truncated.
+	^quantity asString , ' ', (sowingsPerCrop at: 1) quantity unit ,' en ', surface asString , ' Mts2'
 ]
 
 { #category : #rendering }
@@ -47,9 +55,9 @@ CropsForExpertsDashboardComponent >> renderTableBodyOn: html [
 					html
 						tableRow: [ html tableData: crop vulgarName.
 							html
-								tableData: (self inThisMonth: (sowingsPerCrop at: crop) of: crop).
+								tableData: (self inThisMonth: (sowingsPerCrop at: crop)).
 							html
-								tableData: (self inThisWeek: (sowingsPerCrop at: crop) of: crop) ] ] ]
+								tableData: (self inThisWeek: (sowingsPerCrop at: crop)) ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
