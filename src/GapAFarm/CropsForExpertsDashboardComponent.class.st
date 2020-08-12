@@ -4,6 +4,19 @@ Class {
 	#category : #'GapAFarm-ui-expert-dashboard'
 }
 
+{ #category : #'as yet unclassified' }
+CropsForExpertsDashboardComponent >> calculateInfo: sowingsPerCrop [
+	| quantity surface farms |
+	quantity:= 
+		(sowingsPerCrop inject: 0 into: [ :sum :sowing | sum + sowing quantity magnitude ]) truncated.
+	surface:= 
+		(sowingsPerCrop inject: 0 into: [ :sum :sowing | sum + sowing plot surface ]) truncated.
+	farms := ((self session gapAFarm farms) select: [ :farm | farm haveSowingsIn: sowingsPerCrop ]).
+	^quantity asString , ' ', (sowingsPerCrop at: 1) quantity unitSmall
+		,' / ', (surface / 10000) asFloat asString 
+		,' / ', (farms size) asString 
+]
+
 { #category : #accessing }
 CropsForExpertsDashboardComponent >> elements [
 	^ ((self session gapAFarm users flatCollect: [ :user | user farms ])
@@ -13,29 +26,24 @@ CropsForExpertsDashboardComponent >> elements [
 
 { #category : #'as yet unclassified' }
 CropsForExpertsDashboardComponent >> inThisMonth: sowingsPerCrop [
-	| quantity surface |
-	quantity:= 
-		(sowingsPerCrop inject: 0 into: [ :sum :sowing | sum + sowing quantity magnitude ]) truncated.
-	surface:= 
-		(sowingsPerCrop inject: 0 into: [ :sum :sowing | sum + sowing plot surface ]) truncated.
-	^quantity asString , ' ', (sowingsPerCrop at: 1) quantity unit ,' en ', surface asString , ' Mts2'
+	sowingsPerCrop isEmpty 
+	ifTrue: [ ^'No hay datos' ]
+	ifFalse: [ ^self calculateInfo: sowingsPerCrop  ]
 ]
 
 { #category : #'as yet unclassified' }
 CropsForExpertsDashboardComponent >> inThisWeek: sowingsPerCrop [
-	| sowingsInWeek quantity surface |
+	| sowingsInWeek |
 	sowingsInWeek:= sowingsPerCrop select: [ :sowing | sowing date isAfter:(Date today subtractDays:7)].
-	quantity:=
-		(sowingsInWeek inject: 0 into:[ :sum :sowing | sum + sowing quantity magnitude ]) truncated.
-	surface:= 
-		(sowingsInWeek inject: 0 into: [ :sum :sowing | sum + sowing plot surface ]) truncated.
-	^quantity asString , ' ', (sowingsPerCrop at: 1) quantity unit ,' en ', surface asString , ' Mts2'
+	sowingsInWeek isEmpty 
+	ifTrue: [ ^'No hay datos' ]
+	ifFalse: [ ^self calculateInfo: sowingsInWeek  ]
 ]
 
 { #category : #rendering }
 CropsForExpertsDashboardComponent >> renderContentOn: html [
 	html table
-		class: 'table table-hover';
+		class: 'table table-hover table-sm';
 		with: [ self tableHeadingOn: html.
 				  self renderTableBodyOn: html ].
 ]
@@ -57,7 +65,11 @@ CropsForExpertsDashboardComponent >> renderTableBodyOn: html [
 							html
 								tableData: (self inThisMonth: (sowingsPerCrop at: crop)).
 							html
-								tableData: (self inThisWeek: (sowingsPerCrop at: crop)) ] ] ]
+								tableData: (self inThisWeek: (sowingsPerCrop at: crop)) ] ]. 
+					html tableRow: [ 
+							html tableData:' '.
+							html tableData: [ html small with: 'Plantado / Hecs / Granjas'].
+							html tableData: [ html small with: 'Plantado / Hecs / Granjas'] ]	]
 ]
 
 { #category : #'as yet unclassified' }
