@@ -66,10 +66,14 @@ CropsForExpertsDashboardComponent >> renderTableBodyOn: html [
 								tableData: (self inThisMonth: (sowingsPerCrop at: crop)).
 							html
 								tableData: (self inThisWeek: (sowingsPerCrop at: crop)) ] ]. 
-					html tableRow: [ 
-							html tableData:' '.
-							html tableData: [ html small with: 'Plantado / Hecs / Granjas'].
-							html tableData: [ html small with: 'Plantado / Hecs / Granjas'] ]	]
+					html 
+						tableRow: [ 
+							html 
+								tableData:' '.
+							html 
+								tableData: [ html small with: 'Plantado / Hecs / Granjas'].
+							html 
+								tableData: [ html small with: 'Plantado / Hecs / Granjas'] ] ]
 ]
 
 { #category : #'as yet unclassified' }

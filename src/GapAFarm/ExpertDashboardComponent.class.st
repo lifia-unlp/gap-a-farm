@@ -27,7 +27,7 @@ ExpertDashboardComponent >> initializeComponents [
 		(DashboardCardDecorator new
 				component: SubstancesForExpertsDashboardComponent new;
 				title: 'Uso de fitosanitarios';
-				size: 6;
+				size: 8;
 				yourself)
 ]
 

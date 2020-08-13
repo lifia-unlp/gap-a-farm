@@ -4,6 +4,14 @@ Class {
 	#category : #'GapAFarm-ui-expert-dashboard'
 }
 
+{ #category : #'as yet unclassified' }
+ProblemsForExpertsDashboardComponent >> calculateInfo: reports [
+	| surface farms |
+	surface:= (reports inject: 0 into: [ :sum :report | sum + report plot surface ]) truncated.
+	farms := ((self session gapAFarm farms) select: [ :farm | farm haveEventIn: reports ]).
+	^(surface / 10000) asFloat asString ,' / ', (farms size) asString 
+]
+
 { #category : #accessing }
 ProblemsForExpertsDashboardComponent >> elements [
 	^((self session gapAFarm users flatCollect: [ :user | user farms ]) flatCollect: [ :farm | farm problems ]) select: [ :each | each date isAfter: ((Date today) subtractDays: 30) ].
@@ -11,21 +19,25 @@ ProblemsForExpertsDashboardComponent >> elements [
 ]
 
 { #category : #'as yet unclassified' }
-ProblemsForExpertsDashboardComponent >> inThisMonth: reports of: type [
-	^ reports size
+ProblemsForExpertsDashboardComponent >> inThisMonth: reports [
+	reports isEmpty 
+	ifTrue: [ ^'No hay datos' ]
+	ifFalse: [ ^self calculateInfo: reports ]
 ]
 
 { #category : #'as yet unclassified' }
-ProblemsForExpertsDashboardComponent >> inThisWeek: elements of: type [
-	^ (elements
-		select: [ :issue | issue date isAfter: (Date today subtractDays: 7) ])
-		size
+ProblemsForExpertsDashboardComponent >> inThisWeek: reports [
+	| reportsInWeek |
+	reportsInWeek:= reports select: [ :report | report date isAfter:(Date today subtractDays:7)].
+	reportsInWeek isEmpty 
+	ifTrue: [ ^'No hay datos' ]
+	ifFalse: [ ^self calculateInfo: reportsInWeek  ]
 ]
 
 { #category : #rendering }
 ProblemsForExpertsDashboardComponent >> renderContentOn: html [
 	html table
-		class: 'table table-hover';
+		class: 'table table-hover table-sm';
 		with: [ self tableHeadingOn: html.
 				  self renderTableBodyOn: html ].
 ]
@@ -41,8 +53,16 @@ ProblemsForExpertsDashboardComponent >> renderTableBodyOn: html [
 				do: [ :type | 
 					html
 						tableRow: [ html tableData: type.
-							html tableData: (self inThisMonth: (adversitiesPerTypes at: type) of: type).
-							html tableData: (self inThisWeek: (adversitiesPerTypes at: type) of: type) ] ] ]
+							html tableData: (self inThisMonth: (adversitiesPerTypes at: type)).
+							html tableData: (self inThisWeek: (adversitiesPerTypes at: type)) ] ].
+					html 
+						tableRow: [ 
+							html 
+								tableData:' '.
+							html 
+								tableData: [ html small with: 'Hecs / Granjas'].
+							html 
+								tableData: [ html small with: 'Hecs / Granjas'] ] ]
 ]
 
 { #category : #'as yet unclassified' }

@@ -4,28 +4,45 @@ Class {
 	#category : #'GapAFarm-ui-expert-dashboard'
 }
 
+{ #category : #'as yet unclassified' }
+SubstancesForExpertsDashboardComponent >> calculateInfo: applications [
+	| quantity surface farms |
+	quantity:= 
+		(applications inject: 0 into: [ :sum :application | sum + application quantity ]) truncated.
+	surface:= 
+		(applications inject: 0 into: [ :sum :application | sum + application plot surface ]) truncated.
+	farms := ((self session gapAFarm farms) select: [ :farm | farm haveEventIn: applications ]).
+	^quantity asString ,(applications at: 1) substance unit
+		,' / ', (surface / 10000) asFloat asString 
+		,' / ', (farms size) asString 
+]
+
 { #category : #accessing }
 SubstancesForExpertsDashboardComponent >> elements [ 
 	^((self session gapAFarm users flatCollect: [ :user | user farms ]) flatCollect: [ :farm | farm aplications ]) select: [ :each | each date isAfter: ((Date today) subtractDays: 30) ]
 ]
 
-{ #category : #private }
-SubstancesForExpertsDashboardComponent >> inThisMonth: elements of: ingredient [
-	^ elements size
+{ #category : #'as yet unclassified' }
+SubstancesForExpertsDashboardComponent >> inThisMonth: applications [
+	applications isEmpty 
+	ifTrue: [ ^'No hay datos' ]
+	ifFalse: [ ^self calculateInfo: applications ]
 ]
 
-{ #category : #private }
-SubstancesForExpertsDashboardComponent >> inThisWeek: elements of: ingredient [
-	^ (elements
-		select:
-			[ :application | application date isAfter: (Date today subtractDays: 7) ])
-		size
+{ #category : #'as yet unclassified' }
+SubstancesForExpertsDashboardComponent >> inThisWeek: applications [
+	| applicationsInWeek |
+	applicationsInWeek:= 
+		applications select: [ :report | report date isAfter:(Date today subtractDays:7)].
+	applicationsInWeek isEmpty 
+	ifTrue: [ ^'No hay datos' ]
+	ifFalse: [ ^self calculateInfo: applicationsInWeek  ]
 ]
 
 { #category : #rendering }
 SubstancesForExpertsDashboardComponent >> renderContentOn: html [
 	html table
-		class: 'table table-hover';
+		class: 'table table-hover table-sm';
 		with: [ self tableHeadingOn: html.
 				  self renderTableBodyOn: html ].
 ]
@@ -46,14 +63,18 @@ SubstancesForExpertsDashboardComponent >> renderTableBodyOn: html [
 						tableRow: [ html tableData: substance comercialName.
 							html
 								tableData:
-									(self
-										inThisMonth: (applicationsPerSubstance at: substance)
-										of: substance).
+									(self inThisMonth: (applicationsPerSubstance at: substance)).
 							html
 								tableData:
-									(self
-										inThisWeek: (applicationsPerSubstance at: substance)
-										of: substance) ] ] ]
+									(self inThisWeek: (applicationsPerSubstance at: substance)) ] ].
+					html 
+						tableRow: [ 
+							html 
+								tableData:' '.
+							html 
+								tableData: [ html small with: 'Uso/Hecs/Granjas'].
+							html 
+								tableData: [ html small with: 'Uso/Hecs/Granjas'] ] ]
 ]
 
 { #category : #private }
