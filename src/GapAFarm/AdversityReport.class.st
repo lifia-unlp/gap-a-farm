@@ -31,6 +31,11 @@ AdversityReport class >> types [
 	^ #('Ácaros' 'Enfermedad' 'Hongos' 'Insectos' 'Malezas' 'Carencia nutricional' 'Nemátodos' 'Otro')
 ]
 
+{ #category : #visitor }
+AdversityReport >> acceptVisitor: aVisitor on: aFarm [
+	aVisitor visitAdversityReport: self on: aFarm
+]
+
 { #category : #accessing }
 AdversityReport >> adversityTypes [
 	^ adversityTypes

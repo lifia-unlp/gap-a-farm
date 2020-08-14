@@ -27,6 +27,11 @@ Application class >> isVoyageRoot [
 	^ true
 ]
 
+{ #category : #visitor }
+Application >> acceptVisitor: aVisitor on: aFarm [
+	aVisitor visitApplication: self on: aFarm
+]
+
 { #category : #accessing }
 Application >> dose [
 	^ dose

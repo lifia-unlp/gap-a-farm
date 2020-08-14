@@ -1,6 +1,9 @@
 Class {
 	#name : #GapAFarm,
 	#superclass : #Object,
+	#instVars : [
+		'statistics'
+	],
 	#classInstVars : [
 		'singleton'
 	],
@@ -103,6 +106,13 @@ GapAFarm >> registeredCropsForActiveIngredient: activeIngrediente [
 		flatCollect: [ :cropName | self cropNamed: cropName ]
 ]
 
+{ #category : #statistics }
+GapAFarm >> statistics [
+	^ statistics
+		ifNil: [ self updateStatistics.
+			statistics ]
+]
+
 { #category : #'db queries' }
 GapAFarm >> substanceWithCommercialName: aCommercialName [
 	^ Substance selectAll
@@ -114,6 +124,13 @@ GapAFarm >> substanceWithCommercialName: aCommercialName [
 GapAFarm >> substances [
 	^ Substance selectAll
 		asSortedCollection: [ :a :b | a comercialName < b comercialName ]
+]
+
+{ #category : #statistics }
+GapAFarm >> updateStatistics [
+	statistics := Statistics new.
+	statistics updateWith: self.
+
 ]
 
 { #category : #'db queries' }

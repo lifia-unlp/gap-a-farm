@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-SubstancesForExpertsDashboardComponent >> calculateInfo: applications [
+SubstancesForExpertsDashboardComponent >> describe: applications [
 	| quantity surface farms |
 	quantity:= 
 		(applications inject: 0 into: [ :sum :application | sum + application quantity ]) truncated.
@@ -17,26 +17,31 @@ SubstancesForExpertsDashboardComponent >> calculateInfo: applications [
 		,' / ', (farms size) asString 
 ]
 
-{ #category : #accessing }
-SubstancesForExpertsDashboardComponent >> elements [ 
-	^((self session gapAFarm users flatCollect: [ :user | user farms ]) flatCollect: [ :farm | farm aplications ]) select: [ :each | each date isAfter: ((Date today) subtractDays: 30) ]
-]
-
 { #category : #'as yet unclassified' }
-SubstancesForExpertsDashboardComponent >> inThisMonth: applications [
+SubstancesForExpertsDashboardComponent >> describeThisMonth: applications [
 	applications isEmpty 
 	ifTrue: [ ^'No hay datos' ]
-	ifFalse: [ ^self calculateInfo: applications ]
+	ifFalse: [ ^self describe: applications ]
 ]
 
 { #category : #'as yet unclassified' }
-SubstancesForExpertsDashboardComponent >> inThisWeek: applications [
+SubstancesForExpertsDashboardComponent >> describeThisWeek: applications [
 	| applicationsInWeek |
 	applicationsInWeek:= 
 		applications select: [ :report | report date isAfter:(Date today subtractDays:7)].
 	applicationsInWeek isEmpty 
 	ifTrue: [ ^'No hay datos' ]
-	ifFalse: [ ^self calculateInfo: applicationsInWeek  ]
+	ifFalse: [ ^self describe: applicationsInWeek  ]
+]
+
+{ #category : #accessing }
+SubstancesForExpertsDashboardComponent >> elements [ 
+	^((self session gapAFarm users flatCollect: [ :user | user farms ]) flatCollect: [ :farm | farm aplications ]) select: [ :each | each date isAfter: ((Date today) subtractDays: 30) ]
+]
+
+{ #category : #accessing }
+SubstancesForExpertsDashboardComponent >> hasElementsToShow [
+	^ true
 ]
 
 { #category : #rendering }
@@ -63,10 +68,10 @@ SubstancesForExpertsDashboardComponent >> renderTableBodyOn: html [
 						tableRow: [ html tableData: substance comercialName.
 							html
 								tableData:
-									(self inThisMonth: (applicationsPerSubstance at: substance)).
+									(self describeThisMonth: (applicationsPerSubstance at: substance)).
 							html
 								tableData:
-									(self inThisWeek: (applicationsPerSubstance at: substance)) ] ].
+									(self describeThisWeek: (applicationsPerSubstance at: substance)) ] ].
 					html 
 						tableRow: [ 
 							html 

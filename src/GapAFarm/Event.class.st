@@ -14,6 +14,11 @@ Event class >> isVoyageRoot [
 	^ false
 ]
 
+{ #category : #visitor }
+Event >> acceptVisitor: aVisitor on: aFarm [
+	self subclassResponsibility 
+]
+
 { #category : #accessing }
 Event >> crop [
 	^ crop

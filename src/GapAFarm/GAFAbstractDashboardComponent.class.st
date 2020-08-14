@@ -1,8 +1,21 @@
 Class {
 	#name : #GAFAbstractDashboardComponent,
 	#superclass : #GAFAbstractComponent,
+	#classVars : [
+		'NicelyHandleErrors'
+	],
 	#category : #'GapAFarm-ui-common'
 }
+
+{ #category : #'error-handling' }
+GAFAbstractDashboardComponent class >> nicelyHandleErrors [
+	^ NicelyHandleErrors ifNil: [ true ]
+]
+
+{ #category : #'error-handling' }
+GAFAbstractDashboardComponent class >> nicelyHandleErrors: aBoolean [
+	NicelyHandleErrors := aBoolean
+]
 
 { #category : #initialization }
 GAFAbstractDashboardComponent >> initialize [ 
@@ -38,7 +51,9 @@ GAFAbstractDashboardComponent >> renderContentCatchingErrorsOn: html [
 
 { #category : #rendering }
 GAFAbstractDashboardComponent >> renderContentOn: html [
-	self renderContentCatchingErrorsOn: html
+	self class nicelyHandleErrors
+		ifTrue: [ self renderContentCatchingErrorsOn: html ]
+		ifFalse: [ self renderContentShowingErrorsOn: html ]
 ]
 
 { #category : #rendering }
@@ -60,7 +75,9 @@ GAFAbstractDashboardComponent >> renderContentShowingErrorsOn: html [
 
 { #category : #'as yet unclassified' }
 GAFAbstractDashboardComponent >> sortedWidgets [
-	^ self widgets select: [ :each | each hasElementsToShow ]
+	| widgets |
+	widgets := self widgets select: [ :each | each hasElementsToShow ].
+	^ widgets
 ]
 
 { #category : #initialization }

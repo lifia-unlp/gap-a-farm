@@ -5,11 +5,27 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-ProblemsForExpertsDashboardComponent >> calculateInfo: reports [
+ProblemsForExpertsDashboardComponent >> describe: reports [
 	| surface farms |
 	surface:= (reports inject: 0 into: [ :sum :report | sum + report plot surface ]) truncated.
 	farms := ((self session gapAFarm farms) select: [ :farm | farm haveEventIn: reports ]).
 	^(surface / 10000) asFloat asString ,' / ', (farms size) asString 
+]
+
+{ #category : #'as yet unclassified' }
+ProblemsForExpertsDashboardComponent >> describeThisMonth: reports [
+	reports isEmpty 
+	ifTrue: [ ^'No hay datos' ]
+	ifFalse: [ ^self describe: reports ]
+]
+
+{ #category : #'as yet unclassified' }
+ProblemsForExpertsDashboardComponent >> describeThisWeek: reports [
+	| reportsInWeek |
+	reportsInWeek:= reports select: [ :report | report date isAfter:(Date today subtractDays:7)].
+	reportsInWeek isEmpty 
+	ifTrue: [ ^'No hay datos' ]
+	ifFalse: [ ^self describe: reportsInWeek  ]
 ]
 
 { #category : #accessing }
@@ -18,20 +34,9 @@ ProblemsForExpertsDashboardComponent >> elements [
 	
 ]
 
-{ #category : #'as yet unclassified' }
-ProblemsForExpertsDashboardComponent >> inThisMonth: reports [
-	reports isEmpty 
-	ifTrue: [ ^'No hay datos' ]
-	ifFalse: [ ^self calculateInfo: reports ]
-]
-
-{ #category : #'as yet unclassified' }
-ProblemsForExpertsDashboardComponent >> inThisWeek: reports [
-	| reportsInWeek |
-	reportsInWeek:= reports select: [ :report | report date isAfter:(Date today subtractDays:7)].
-	reportsInWeek isEmpty 
-	ifTrue: [ ^'No hay datos' ]
-	ifFalse: [ ^self calculateInfo: reportsInWeek  ]
+{ #category : #testing }
+ProblemsForExpertsDashboardComponent >> hasElementsToShow [
+	^ true
 ]
 
 { #category : #rendering }
@@ -53,8 +58,8 @@ ProblemsForExpertsDashboardComponent >> renderTableBodyOn: html [
 				do: [ :type | 
 					html
 						tableRow: [ html tableData: type.
-							html tableData: (self inThisMonth: (adversitiesPerTypes at: type)).
-							html tableData: (self inThisWeek: (adversitiesPerTypes at: type)) ] ].
+							html tableData: (self describeThisMonth: (adversitiesPerTypes at: type)).
+							html tableData: (self describeThisWeek: (adversitiesPerTypes at: type)) ] ].
 					html 
 						tableRow: [ 
 							html 

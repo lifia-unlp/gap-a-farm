@@ -53,9 +53,3 @@ Measurement >> unit [
 Measurement >> unit: anObject [
 	unit := anObject
 ]
-
-{ #category : #'as yet unclassified' }
-Measurement >> unitSmall [
-	unit = 'Plantas' ifTrue: [ ^'Plats' ].
-	unit = 'Kg de semilla' ifTrue: [ ^'Kg sem' ]
-]

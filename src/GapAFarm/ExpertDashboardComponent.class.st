@@ -31,6 +31,12 @@ ExpertDashboardComponent >> initializeComponents [
 				yourself)
 ]
 
+{ #category : #initialization }
+ExpertDashboardComponent >> renderContentOn: html [
+	self session gapAFarm updateStatistics.
+	super renderContentOn: html
+]
+
 { #category : #accessing }
 ExpertDashboardComponent >> widgets [
 	^ {cropsExpertDashboardComponent.

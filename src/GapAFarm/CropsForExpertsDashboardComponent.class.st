@@ -4,40 +4,30 @@ Class {
 	#category : #'GapAFarm-ui-expert-dashboard'
 }
 
-{ #category : #'as yet unclassified' }
-CropsForExpertsDashboardComponent >> calculateInfo: sowingsPerCrop [
-	| quantity surface farms |
-	quantity:= 
-		(sowingsPerCrop inject: 0 into: [ :sum :sowing | sum + sowing quantity magnitude ]) truncated.
-	surface:= 
-		(sowingsPerCrop inject: 0 into: [ :sum :sowing | sum + sowing plot surface ]) truncated.
-	farms := ((self session gapAFarm farms) select: [ :farm | farm haveSowingsIn: sowingsPerCrop ]).
-	^quantity asString , ' ', (sowingsPerCrop at: 1) quantity unitSmall
-		,' / ', (surface / 10000) asFloat asString 
-		,' / ', (farms size) asString 
+{ #category : #'text labels' }
+CropsForExpertsDashboardComponent >> describeThisMonth: aSowingStatisticsRecord [
+	aSowingStatisticsRecord farmsActiveThisMonth
+		ifEmpty: [ ^ 'Sin actividad' ].
+	^ aSowingStatisticsRecord quantityThisMonth asString , ' / '
+		, (aSowingStatisticsRecord surfaceThisMonth / 10000) asFloat asString
+		, 'ha / '
+		, aSowingStatisticsRecord farmsActiveThisMonth size asString
 ]
 
-{ #category : #accessing }
-CropsForExpertsDashboardComponent >> elements [
-	^ ((self session gapAFarm users flatCollect: [ :user | user farms ])
-		flatCollect: [ :farm | farm sowings ])
-		select: [ :each | each date isAfter: (Date today subtractDays: 30) ]
+{ #category : #'text labels' }
+CropsForExpertsDashboardComponent >> describeThisWeek: aSowingStatisticsRecord [
+
+	aSowingStatisticsRecord farmsActiveThisWeek
+		ifEmpty: [ ^ 'Sin actividad' ].
+	^ aSowingStatisticsRecord quantityThisWeek asString , ' / '
+		, (aSowingStatisticsRecord surfaceThisWeek / 10000) asFloat asString
+		, 'ha / '
+		, aSowingStatisticsRecord farmsActiveThisWeek size asString
 ]
 
-{ #category : #'as yet unclassified' }
-CropsForExpertsDashboardComponent >> inThisMonth: sowingsPerCrop [
-	sowingsPerCrop isEmpty 
-	ifTrue: [ ^'No hay datos' ]
-	ifFalse: [ ^self calculateInfo: sowingsPerCrop  ]
-]
-
-{ #category : #'as yet unclassified' }
-CropsForExpertsDashboardComponent >> inThisWeek: sowingsPerCrop [
-	| sowingsInWeek |
-	sowingsInWeek:= sowingsPerCrop select: [ :sowing | sowing date isAfter:(Date today subtractDays:7)].
-	sowingsInWeek isEmpty 
-	ifTrue: [ ^'No hay datos' ]
-	ifFalse: [ ^self calculateInfo: sowingsInWeek  ]
+{ #category : #rendering }
+CropsForExpertsDashboardComponent >> hasElementsToShow [
+	^ true
 ]
 
 { #category : #rendering }
@@ -49,34 +39,34 @@ CropsForExpertsDashboardComponent >> renderContentOn: html [
 ]
 
 { #category : #rendering }
+CropsForExpertsDashboardComponent >> renderLegendOn: html [
+	^ html
+		tableRow: [ html tableData.
+			html tableData
+				style: 'text-align:center';
+				colSpan: 2;
+				with: [ html small with: 'Cantidad / Superficie / Granjas' ] ]
+]
+
+{ #category : #rendering }
 CropsForExpertsDashboardComponent >> renderTableBodyOn: html [
-	| set sowingsPerCrop |
-	sowingsPerCrop := Dictionary new.
-	self elements
-		do: [ :each | 
-			(sowingsPerCrop at: each crop ifAbsentPut: OrderedCollection new)
-				add: each ].
+	| statisticsPerCrop |
+	statisticsPerCrop := self session gapAFarm statistics
+		sowingStatistics.
 	html
-		tableBody: [ (sowingsPerCrop keys
+		tableBody: [ (statisticsPerCrop keys
 				asSortedCollection: [ :a :b | a vulgarName < b vulgarName ])
 				do: [ :crop | 
 					html
 						tableRow: [ html tableData: crop vulgarName.
 							html
-								tableData: (self inThisMonth: (sowingsPerCrop at: crop)).
+								tableData: (self describeThisMonth: (statisticsPerCrop at: crop)).
 							html
-								tableData: (self inThisWeek: (sowingsPerCrop at: crop)) ] ]. 
-					html 
-						tableRow: [ 
-							html 
-								tableData:' '.
-							html 
-								tableData: [ html small with: 'Plantado / Hecs / Granjas'].
-							html 
-								tableData: [ html small with: 'Plantado / Hecs / Granjas'] ] ]
+								tableData: (self describeThisWeek: (statisticsPerCrop at: crop)) ] ].
+			self renderLegendOn: html ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #rendering }
 CropsForExpertsDashboardComponent >> tableHeadingOn: html [
 	html tableHead: [ 
 		html tableRow: [ 
@@ -86,7 +76,7 @@ CropsForExpertsDashboardComponent >> tableHeadingOn: html [
 				tableHeading: 'Última semana'  ] ]
 ]
 
-{ #category : #rendering }
+{ #category : #'text labels' }
 CropsForExpertsDashboardComponent >> title [
 	^ 'Plantación y siembra'
 ]

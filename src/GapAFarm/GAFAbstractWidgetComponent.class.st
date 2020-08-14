@@ -22,6 +22,16 @@ GAFAbstractWidgetComponent class >> rows: aRowQuantity parent: aParent [
 		yourself
 ]
 
+{ #category : #accessing }
+GAFAbstractWidgetComponent >> elements [
+	^ self subclassResponsibility
+]
+
+{ #category : #testing }
+GAFAbstractWidgetComponent >> hasElementsToShow [
+	^ self elements isNotEmpty
+]
+
 { #category : #rendering }
 GAFAbstractWidgetComponent >> renderButtonShowAllOn: html [
 	html paragraph
@@ -52,7 +62,7 @@ GAFAbstractWidgetComponent >> rows: anObject [
 	rows := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #rendering }
 GAFAbstractWidgetComponent >> viewAll [
 	^ self subclassResponsibility 
 ]
