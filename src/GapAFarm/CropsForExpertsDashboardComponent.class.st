@@ -4,6 +4,12 @@ Class {
 	#category : #'GapAFarm-ui-expert-dashboard'
 }
 
+{ #category : #accesing }
+CropsForExpertsDashboardComponent >> cropsWithRecords [
+	^ self session gapAFarm statistics sowingStatistics
+		select: [ :sowing | sowing haveActivity ]
+]
+
 { #category : #'text labels' }
 CropsForExpertsDashboardComponent >> describeThisMonth: aSowingStatisticsRecord [
 	aSowingStatisticsRecord farmsActiveThisMonth
@@ -16,7 +22,6 @@ CropsForExpertsDashboardComponent >> describeThisMonth: aSowingStatisticsRecord 
 
 { #category : #'text labels' }
 CropsForExpertsDashboardComponent >> describeThisWeek: aSowingStatisticsRecord [
-
 	aSowingStatisticsRecord farmsActiveThisWeek
 		ifEmpty: [ ^ 'Sin actividad' ].
 	^ aSowingStatisticsRecord quantityThisWeek asString , ' / '
@@ -51,8 +56,7 @@ CropsForExpertsDashboardComponent >> renderLegendOn: html [
 { #category : #rendering }
 CropsForExpertsDashboardComponent >> renderTableBodyOn: html [
 	| statisticsPerCrop |
-	statisticsPerCrop := self session gapAFarm statistics
-		sowingStatistics.
+	statisticsPerCrop := self cropsWithRecords.
 	html
 		tableBody: [ (statisticsPerCrop keys
 				asSortedCollection: [ :a :b | a vulgarName < b vulgarName ])

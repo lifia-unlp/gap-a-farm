@@ -4,39 +4,24 @@ Class {
 	#category : #'GapAFarm-ui-expert-dashboard'
 }
 
-{ #category : #'as yet unclassified' }
-SubstancesForExpertsDashboardComponent >> describe: applications [
-	| quantity surface farms |
-	quantity:= 
-		(applications inject: 0 into: [ :sum :application | sum + application quantity ]) truncated.
-	surface:= 
-		(applications inject: 0 into: [ :sum :application | sum + application plot surface ]) truncated.
-	farms := ((self session gapAFarm farms) select: [ :farm | farm haveEventIn: applications ]).
-	^quantity asString ,(applications at: 1) substance unit
-		,' / ', (surface / 10000) asFloat asString 
-		,' / ', (farms size) asString 
+{ #category : #'text labels' }
+SubstancesForExpertsDashboardComponent >> describeThisMonth: anApplicationStatisticsRecord [
+	anApplicationStatisticsRecord farmsActiveThisMonth
+		ifEmpty: [ ^ 'Sin actividad' ].
+	^ anApplicationStatisticsRecord quantityThisMonth asString , ' / '
+		, (anApplicationStatisticsRecord surfaceThisMonth / 10000) asFloat asString
+		, 'ha / '
+		, anApplicationStatisticsRecord farmsActiveThisMonth size asString
 ]
 
-{ #category : #'as yet unclassified' }
-SubstancesForExpertsDashboardComponent >> describeThisMonth: applications [
-	applications isEmpty 
-	ifTrue: [ ^'No hay datos' ]
-	ifFalse: [ ^self describe: applications ]
-]
-
-{ #category : #'as yet unclassified' }
-SubstancesForExpertsDashboardComponent >> describeThisWeek: applications [
-	| applicationsInWeek |
-	applicationsInWeek:= 
-		applications select: [ :report | report date isAfter:(Date today subtractDays:7)].
-	applicationsInWeek isEmpty 
-	ifTrue: [ ^'No hay datos' ]
-	ifFalse: [ ^self describe: applicationsInWeek  ]
-]
-
-{ #category : #accessing }
-SubstancesForExpertsDashboardComponent >> elements [ 
-	^((self session gapAFarm users flatCollect: [ :user | user farms ]) flatCollect: [ :farm | farm aplications ]) select: [ :each | each date isAfter: ((Date today) subtractDays: 30) ]
+{ #category : #'text labels' }
+SubstancesForExpertsDashboardComponent >> describeThisWeek: anApplicationStatisticsRecord [
+	anApplicationStatisticsRecord farmsActiveThisWeek
+		ifEmpty: [ ^ 'Sin actividad' ].
+	^ anApplicationStatisticsRecord quantityThisWeek asString , ' / '
+		, (anApplicationStatisticsRecord surfaceThisWeek / 10000) asFloat asString
+		, 'ha / '
+		, anApplicationStatisticsRecord farmsActiveThisWeek size asString
 ]
 
 { #category : #accessing }
@@ -53,33 +38,35 @@ SubstancesForExpertsDashboardComponent >> renderContentOn: html [
 ]
 
 { #category : #rendering }
+SubstancesForExpertsDashboardComponent >> renderLegendOn: html [
+	^ html
+		tableRow: [ html tableData.
+			html tableData
+				style: 'text-align:center';
+				colSpan: 3;
+				with: [ html small with: 'Usado / Superficie / Granjas' ] ]
+]
+
+{ #category : #rendering }
 SubstancesForExpertsDashboardComponent >> renderTableBodyOn: html [
-	| applicationsPerSubstance |
-	applicationsPerSubstance := Dictionary new.
-	self elements
-		do: [ :each | 
-			(applicationsPerSubstance
-				at: each substance
-				ifAbsentPut: OrderedCollection new) add: each ].
+	| statisticsPerSubstance |
+	statisticsPerSubstance := self subtancesWithRecords.
 	html
-		tableBody: [ applicationsPerSubstance keys asOrderedCollection
+		tableBody: [ statisticsPerSubstance keys asOrderedCollection
 				do: [ :substance | 
 					html
 						tableRow: [ html tableData: substance comercialName.
 							html
-								tableData:
-									(self describeThisMonth: (applicationsPerSubstance at: substance)).
+								tableData: (self describeThisMonth: (statisticsPerSubstance at: substance)).
 							html
-								tableData:
-									(self describeThisWeek: (applicationsPerSubstance at: substance)) ] ].
-					html 
-						tableRow: [ 
-							html 
-								tableData:' '.
-							html 
-								tableData: [ html small with: 'Uso/Hecs/Granjas'].
-							html 
-								tableData: [ html small with: 'Uso/Hecs/Granjas'] ] ]
+								tableData: (self describeThisWeek: (statisticsPerSubstance at: substance)) ] ].
+			self renderLegendOn: html ]
+]
+
+{ #category : #accessing }
+SubstancesForExpertsDashboardComponent >> subtancesWithRecords [
+	^ self session gapAFarm statistics applicationStatistics
+		select: [ :sowing | sowing haveActivity ]
 ]
 
 { #category : #private }

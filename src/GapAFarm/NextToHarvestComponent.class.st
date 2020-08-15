@@ -53,6 +53,6 @@ NextToHarvestComponent >> plotsToHarvest [
 		reject: [ :plot | self plotsInWaitingPeriod includes: plot ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #rendering }
 NextToHarvestComponent >> viewAll [
 ]

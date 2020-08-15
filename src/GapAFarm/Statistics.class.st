@@ -2,14 +2,28 @@ Class {
 	#name : #Statistics,
 	#superclass : #Object,
 	#instVars : [
-		'sowingStatistics'
+		'sowingStatistics',
+		'applicationStatistics',
+		'adversityStatistics'
 	],
 	#category : #'GapAFarm-statistics'
 }
 
+{ #category : #accessing }
+Statistics >> adversityStatistics [
+	^ adversityStatistics
+]
+
+{ #category : #accessing }
+Statistics >> applicationStatistics [
+	^ applicationStatistics
+]
+
 { #category : #initialization }
 Statistics >> initialize [
-	sowingStatistics := Dictionary new
+	sowingStatistics := Dictionary new.
+	applicationStatistics := Dictionary new.
+	adversityStatistics := Dictionary new
 ]
 
 { #category : #accessing }
@@ -29,11 +43,26 @@ Statistics >> visit: aFarm [
 
 { #category : #updating }
 Statistics >> visitAdversityReport: anAdversityReport on: aFarm [ 
+	(adversityStatistics 
+		at: anAdversityReport descriptionOfAdversities
+		ifAbsentPut: (AdversitiStatisticsRecord for: anAdversityReport descriptionOfAdversities ))
+		updateWith: anAdversityReport
+		from: aFarm
 	
 ]
 
 { #category : #updating }
 Statistics >> visitApplication: anApplication on: aFarm [ 
+	(applicationStatistics
+		at: anApplication substance
+		ifAbsentPut: (ApplicationStatisticsRecord for: anApplication substance ))
+		updateWith: anApplication
+		from: aFarm
+	
+]
+
+{ #category : #updating }
+Statistics >> visitCropSale: anAdversityReport on: aFarm [ 
 	
 ]
 

@@ -62,6 +62,6 @@ YieldReportsComponent >> plotsInHarvesting [
 				and: [ Date today isAfter: plot currentCycle harvestDate ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #rendering }
 YieldReportsComponent >> viewAll [
 ]

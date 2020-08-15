@@ -2,7 +2,7 @@ Class {
 	#name : #EventStatisticsRecord,
 	#superclass : #Object,
 	#instVars : [
-		'crop'
+		'element'
 	],
 	#category : #'GapAFarm-statistics'
 }
@@ -20,13 +20,18 @@ EventStatisticsRecord >> classToMonitor [
 ]
 
 { #category : #accessing }
-EventStatisticsRecord >> crop [
-	^ crop
+EventStatisticsRecord >> element [
+	^ element
+]
+
+{ #category : #accessing }
+EventStatisticsRecord >> eventElementOf: anEvent [
+	self subclassResponsibility
 ]
 
 { #category : #initialization }
-EventStatisticsRecord >> for: aCrop [
-	crop := aCrop
+EventStatisticsRecord >> for: anElement [
+	element := anElement
 ]
 
 { #category : #updating }
@@ -43,7 +48,7 @@ EventStatisticsRecord >> updateThisWeekWith: anEvent from: farm [
 EventStatisticsRecord >> updateWith: anEvent from: farm [
 	anEvent class ~= self classToMonitor
 		ifTrue: [ ^ self ].
-	anEvent crop ~= crop
+	(self eventElementOf: anEvent) ~= element
 		ifTrue: [ ^ self ].
 	anEvent date < (Date today subtractDays: 30)
 		ifTrue: [ ^ self ].

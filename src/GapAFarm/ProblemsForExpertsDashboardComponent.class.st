@@ -4,34 +4,29 @@ Class {
 	#category : #'GapAFarm-ui-expert-dashboard'
 }
 
-{ #category : #'as yet unclassified' }
-ProblemsForExpertsDashboardComponent >> describe: reports [
-	| surface farms |
-	surface:= (reports inject: 0 into: [ :sum :report | sum + report plot surface ]) truncated.
-	farms := ((self session gapAFarm farms) select: [ :farm | farm haveEventIn: reports ]).
-	^(surface / 10000) asFloat asString ,' / ', (farms size) asString 
+{ #category : #testing }
+ProblemsForExpertsDashboardComponent >> adversitiesWithRecords [
+	^ self session gapAFarm statistics adversityStatistics
+		select: [ :each | each haveActivity ]
 ]
 
-{ #category : #'as yet unclassified' }
-ProblemsForExpertsDashboardComponent >> describeThisMonth: reports [
-	reports isEmpty 
-	ifTrue: [ ^'No hay datos' ]
-	ifFalse: [ ^self describe: reports ]
+{ #category : #'text labels' }
+ProblemsForExpertsDashboardComponent >> describeThisMonth: anAdversityStatisticsRecord [
+	anAdversityStatisticsRecord farmsActiveThisMonth 
+		ifEmpty: [ ^ 'Sin actividad' ].
+	^ (anAdversityStatisticsRecord surfaceThisMonth / 10000) asFloat asString
+		, 'ha / '
+		, anAdversityStatisticsRecord farmsActiveThisMonth size asString
 ]
 
-{ #category : #'as yet unclassified' }
-ProblemsForExpertsDashboardComponent >> describeThisWeek: reports [
-	| reportsInWeek |
-	reportsInWeek:= reports select: [ :report | report date isAfter:(Date today subtractDays:7)].
-	reportsInWeek isEmpty 
-	ifTrue: [ ^'No hay datos' ]
-	ifFalse: [ ^self describe: reportsInWeek  ]
-]
+{ #category : #'text labels' }
+ProblemsForExpertsDashboardComponent >> describeThisWeek: anAdversityStatisticsRecord [
+	anAdversityStatisticsRecord farmsActiveThisWeek
+		ifEmpty: [ ^ 'Sin actividad' ].
+	^ (anAdversityStatisticsRecord surfaceThisWeek / 10000) asFloat asString
+		, 'ha / '
+		, anAdversityStatisticsRecord farmsActiveThisWeek size asString
 
-{ #category : #accessing }
-ProblemsForExpertsDashboardComponent >> elements [
-	^((self session gapAFarm users flatCollect: [ :user | user farms ]) flatCollect: [ :farm | farm problems ]) select: [ :each | each date isAfter: ((Date today) subtractDays: 30) ].
-	
 ]
 
 { #category : #testing }
@@ -48,29 +43,32 @@ ProblemsForExpertsDashboardComponent >> renderContentOn: html [
 ]
 
 { #category : #rendering }
+ProblemsForExpertsDashboardComponent >> renderLegendOn: html [
+	^ html
+		tableRow: [ html tableData.
+			html tableData
+				style: 'text-align:center';
+				colSpan: 2;
+				with: [ html small with: 'Superficie / Granjas' ] ]
+]
+
+{ #category : #rendering }
 ProblemsForExpertsDashboardComponent >> renderTableBodyOn: html [
-	| adversitiesPerTypes |
-	adversitiesPerTypes := Dictionary new. 
-	self elements do: [ :each | each adversityTypes do: [ :type | (adversitiesPerTypes at: type ifAbsentPut: OrderedCollection new)  add:each]   ].
-	
+	| statisticsPerTypes |
+	statisticsPerTypes := self adversitiesWithRecords.
 	html
-		tableBody: [ adversitiesPerTypes keys asOrderedCollection 
+		tableBody: [ statisticsPerTypes keys asOrderedCollection
 				do: [ :type | 
 					html
 						tableRow: [ html tableData: type.
-							html tableData: (self describeThisMonth: (adversitiesPerTypes at: type)).
-							html tableData: (self describeThisWeek: (adversitiesPerTypes at: type)) ] ].
-					html 
-						tableRow: [ 
-							html 
-								tableData:' '.
-							html 
-								tableData: [ html small with: 'Hecs / Granjas'].
-							html 
-								tableData: [ html small with: 'Hecs / Granjas'] ] ]
+							html
+								tableData: (self describeThisMonth: (statisticsPerTypes at: type)).
+							html
+								tableData: (self describeThisWeek: (statisticsPerTypes at: type)) ] ].
+			self renderLegendOn: html ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #rendering }
 ProblemsForExpertsDashboardComponent >> tableHeadingOn: html [
 	html tableHead: [ 
 		html tableRow: [ 

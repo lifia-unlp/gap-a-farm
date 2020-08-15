@@ -1,5 +1,5 @@
 Class {
-	#name : #SowingStatisticsRecord,
+	#name : #ApplicationStatisticsRecord,
 	#superclass : #EventStatisticsRecord,
 	#instVars : [
 		'quantityThisMonth',
@@ -13,33 +13,32 @@ Class {
 }
 
 { #category : #accessing }
-SowingStatisticsRecord >> classToMonitor [
-	^ Sowing
+ApplicationStatisticsRecord >> classToMonitor [
+	^ Application 
 ]
 
 { #category : #accessing }
-SowingStatisticsRecord >> eventElementOf: aSowing [
-	^aSowing crop
-	
+ApplicationStatisticsRecord >> eventElementOf: anApplication [
+	^anApplication substance 
 ]
 
 { #category : #accessing }
-SowingStatisticsRecord >> farmsActiveThisMonth [
+ApplicationStatisticsRecord >> farmsActiveThisMonth [
 	^ farmsActiveThisMonth
 ]
 
 { #category : #accessing }
-SowingStatisticsRecord >> farmsActiveThisWeek [
+ApplicationStatisticsRecord >> farmsActiveThisWeek [
 	^ farmsActiveThisWeek
 ]
 
 { #category : #accessing }
-SowingStatisticsRecord >> haveActivity [
+ApplicationStatisticsRecord >> haveActivity [
 	^farmsActiveThisMonth isNotEmpty 
 ]
 
 { #category : #initialization }
-SowingStatisticsRecord >> initialize [
+ApplicationStatisticsRecord >> initialize [
 	quantityThisMonth := 0.
 	quantityThisWeek := 0.
 	farmsActiveThisMonth := Set new.
@@ -49,35 +48,35 @@ SowingStatisticsRecord >> initialize [
 ]
 
 { #category : #accessing }
-SowingStatisticsRecord >> quantityThisMonth [
+ApplicationStatisticsRecord >> quantityThisMonth [
 	^ quantityThisMonth
 ]
 
 { #category : #accessing }
-SowingStatisticsRecord >> quantityThisWeek [
+ApplicationStatisticsRecord >> quantityThisWeek [
 	^ quantityThisWeek
 ]
 
 { #category : #accessing }
-SowingStatisticsRecord >> surfaceThisMonth [
+ApplicationStatisticsRecord >> surfaceThisMonth [
 	^ surfaceThisMonth
 ]
 
 { #category : #accessing }
-SowingStatisticsRecord >> surfaceThisWeek [
+ApplicationStatisticsRecord >> surfaceThisWeek [
 	^ surfaceThisWeek
 ]
 
 { #category : #updating }
-SowingStatisticsRecord >> updateThisMonthWith: anEvent from: farm [
-	quantityThisMonth := quantityThisMonth + anEvent quantity magnitude.
+ApplicationStatisticsRecord >> updateThisMonthWith: anEvent from: farm [
+	quantityThisMonth := quantityThisMonth + anEvent quantity.
 	surfaceThisMonth := surfaceThisMonth + anEvent plot surface.
 	farmsActiveThisMonth add: farm
 ]
 
 { #category : #updating }
-SowingStatisticsRecord >> updateThisWeekWith: anEvent from: farm [
-	quantityThisWeek := quantityThisWeek + anEvent quantity magnitude.
+ApplicationStatisticsRecord >> updateThisWeekWith: anEvent from: farm [
+	quantityThisWeek := quantityThisWeek + anEvent quantity.
 	surfaceThisWeek := surfaceThisWeek + anEvent plot surface.
 	farmsActiveThisWeek add: farm
 ]
