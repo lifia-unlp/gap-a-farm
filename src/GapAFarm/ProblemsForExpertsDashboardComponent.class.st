@@ -4,48 +4,70 @@ Class {
 	#category : #'GapAFarm-ui-expert-dashboard'
 }
 
-{ #category : #accessing }
-ProblemsForExpertsDashboardComponent >> elements [
-	^((self session gapAFarm users flatCollect: [ :user | user farms ]) flatCollect: [ :farm | farm problems ]) select: [ :each | each date isAfter: ((Date today) subtractDays: 30) ].
-	
+{ #category : #testing }
+ProblemsForExpertsDashboardComponent >> adversitiesWithRecords [
+	^ self session gapAFarm statistics adversityStatistics
+		select: [ :each | each haveActivity ]
 ]
 
-{ #category : #'as yet unclassified' }
-ProblemsForExpertsDashboardComponent >> inThisMonth: reports of: type [
-	^ reports size
+{ #category : #'text labels' }
+ProblemsForExpertsDashboardComponent >> describeThisMonth: anAdversityStatisticsRecord [
+	anAdversityStatisticsRecord farmsActiveThisMonth
+		ifEmpty: [ ^ 'Sin actividad' ].
+	^ ((anAdversityStatisticsRecord surfaceThisMonth / 10000) asFloat
+		round: 2) asString , 'ha / '
+		, anAdversityStatisticsRecord farmsActiveThisMonth size asString
 ]
 
-{ #category : #'as yet unclassified' }
-ProblemsForExpertsDashboardComponent >> inThisWeek: elements of: type [
-	^ (elements
-		select: [ :issue | issue date isAfter: (Date today subtractDays: 7) ])
-		size
+{ #category : #'text labels' }
+ProblemsForExpertsDashboardComponent >> describeThisWeek: anAdversityStatisticsRecord [
+	anAdversityStatisticsRecord farmsActiveThisWeek
+		ifEmpty: [ ^ 'Sin actividad' ].
+	^ ((anAdversityStatisticsRecord surfaceThisWeek / 10000) asFloat
+		round: 2) asString , 'ha / '
+		, anAdversityStatisticsRecord farmsActiveThisWeek size asString
+]
+
+{ #category : #testing }
+ProblemsForExpertsDashboardComponent >> hasElementsToShow [
+	^ true
 ]
 
 { #category : #rendering }
 ProblemsForExpertsDashboardComponent >> renderContentOn: html [
 	html table
-		class: 'table table-hover';
+		class: 'table table-hover table-sm';
 		with: [ self tableHeadingOn: html.
 				  self renderTableBodyOn: html ].
 ]
 
 { #category : #rendering }
+ProblemsForExpertsDashboardComponent >> renderLegendOn: html [
+	^ html
+		tableRow: [ html tableData.
+			html tableData
+				style: 'text-align:center';
+				colSpan: 2;
+				with: [ html small with: 'Superficie / Granjas' ] ]
+]
+
+{ #category : #rendering }
 ProblemsForExpertsDashboardComponent >> renderTableBodyOn: html [
-	| adversitiesPerTypes |
-	adversitiesPerTypes := Dictionary new. 
-	self elements do: [ :each | each adversityTypes do: [ :type | (adversitiesPerTypes at: type ifAbsentPut: OrderedCollection new)  add:each]   ].
-	
+	| statisticsPerTypes |
+	statisticsPerTypes := self adversitiesWithRecords.
 	html
-		tableBody: [ adversitiesPerTypes keys asOrderedCollection 
+		tableBody: [ statisticsPerTypes keys asOrderedCollection
 				do: [ :type | 
 					html
 						tableRow: [ html tableData: type.
-							html tableData: (self inThisMonth: (adversitiesPerTypes at: type) of: type).
-							html tableData: (self inThisWeek: (adversitiesPerTypes at: type) of: type) ] ] ]
+							html
+								tableData: (self describeThisMonth: (statisticsPerTypes at: type)).
+							html
+								tableData: (self describeThisWeek: (statisticsPerTypes at: type)) ] ].
+			self renderLegendOn: html ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #rendering }
 ProblemsForExpertsDashboardComponent >> tableHeadingOn: html [
 	html tableHead: [ 
 		html tableRow: [ 

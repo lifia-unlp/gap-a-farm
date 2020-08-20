@@ -29,7 +29,7 @@ BlogPostsDahboardComponent >> renderElementsTableOn: html [
 					html text: (self shorten: post text to: 120) ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #rendering }
 BlogPostsDahboardComponent >> viewAll [
 	self parent show: BlogPostsComponentForFarmers new
 ]

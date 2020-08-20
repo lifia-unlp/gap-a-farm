@@ -34,6 +34,11 @@ Harvesting class >> units [
 		with: 'Razos') copy
 ]
 
+{ #category : #visitor }
+Harvesting >> acceptVisitor: aVisitor on: aFarm [
+	aVisitor visitHarvesting: self on: aFarm
+]
+
 { #category : #accessing }
 Harvesting >> cultivarName [
 	^ cultivarName

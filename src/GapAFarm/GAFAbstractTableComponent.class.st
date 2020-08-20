@@ -18,11 +18,6 @@ GAFAbstractTableComponent >> columnValuesFor: element [
 ]
 
 { #category : #accessing }
-GAFAbstractTableComponent >> elements [
-	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
 GAFAbstractTableComponent >> filteredElements [ 
 	^self elements
 ]

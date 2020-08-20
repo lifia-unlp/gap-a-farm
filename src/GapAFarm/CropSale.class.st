@@ -22,6 +22,11 @@ CropSale class >> product: aCrop kilograms: kg fromPlot: aPlot [
 		yourself
 ]
 
+{ #category : #visitor }
+CropSale >> acceptVisitor: aVisitor on: aFarm [
+	aVisitor visitCropSale: self on: aFarm
+]
+
 { #category : #accessing }
 CropSale >> date [
 	^ sale date asDate

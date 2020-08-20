@@ -85,6 +85,16 @@ Farm >> harvestings [
 	^ self plots flatCollect: [ :each | each harvests ]
 ]
 
+{ #category : #testing }
+Farm >> haveEventIn: events [
+	^events detect: [ :each | (self events) includes: each  ] ifFound: [ ^true ] ifNone: [ ^false ]  
+]
+
+{ #category : #testing }
+Farm >> haveSowingsIn: sowings [
+	^sowings detect: [ :each | (self sowings) includes: each  ] ifFound: [ ^true ] ifNone: [ ^false ]  
+]
+
 { #category : #initialization }
 Farm >> initialize [
 	super initialize.

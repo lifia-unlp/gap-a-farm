@@ -4,55 +4,75 @@ Class {
 	#category : #'GapAFarm-ui-expert-dashboard'
 }
 
-{ #category : #accessing }
-CropsForExpertsDashboardComponent >> elements [ 
-	^((self session gapAFarm users flatCollect: [ :user | user farms ]) flatCollect: [ :farm | farm sowings ]) select: [ :each | each date isAfter: ((Date today) subtractDays: 30) ]
+{ #category : #accesing }
+CropsForExpertsDashboardComponent >> cropsWithRecords [
+	^ self session gapAFarm statistics sowingStatistics
+		select: [ :sowing | sowing haveActivity ]
 ]
 
-{ #category : #'as yet unclassified' }
-CropsForExpertsDashboardComponent >> inThisMonth: elements of: crop [
-	^ (elements
-		inject: 0
-		into: [ :sum :sowing | sum + sowing quantity magnitude ]) truncated
+{ #category : #'text labels' }
+CropsForExpertsDashboardComponent >> describeThisMonth: aSowingStatisticsRecord [
+	aSowingStatisticsRecord farmsActiveThisMonth
+		ifEmpty: [ ^ 'Sin actividad' ].
+	^ aSowingStatisticsRecord quantityThisMonth asString , '/'
+		,
+			((aSowingStatisticsRecord surfaceThisMonth / 10000) asFloat round: 2)
+				asString , 'ha/'
+		, aSowingStatisticsRecord farmsActiveThisMonth size asString
 ]
 
-{ #category : #'as yet unclassified' }
-CropsForExpertsDashboardComponent >> inThisWeek: elements of: crop [
-	^ ((elements
-		select: [ :sowing | sowing date isAfter: (Date today subtractDays: 7) ])
-		inject: 0
-		into: [ :sum :sowing | sum + sowing quantity magnitude ]) truncated
+{ #category : #'text labels' }
+CropsForExpertsDashboardComponent >> describeThisWeek: aSowingStatisticsRecord [
+	aSowingStatisticsRecord farmsActiveThisWeek
+		ifEmpty: [ ^ 'Sin actividad' ].
+	^ aSowingStatisticsRecord quantityThisWeek asString , ' / '
+		,
+			((aSowingStatisticsRecord surfaceThisWeek / 10000) asFloat round: 2)
+				asString , 'ha / '
+		, aSowingStatisticsRecord farmsActiveThisWeek size asString
+]
+
+{ #category : #rendering }
+CropsForExpertsDashboardComponent >> hasElementsToShow [
+	^ true
 ]
 
 { #category : #rendering }
 CropsForExpertsDashboardComponent >> renderContentOn: html [
 	html table
-		class: 'table table-hover';
+		class: 'table table-hover table-sm';
 		with: [ self tableHeadingOn: html.
 				  self renderTableBodyOn: html ].
 ]
 
 { #category : #rendering }
+CropsForExpertsDashboardComponent >> renderLegendOn: html [
+	^ html
+		tableRow: [ html tableData.
+			html tableData
+				style: 'text-align:center';
+				colSpan: 2;
+				with: [ html small with: 'Cantidad / Superficie / Granjas' ] ]
+]
+
+{ #category : #rendering }
 CropsForExpertsDashboardComponent >> renderTableBodyOn: html [
-	| set sowingsPerCrop |
-	sowingsPerCrop := Dictionary new.
-	self elements
-		do: [ :each | 
-			(sowingsPerCrop at: each crop ifAbsentPut: OrderedCollection new)
-				add: each ].
+	| statisticsPerCrop |
+	statisticsPerCrop := self cropsWithRecords.
 	html
-		tableBody: [ (sowingsPerCrop keys
+		tableBody: [ (statisticsPerCrop keys
 				asSortedCollection: [ :a :b | a vulgarName < b vulgarName ])
 				do: [ :crop | 
 					html
 						tableRow: [ html tableData: crop vulgarName.
 							html
-								tableData: (self inThisMonth: (sowingsPerCrop at: crop) of: crop).
+								tableData: (self describeThisMonth: (statisticsPerCrop at: crop)).
 							html
-								tableData: (self inThisWeek: (sowingsPerCrop at: crop) of: crop) ] ] ]
+								tableData: (self describeThisWeek: (statisticsPerCrop at: crop)) ] ].
+			self renderLegendOn: html ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #rendering }
 CropsForExpertsDashboardComponent >> tableHeadingOn: html [
 	html tableHead: [ 
 		html tableRow: [ 
@@ -62,7 +82,7 @@ CropsForExpertsDashboardComponent >> tableHeadingOn: html [
 				tableHeading: 'Última semana'  ] ]
 ]
 
-{ #category : #rendering }
+{ #category : #'text labels' }
 CropsForExpertsDashboardComponent >> title [
 	^ 'Plantación y siembra'
 ]

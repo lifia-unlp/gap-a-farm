@@ -18,7 +18,7 @@ DashboardCardDecorator >> component: anObject [
 
 { #category : #testing }
 DashboardCardDecorator >> hasElementsToShow [
-	^component elements isNotEmpty.
+	^ component hasElementsToShow
 ]
 
 { #category : #accessing }

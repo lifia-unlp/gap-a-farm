@@ -30,6 +30,11 @@ Sowing class >> isVoyageRoot [
 	^ true
 ]
 
+{ #category : #visitor }
+Sowing >> acceptVisitor: aVisitor on: aFarm [
+	aVisitor visitSowing: self on: aFarm
+]
+
 { #category : #accessing }
 Sowing >> cultivarName [
 	^ cultivarName
@@ -50,7 +55,7 @@ Sowing >> expectedYield: anObject [
 	expectedYield := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 Sowing >> harvestDate [
 	^ self date addDays: timeToHarvest.
 ]
@@ -65,7 +70,7 @@ Sowing >> harvestDuration: anObject [
 	harvestDuration := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 Sowing >> harvestPeriod [
 	^ self harvestDate addDays: harvestDuration.
 ]

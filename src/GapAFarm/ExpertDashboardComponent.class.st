@@ -27,8 +27,14 @@ ExpertDashboardComponent >> initializeComponents [
 		(DashboardCardDecorator new
 				component: SubstancesForExpertsDashboardComponent new;
 				title: 'Uso de fitosanitarios';
-				size: 6;
+				size: 8;
 				yourself)
+]
+
+{ #category : #initialization }
+ExpertDashboardComponent >> renderContentOn: html [
+	self session gapAFarm updateStatistics.
+	super renderContentOn: html
 ]
 
 { #category : #accessing }
