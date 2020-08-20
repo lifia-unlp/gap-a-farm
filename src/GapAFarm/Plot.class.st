@@ -3,6 +3,8 @@ Class {
 	#superclass : #GafObject,
 	#instVars : [
 		'id',
+		'type',
+		'contractor',
 		'surface',
 		'events',
 		'currentCycle'
@@ -23,6 +25,11 @@ Plot class >> isVoyageRoot [
 	^ true
 ]
 
+{ #category : #constants }
+Plot class >> types [
+	^ {'Invernadero' . 'A campo' . 'Hidroponia'}
+]
+
 { #category : #accessing }
 Plot >> addEvent: anEvent [
 	currentCycle addEvent: anEvent.
@@ -33,6 +40,16 @@ Plot >> addEvent: anEvent [
 { #category : #accessing }
 Plot >> aplications [
 	^ self events select: [ :event | event species = Application ]
+]
+
+{ #category : #accessing }
+Plot >> contractor [
+	^ contractor
+]
+
+{ #category : #accessing }
+Plot >> contractor: anObject [
+	contractor := anObject
 ]
 
 { #category : #utility }
@@ -170,6 +187,16 @@ Plot >> surface [
 { #category : #accessing }
 Plot >> surface: anObject [
 	surface := anObject
+]
+
+{ #category : #accessing }
+Plot >> type [
+	^ type
+]
+
+{ #category : #accessing }
+Plot >> type: anObject [
+	type := anObject
 ]
 
 { #category : #'current cycle' }

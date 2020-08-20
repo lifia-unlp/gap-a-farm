@@ -13,13 +13,15 @@ PlotsManagementComponent >> addManyElements [
 
 { #category : #rendering }
 PlotsManagementComponent >> columnHeadings [
-	^ {'ID' . 'Superficie (m2)'. 'Notas' },super columnHeadings
+	^ {'ID' . 'Superficie (m2)'. 'Tipo'. 'Mediero'. 'Notas' },super columnHeadings
 ]
 
 { #category : #rendering }
 PlotsManagementComponent >> columnValuesFor: element [
 	^ {element id.
 	element surface.
+	(element type ifNil: [ '' ]).
+	(element contractor ifNil: [ '' ]).
 	(self shorten: element comment to: 45)}
 		, (super columnValuesFor: element)
 ]

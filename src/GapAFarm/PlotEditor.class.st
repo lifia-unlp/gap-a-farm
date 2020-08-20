@@ -3,7 +3,9 @@ Class {
 	#superclass : #GAFEditor,
 	#instVars : [
 		'idPEditorComponent',
-		'surfaceEditorComponent'
+		'surfaceEditorComponent',
+		'typeEditorComponent',
+		'contractorEditorComponent'
 	],
 	#category : #'GapAFarm-ui-editors'
 }
@@ -28,7 +30,9 @@ PlotEditor >> children [
 	"Return all property editors in this editor, in the order you want them to be rendered"
 
 	^ {idPEditorComponent.
-		surfaceEditorComponent}, 
+		surfaceEditorComponent.
+		typeEditorComponent.
+		contractorEditorComponent}, 
 		super children
 ]
 
@@ -38,7 +42,19 @@ PlotEditor >> initializeComponents [
 
 	self initializeIdEditorComponent.
 	self initializeSurfaceEditorComponent.
+	self initializeTypeEditorComponent.
+	self initializeContractorEditorComponent.
 	super initializeComponents
+]
+
+{ #category : #initialization }
+PlotEditor >> initializeContractorEditorComponent [
+	contractorEditorComponent := TextLinePropertyEditorComponent
+		id: 'contractor'
+		subject: subject
+		selector: #contractor
+		label: 'Mediero'
+		required: false
 ]
 
 { #category : #initialization }
@@ -59,4 +75,15 @@ PlotEditor >> initializeSurfaceEditorComponent [
 		selector: #surface
 		label: 'Superficie del Lote (m2)'
 		required: true
+]
+
+{ #category : #initialization }
+PlotEditor >> initializeTypeEditorComponent [
+	typeEditorComponent := DropdownSelectPropertyEditorComponent
+		id: 'typeSelector'
+		subject: subject
+		selector: #type
+		label: 'Tipo de lote'
+		required: true.
+	typeEditorComponent possibleValuesBlock: [ Plot types ]
 ]

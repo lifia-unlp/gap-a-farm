@@ -75,6 +75,9 @@ EventEditor >> labelForPlot: each [
 	^ String
 		streamContents: [ :stream | 
 			stream nextPutAll: each id.
+			each type ifNotNil: [ stream nextPutAll: ' - ' , each type ].
+			each contractor
+				ifNotNil: [ stream nextPutAll: ' - ' , each contractor ].
 			each currentCycle latestSowing
 				ifNotNil: [ :it | 
 					stream
