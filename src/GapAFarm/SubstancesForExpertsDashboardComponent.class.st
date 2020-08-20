@@ -9,8 +9,9 @@ SubstancesForExpertsDashboardComponent >> describeThisMonth: anApplicationStatis
 	anApplicationStatisticsRecord farmsActiveThisMonth
 		ifEmpty: [ ^ 'Sin actividad' ].
 	^ anApplicationStatisticsRecord quantityThisMonth asString , ' / '
-		, (anApplicationStatisticsRecord surfaceThisMonth / 10000) asFloat asString
-		, 'ha / '
+		,
+			((anApplicationStatisticsRecord surfaceThisMonth / 10000) asFloat
+				round: 2) asString , 'ha / '
 		, anApplicationStatisticsRecord farmsActiveThisMonth size asString
 ]
 
@@ -19,8 +20,9 @@ SubstancesForExpertsDashboardComponent >> describeThisWeek: anApplicationStatist
 	anApplicationStatisticsRecord farmsActiveThisWeek
 		ifEmpty: [ ^ 'Sin actividad' ].
 	^ anApplicationStatisticsRecord quantityThisWeek asString , ' / '
-		, (anApplicationStatisticsRecord surfaceThisWeek / 10000) asFloat asString
-		, 'ha / '
+		,
+			((anApplicationStatisticsRecord surfaceThisWeek / 10000) asFloat
+				round: 2) asString , 'ha / '
 		, anApplicationStatisticsRecord farmsActiveThisWeek size asString
 ]
 

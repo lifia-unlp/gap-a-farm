@@ -12,10 +12,10 @@ ProblemsForExpertsDashboardComponent >> adversitiesWithRecords [
 
 { #category : #'text labels' }
 ProblemsForExpertsDashboardComponent >> describeThisMonth: anAdversityStatisticsRecord [
-	anAdversityStatisticsRecord farmsActiveThisMonth 
+	anAdversityStatisticsRecord farmsActiveThisMonth
 		ifEmpty: [ ^ 'Sin actividad' ].
-	^ (anAdversityStatisticsRecord surfaceThisMonth / 10000) asFloat asString
-		, 'ha / '
+	^ ((anAdversityStatisticsRecord surfaceThisMonth / 10000) asFloat
+		round: 2) asString , 'ha / '
 		, anAdversityStatisticsRecord farmsActiveThisMonth size asString
 ]
 
@@ -23,10 +23,9 @@ ProblemsForExpertsDashboardComponent >> describeThisMonth: anAdversityStatistics
 ProblemsForExpertsDashboardComponent >> describeThisWeek: anAdversityStatisticsRecord [
 	anAdversityStatisticsRecord farmsActiveThisWeek
 		ifEmpty: [ ^ 'Sin actividad' ].
-	^ (anAdversityStatisticsRecord surfaceThisWeek / 10000) asFloat asString
-		, 'ha / '
+	^ ((anAdversityStatisticsRecord surfaceThisWeek / 10000) asFloat
+		round: 2) asString , 'ha / '
 		, anAdversityStatisticsRecord farmsActiveThisWeek size asString
-
 ]
 
 { #category : #testing }

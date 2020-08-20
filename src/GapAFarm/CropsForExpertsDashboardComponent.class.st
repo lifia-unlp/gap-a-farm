@@ -14,9 +14,10 @@ CropsForExpertsDashboardComponent >> cropsWithRecords [
 CropsForExpertsDashboardComponent >> describeThisMonth: aSowingStatisticsRecord [
 	aSowingStatisticsRecord farmsActiveThisMonth
 		ifEmpty: [ ^ 'Sin actividad' ].
-	^ aSowingStatisticsRecord quantityThisMonth asString , ' / '
-		, (aSowingStatisticsRecord surfaceThisMonth / 10000) asFloat asString
-		, 'ha / '
+	^ aSowingStatisticsRecord quantityThisMonth asString , '/'
+		,
+			((aSowingStatisticsRecord surfaceThisMonth / 10000) asFloat round: 2)
+				asString , 'ha/'
 		, aSowingStatisticsRecord farmsActiveThisMonth size asString
 ]
 
@@ -25,8 +26,9 @@ CropsForExpertsDashboardComponent >> describeThisWeek: aSowingStatisticsRecord [
 	aSowingStatisticsRecord farmsActiveThisWeek
 		ifEmpty: [ ^ 'Sin actividad' ].
 	^ aSowingStatisticsRecord quantityThisWeek asString , ' / '
-		, (aSowingStatisticsRecord surfaceThisWeek / 10000) asFloat asString
-		, 'ha / '
+		,
+			((aSowingStatisticsRecord surfaceThisWeek / 10000) asFloat round: 2)
+				asString , 'ha / '
 		, aSowingStatisticsRecord farmsActiveThisWeek size asString
 ]
 
