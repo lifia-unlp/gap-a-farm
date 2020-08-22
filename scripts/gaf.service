@@ -1,0 +1,15 @@
+[Unit]
+Description=GAP-A-Farm server
+After=network.target 
+Requires=mongod.service
+
+[Service]
+Type=simple
+PIDFile=/var/run/gaf.pid
+Environment=appdir=/var/www/apps/gaf
+ExecStart=/var/www/apps/gaf/pharo /var/www/apps/gaf/Pharo.image st /var/www/apps/gaf/run.st --no-quit --no-default-preferences
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
