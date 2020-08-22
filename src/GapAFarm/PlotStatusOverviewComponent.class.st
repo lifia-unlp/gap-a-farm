@@ -46,7 +46,7 @@ PlotStatusOverviewComponent >> columnValuesFor: element [
 	"{'Lote' . 'Implantación' . 'Adversidades' . 'Aplicaciones'.
 	'Cosecha'}"
 
-	^ {element id.
+	^ {(self labelFor: element).
 	(self sowingSummaryForPlot: element).
 	(self adversitySummaryForPlot: element).
 	((self applicationsSummaryForPlot: element)
@@ -80,6 +80,17 @@ PlotStatusOverviewComponent >> initialize [
 	addEnabled := false.
 	editEnabled := false.
 	duplicateEnabled := false
+]
+
+{ #category : #summaries }
+PlotStatusOverviewComponent >> labelFor: aPlot [
+	^ String
+		streamContents: [ :stream | 
+			stream nextPutAll: aPlot id.
+			aPlot type ifNotNil: [ :type | stream nextPutAll: ' - ' , type ].
+			aPlot contractor
+				ifNotNil:
+					[ :contractor | contractor ifNotEmpty: [ stream nextPutAll: ' - ' , contractor ] ] ]
 ]
 
 { #category : #summaries }
