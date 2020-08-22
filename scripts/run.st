@@ -4,7 +4,6 @@ port := 8080.
 adminEmail := 'admin@gapafarm.com'.
 demoMode := false. 
 mongoDB := 'gapafarm'.
-route := 'gaf'.
 
 "DO NOT CHANGE FROM HERE ON"
 
@@ -25,6 +24,6 @@ GAFDeployer new
 	database: mongoDB;
 	deploy.
 
-WAAdmin defaultDispatcher defaultName: route.
+WAAdmin defaultDispatcher defaultName: 'gaf'.
 
 GAFDeployer demoMode: demoMode.
