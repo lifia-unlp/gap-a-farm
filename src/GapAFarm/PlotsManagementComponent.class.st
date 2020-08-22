@@ -42,7 +42,7 @@ PlotsManagementComponent >> elementEditorClass [
 
 { #category : #accessing }
 PlotsManagementComponent >> elements [
-	^ self session farm plots
+	^ self session farm plots asSortedCollection: [ :a :b | a id < b id ]
 ]
 
 { #category : #rendering }
