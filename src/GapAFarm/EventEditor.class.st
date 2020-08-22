@@ -77,12 +77,12 @@ EventEditor >> labelForPlot: each [
 			stream nextPutAll: each id.
 			each type ifNotNil: [ stream nextPutAll: ' - ' , each type ].
 			each contractor
-				ifNotNil: [ stream nextPutAll: ' - ' , each contractor ].
+				ifNotNil:
+					[ :contractor | contractor ifNotEmpty: [ stream nextPutAll: ' - ' , each contractor ] ].
+			stream nextPutAll: ' - '.
 			each currentCycle latestSowing
-				ifNotNil: [ :it | 
-					stream
-						nextPutAll: ' - ';
-						nextPutAll: it crop vulgarName ].
+				ifNil: [ stream nextPutAll: 'sin cultivar' ]
+				ifNotNil: [ :it | stream nextPutAll: it crop vulgarName ].
 			daysLeft := [ each withdrawalPeriodDaysLeft ]
 				on: MissingWithdrawalInformationException
 				do: [ nil ].
