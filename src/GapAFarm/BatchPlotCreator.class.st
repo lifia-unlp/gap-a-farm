@@ -3,7 +3,9 @@ Class {
 	#superclass : #GAFEditor,
 	#instVars : [
 		'surface',
+		'type',
 		'surfaceEditorComponent',
+		'typeEditorComponent',
 		'numberOfPlots',
 		'plotIdsEditorComponent',
 		'plotIds'
@@ -37,12 +39,17 @@ BatchPlotCreator >> children [
 	"Return all property editors in this editor, in the order you want them to be rendered"
 
 	^ {plotIdsEditorComponent.
-	surfaceEditorComponent}
+	surfaceEditorComponent.
+	typeEditorComponent}
 ]
 
 { #category : #callbacks }
 BatchPlotCreator >> createPlots [
-	^ plotIds collect: [ :id | Plot id: id surface: surface ]
+	^ plotIds
+		collect: [ :id | 
+			(Plot id: id surface: surface)
+				type: type;
+				yourself ]
 ]
 
 { #category : #'subclass-responsibility' }
@@ -56,7 +63,8 @@ BatchPlotCreator >> initializeComponents [
 	"Initialize all property components"
 
 	self initializePlotIdsEditorComopnent.
-	self initializeSurfaceEditorComponent
+	self initializeSurfaceEditorComponent.
+	self initializeTypeEditorComponent
 ]
 
 { #category : #initialization }
@@ -80,6 +88,17 @@ BatchPlotCreator >> initializeSurfaceEditorComponent [
 		selector: #surface
 		label: 'Superficie de los lotes (m2)'
 		required: true
+]
+
+{ #category : #initialization }
+BatchPlotCreator >> initializeTypeEditorComponent [
+	typeEditorComponent := DropdownSelectPropertyEditorComponent
+		id: 'typeSelector'
+		subject: self
+		selector: #type
+		label: 'Tipo de lote'
+		required: true.
+	typeEditorComponent possibleValuesBlock: [ Plot types ]
 ]
 
 { #category : #accessing }
@@ -110,4 +129,14 @@ BatchPlotCreator >> surface [
 { #category : #accessing }
 BatchPlotCreator >> surface: anObject [
 	surface := anObject
+]
+
+{ #category : #accessing }
+BatchPlotCreator >> type [
+	^ type
+]
+
+{ #category : #accessing }
+BatchPlotCreator >> type: anObject [
+	type := anObject
 ]
