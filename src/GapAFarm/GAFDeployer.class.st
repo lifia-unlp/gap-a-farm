@@ -3,7 +3,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'adminEmail',
-		'application'
+		'application',
+		'smtpServer',
+		'useEmailErrorHandler'
 	],
 	#classVars : [
 		'DemoMode',
@@ -64,5 +66,33 @@ GAFDeployer >> deploy [
 	self addLibraries.
 	application sessionClass: GAFSession.
 	application configuration addParent: GAFConfiguration instance.
-	application preferenceAt: #adminEmail put: adminEmail
+	application preferenceAt: #adminEmail put: adminEmail.
+	useEmailErrorHandler & smtpServer notNil
+		ifTrue: [ application exceptionHandler: GAFEmailErrorHandler ]
+]
+
+{ #category : #deploying }
+GAFDeployer >> initialize [
+	super initialize.
+	useEmailErrorHandler := false
+]
+
+{ #category : #accessing }
+GAFDeployer >> smtpServer [
+	^ smtpServer
+]
+
+{ #category : #accessing }
+GAFDeployer >> smtpServer: anObject [
+	smtpServer := anObject
+]
+
+{ #category : #accessing }
+GAFDeployer >> useEmailErrorHandler [
+	^ useEmailErrorHandler
+]
+
+{ #category : #accessing }
+GAFDeployer >> useEmailErrorHandler: anObject [
+	useEmailErrorHandler := anObject
 ]
