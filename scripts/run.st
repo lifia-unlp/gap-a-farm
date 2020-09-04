@@ -3,7 +3,7 @@
 port := 8080.
 adminEmail := 'admin@gapafarm.com'.
 demoMode := false. 
-mongoDB := 'gapafarm'.
+mongoDB  :=  'gapafarm'.smtpServer := 'smtp.gapafarm.com'.
 
 "DO NOT CHANGE FROM HERE ON"
 
@@ -20,7 +20,7 @@ WAAdmin applicationDefaults
 	removeParent: WADevelopmentConfiguration instance.
 
 GAFDeployer new
-	adminEmail: adminEmail;
+	adminEmail: adminEmail;	 smtpServer: smtpServer;          useEmailErrorHandler: true;
 	database: mongoDB;
 	deploy.
 
