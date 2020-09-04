@@ -25,10 +25,13 @@ GAFEmailErrorHandler >> handleDefault: anException [
 
 { #category : #private }
 GAFEmailErrorHandler >> renderContentForException: anException on: html [
-	html alert
-		beDanger;
-		with: [ html strong: 'Oh snap!'.
-			html text: ' I encounter an error. I already tried to notify the admins. Be sure to export your reviews, just in case.' ]
+	html heading
+		level: 1;
+		with: 'Ahg!'.
+	html
+		paragraph: ' Estoy experimentando algunas dificultades.';
+		paragraph:
+			'Ya doy aviso a los administradores para que lo revuelvan a la brevedad.'
 ]
 
 { #category : #private }
