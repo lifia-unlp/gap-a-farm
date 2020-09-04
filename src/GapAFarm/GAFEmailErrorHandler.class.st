@@ -5,6 +5,20 @@ Class {
 }
 
 { #category : #private }
+GAFEmailErrorHandler >> bodyFor: anError [
+	^ WAStringEmailBody
+		string:
+			(String
+				streamContents: [ :stream | 
+					stream
+						nextPutAll: self requestContext request url printString;
+						cr;
+						cr.
+					anError signalerContext errorReportOn: stream ])
+		lineLength: 72
+]
+
+{ #category : #private }
 GAFEmailErrorHandler >> from [
 	"ansers the WAEmailAddress instance used as a sender address"
 
@@ -37,6 +51,11 @@ GAFEmailErrorHandler >> renderContentForException: anException on: html [
 { #category : #private }
 GAFEmailErrorHandler >> rendererClass [
 	^ WAHtmlCanvas
+]
+
+{ #category : #private }
+GAFEmailErrorHandler >> subjectFor: anError [
+	^ 'GAP-a-Farm error: ' , anError signalerContext printString
 ]
 
 { #category : #private }
