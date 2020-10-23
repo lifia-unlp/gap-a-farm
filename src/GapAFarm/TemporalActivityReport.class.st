@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'monthlyReports'
 	],
-	#category : #'GapAFarm-Analysis'
+	#category : #'GapAFarm-statistics'
 }
 
 { #category : #printing }
@@ -14,10 +14,10 @@ TemporalActivityReport >> daylyReports [
 ]
 
 { #category : #printing }
-TemporalActivityReport >> eventCounts [
+TemporalActivityReport >> eventCounter [
 	| counter |
 	counter := SpeciesCounter new.
-	monthlyReports do: [ :each | counter add: each eventCounts ].
+	monthlyReports do: [ :each | counter add: each eventCounter ].
 	^ counter
 ]
 
@@ -38,7 +38,7 @@ TemporalActivityReport >> initialize [
 
 { #category : #accessing }
 TemporalActivityReport >> monthlyReports [
-	^ monthlyReports
+	^ monthlyReports values asSortedCollection: [ :a :b | a month < b month ]
 ]
 
 { #category : #updating }

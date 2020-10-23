@@ -5,7 +5,7 @@ Class {
 		'week',
 		'daylyReports'
 	],
-	#category : #'GapAFarm-Analysis'
+	#category : #'GapAFarm-statistics'
 }
 
 { #category : #'instance creation' }
@@ -21,11 +21,11 @@ WeeklyActivityReport >> daylyReports [
 ]
 
 { #category : #printing }
-WeeklyActivityReport >> eventCounts [
+WeeklyActivityReport >> eventCounter [
 	| counter |
 	counter := SpeciesCounter new.
 	daylyReports
-		do: [ :each | each ifNotNil: [ counter add: each eventCounts ] ].
+		do: [ :each | each ifNotNil: [ counter add: each eventCounter ] ].
 	^ counter
 ]
 

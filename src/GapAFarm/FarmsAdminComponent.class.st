@@ -58,3 +58,12 @@ FarmsAdminComponent >> renderSpecificActionsFor: aFarm on: html [
 		callback: [ self session farm: aFarm ];
 		with: 'Usar en esta sessión'
 ]
+
+{ #category : #hooks }
+FarmsAdminComponent >> viewElement: aFarm [
+	self
+		call:
+			(FarmSnapshotComponent new
+				farm: aFarm;
+				yourself)
+]

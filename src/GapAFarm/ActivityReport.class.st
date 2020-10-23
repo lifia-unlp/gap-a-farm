@@ -1,21 +1,21 @@
 Class {
 	#name : #ActivityReport,
 	#superclass : #Object,
-	#category : #'GapAFarm-Analysis'
+	#category : #'GapAFarm-statistics'
 }
 
 { #category : #printing }
 ActivityReport >> asJson [
 	| dict |
 	dict := Dictionary new.
-	self eventCounts speciesCountDictionary
+	self eventCounter counts
 		keysAndValuesDo: [ :key :value | dict at: key name put: value ].
 	dict at: self groupingCriteria put: self group.
 	^ dict asJson
 ]
 
 { #category : #printing }
-ActivityReport >> eventCounts [
+ActivityReport >> eventCounter [
 	^ self subclassResponsibility
 ]
 
@@ -31,5 +31,5 @@ ActivityReport >> groupingCriteria [
 
 { #category : #printing }
 ActivityReport >> printOn: aStream [
-	self eventCounts printOn: aStream
+	self eventCounter printOn: aStream
 ]

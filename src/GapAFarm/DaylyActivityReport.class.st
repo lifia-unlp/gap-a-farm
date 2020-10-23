@@ -5,7 +5,7 @@ Class {
 		'date',
 		'eventCounts'
 	],
-	#category : #'GapAFarm-Analysis'
+	#category : #'GapAFarm-statistics'
 }
 
 { #category : #'instance creation' }
@@ -21,7 +21,7 @@ DaylyActivityReport >> date [
 ]
 
 { #category : #printing }
-DaylyActivityReport >> eventCounts [
+DaylyActivityReport >> eventCounter [
 	^ eventCounts
 ]
 

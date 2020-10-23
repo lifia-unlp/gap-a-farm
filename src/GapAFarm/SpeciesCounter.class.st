@@ -4,12 +4,12 @@ Class {
 	#instVars : [
 		'speciesCountDictionary'
 	],
-	#category : #'GapAFarm-Analysis'
+	#category : #'GapAFarm-statistics'
 }
 
 { #category : #counting }
 SpeciesCounter >> add: anotherCounter [
-	anotherCounter speciesCountDictionary
+	anotherCounter counts
 		keysAndValuesDo: [ :key :value | 
 			speciesCountDictionary
 				at: key
@@ -21,6 +21,11 @@ SpeciesCounter >> count: anObject [
 	speciesCountDictionary
 		at: anObject species
 		put: (speciesCountDictionary at: anObject species ifAbsent: [ 0 ]) + 1
+]
+
+{ #category : #private }
+SpeciesCounter >> counts [
+	^ speciesCountDictionary
 ]
 
 { #category : #initialization }
@@ -36,9 +41,4 @@ SpeciesCounter >> printOn: aStream [
 			ass printOn: aStream.
 			aStream space ].
 	aStream nextPutAll: ')'
-]
-
-{ #category : #private }
-SpeciesCounter >> speciesCountDictionary [
-	^ speciesCountDictionary
 ]
