@@ -10,11 +10,11 @@ BaselineOfGapAFarm >> baseline: spec [
 	spec
 		for: #common
 		do: [ self
-				seaside: spec;
-				bootstrap4: spec;
-				voyage: spec;
 				neoCSV: spec;
-				neoJSON: spec.
+				neoJSON: spec;
+				voyage: spec;
+				seaside: spec;
+				bootstrap4: spec.
 			spec
 				package: 'GapAFarm'
 				with: [ spec requires: #('Seaside3' 'Bootstrap4-Core' 'Voyage' 'NeoCSV') ].
@@ -25,9 +25,6 @@ BaselineOfGapAFarm >> baseline: spec [
 BaselineOfGapAFarm >> bootstrap4: spec [
 	spec
 		package: 'Bootstrap4-Core'
-		with: [ spec repository: 'github://astares/Seaside-Bootstrap4:master/src' ].
-	spec
-		package: 'Bootstrap4-Examples'
 		with: [ spec repository: 'github://astares/Seaside-Bootstrap4:master/src' ].
 
 ]
@@ -96,7 +93,7 @@ WAAdmin defaultDispatcher defaultName: ''gaf''.
 BaselineOfGapAFarm >> seaside: spec [
 	spec
 		baseline: 'Seaside3'
-		with: [ spec repository: 'github://SeasideSt/Seaside:v3.3.4/repository' ].
+		with: [ spec repository: 'github://SeasideSt/Seaside:v3.4.8/repository' ].
 
 ]
 
