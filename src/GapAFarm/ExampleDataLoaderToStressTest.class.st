@@ -20,20 +20,22 @@ ExampleDataLoaderToStressTest >> activeIngredients [
 
 { #category : #loading }
 ExampleDataLoaderToStressTest >> addDemoApplicationToPlot: aPlot [
+
 	| application time type substance |
 	lastDay := lastDay addDays: (1 to: 10) atRandom.
-	time := {'8:00' . '10:00' . '14:00' . '16:00' . '18:00'} atRandom asTime.
-	type := {'Peste' . 'Enfermedad'} atRandom.
-	substance := session gapAFarm substances atRandom. 
+	time := { '8:00'. '10:00'. '14:00'. '16:00'. '18:00' } atRandom
+		        asTime.
+	type := { 'Peste'. 'Enfermedad' } atRandom.
+	substance := session gapAFarm substances atRandom.
 	application := Application new
-		reason: 'Una ' , type , ' muy grave';
-		substance: substance;
-		dose: '200mg/ha';
-		machine: 'Dosificador 1';
-		date: lastDay;
-		time: time;
-		plot: aPlot;
-		yourself.
+		               comment: 'Una ' , type , ' muy grave';
+		               substance: substance;
+		               dose: '200mg/ha';
+		               machine: 'Dosificador 1';
+		               date: lastDay;
+		               time: time;
+		               plot: aPlot;
+		               yourself.
 	aPlot addEvent: application.
 	application save.
 	aPlot save
@@ -81,17 +83,19 @@ ExampleDataLoaderToStressTest >> addDemoPlots [
 
 { #category : #loading }
 ExampleDataLoaderToStressTest >> addDemoProblemToPlot: aPlot [
+
 	| problem time type |
 	lastDay := lastDay addDays: (1 to: 10) atRandom.
-	time := {'8:00' . '10:00' . '14:00' . '16:00' . '18:00'} atRandom asTime.
-	type := {'Peste' . 'Enfermedad'} atRandom.
+	time := { '8:00'. '10:00'. '14:00'. '16:00'. '18:00' } atRandom
+		        asTime.
+	type := { 'Peste'. 'Enfermedad' } atRandom.
 	problem := AdversityReport new
-		name: 'Una ' , type , ' muy grave';
-		type: type;
-		date: lastDay;
-		time: time;
-		plot: aPlot;
-		yourself.
+		           comment: 'Una ' , type , ' muy grave';
+		           adversityTypes: (OrderedCollection with: type);
+		           date: lastDay;
+		           time: time;
+		           plot: aPlot;
+		           yourself.
 	aPlot addEvent: problem.
 	problem save.
 	aPlot save
