@@ -1,0 +1,16 @@
+# run with docker-compose up -d
+
+version: "3.9"  
+services:
+  web:
+    image: memorias:pharo10
+    restart: unless-stopped
+    read_only: true
+    environment: 
+      DB_HOST: your-mongodb-server-ip
+      DB: gapafarm
+      ADMIN_Email: admin@email.com
+      DEBUG: true   
+    ports:
+        - "8080:8080"
+
