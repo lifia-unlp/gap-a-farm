@@ -49,8 +49,8 @@ BaselineOfGapAFarm >> neoJSON: spec [
 { #category : #baselines }
 BaselineOfGapAFarm >> postLoadActions [
 
-	GTPlayground
-		edit: '"To deploy in debug mode use this lines"
+	StPlayground
+		openContents: '"To deploy in debug mode use this lines"
 
 GAFDeployer new adminEmail: ''youremail@yourdomain.com''; 
 	database: ''gapafarm'';
@@ -85,22 +85,24 @@ GAFDeployer new
 WAAdmin defaultDispatcher defaultName: ''gaf''.
 
 '
-	
-	label: 'Deployment scripts'.
 ]
 
 { #category : #baselines }
 BaselineOfGapAFarm >> seaside: spec [
 	spec
 		baseline: 'Seaside3'
-		with: [ spec repository: 'github://SeasideSt/Seaside:v3.4.8/repository' ].
+		with: [ spec repository: 'github://SeasideSt/Seaside:master/repository' ].
+	spec
+		package: 'Seaside-REST-Core'
+		with: [ spec repository: 'github://SeasideSt/Seaside:master/repository' ]
 
 ]
 
 { #category : #baselines }
 BaselineOfGapAFarm >> voyage: spec [
+
 	spec baseline: 'Voyage' with: [ 
 		spec
 			loads: #( mongo );
-			repository: 'github://pharo-nosql/voyage:1.6/mc' ]
+			repository: 'github://pharo-nosql/voyage:pharo10-ready/mc' ]
 ]
