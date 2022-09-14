@@ -42,6 +42,7 @@ LoginFormComponent >> email: anObject [
 
 { #category : #initilization }
 LoginFormComponent >> initialize [
+   super initialize.
 	emailComponent := EmailPropertyEditorComponent
 	   id: 'email'
 		subject: self

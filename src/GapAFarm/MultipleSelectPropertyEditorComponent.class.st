@@ -20,6 +20,7 @@ MultipleSelectPropertyEditorComponent >> handleCallbackWith: anObject [
 
 { #category : #initialization }
 MultipleSelectPropertyEditorComponent >> initialize [
+   super initialize.
 	possibleValuesBlock := [ OrderedCollection new ].
 	rows := 5
 ]

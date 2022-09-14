@@ -30,6 +30,7 @@ DropdownSelectPropertyEditorComponent >> handleCallbackWith: anObject [
 
 { #category : #hooks }
 DropdownSelectPropertyEditorComponent >> initialize [
+   super initialize. 
 	possibleValuesBlock := [ OrderedCollection new ]
 ]
 

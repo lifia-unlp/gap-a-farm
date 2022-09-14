@@ -29,6 +29,14 @@ GAFLandingComponent class >> url [
 	^ '/' , self applicationName
 ]
 
+{ #category : #rendering }
+GAFLandingComponent >> children [
+
+	^ { 
+		  loginComponent.
+		  registerComponent }
+]
+
 { #category : #initialization }
 GAFLandingComponent >> initialize [
 	super initialize.
