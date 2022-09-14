@@ -18,7 +18,7 @@ BaselineOfGapAFarm >> baseline: spec [
 			spec
 				package: 'GapAFarm'
 				with: [ spec requires: #('Seaside3' 'Bootstrap4-Core' 'Voyage' 'NeoCSV') ].
-			spec postLoadDoIt: #postLoadActions ]
+ ]
 ]
 
 { #category : #baselines }
