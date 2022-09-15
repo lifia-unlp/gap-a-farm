@@ -45,7 +45,7 @@ smtpServer notNil
 application
 	addLibrary: JQDeploymentLibrary;
 	addLibrary: JQUiDeploymentLibrary;
-	addLibrary: SBSDeploymentLibrary 
+	addLibrary: SBSDeploymentLibrary .
 
 WAAdmin defaultDispatcher defaultName: GAFLandingComponent applicationName.
 
