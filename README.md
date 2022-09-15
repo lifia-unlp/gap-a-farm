@@ -5,7 +5,7 @@ GAP-a-Farm es una herramienta de investigación que busca explorar el rol de las
 
 For more information, visit [our web-site](https://www.lifia.info.unlp.edu.ar/gap-a-farm/)
 
-In your Pharo 7.0 image evaluate the following expresion to install the application.
+In your Pharo 10.0 image evaluate the following expresion to install the application.
 
 ```Smalltalk
 Metacello new
