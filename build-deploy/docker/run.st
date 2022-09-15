@@ -3,13 +3,13 @@
 debug := (OSEnvironment current at: 'DEBUG' ifAbsent: 'false') = 'true'.
 Transcript show: 'DEBUG: ', debug printString; cr.
 dbhost := OSEnvironment current at: 'DB_HOST' ifAbsent: 'mongodb'.
-Transcript show: 'DB_HOST: ', dnhost printString; cr.
+Transcript show: 'DB_HOST: ', dbhost printString; cr.
 db := OSEnvironment current at: 'DB' ifAbsent: 'gapafarm'.
 Transcript show: 'DB: ', db printString; cr.
 dbuser := OSEnvironment current at: 'DB_USER' ifAbsent: nil.
 dbpassword := OSEnvironment current at: 'DB_PASSWORD' ifAbsent: nil.
 smtpServer := OSEnvironment current at: 'SMTP' ifAbsent: nil.
-Transcript show: 'SMTP: ', smtp printString; cr.
+Transcript show: 'SMTP: ', smtpServer printString; cr.
 adminEmail := OSEnvironment current at: 'ADMIN_EMAIL' ifAbsent: nil.
 Transcript show: 'ADMIN_EMAIL: ', adminEmail printString; cr.
 demo := (OSEnvironment current at: 'DEMO' ifAbsent: 'false') = 'true'.
