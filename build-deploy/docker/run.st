@@ -1,7 +1,9 @@
 | adminEmail application dbhost db dbuser dbpassword smtpServer debug demo |
 
+
+
 debug := (OSEnvironment current at: 'DEBUG' ifAbsent: 'false') = 'true'.
-Transcript show: 'DEBUG: ', debug printString; cr.
+Transcript cr; show: 'DEBUG: ', debug printString; cr.
 dbhost := OSEnvironment current at: 'DB_HOST' ifAbsent: 'mongodb'.
 Transcript show: 'DB_HOST: ', dbhost printString; cr.
 db := OSEnvironment current at: 'DB' ifAbsent: 'gapafarm'.
