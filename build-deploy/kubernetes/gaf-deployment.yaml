@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: gaf
+  name: gaf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: gaf        
+  template:
+    metadata:            
+      labels:
+        app: gaf        
+    spec:
+      containers:
+        - name: gaf
+          image: cientopolis/gapafarm:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              protocol: TCP     
+          env:
+            - name: DB_HOST
+              value: "mongo"
+            - name: DB
+              value: "gapafarm"
+            - name: ADMIN_EMAIL
+              value: "admin@mail.com"
+            - name: DEBUG
+              value: "false"
+
