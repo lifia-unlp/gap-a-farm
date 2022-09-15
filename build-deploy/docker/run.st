@@ -1,4 +1,4 @@
-| application dbhost db dbuser dbpassword smtpServer debug |
+| adminEmail application dbhost db dbuser dbpassword smtpServer debug |
 
 debug := (OSEnvironment current at: 'DEBUG' ifAbsent: 'false') = 'true'.
 dbhost := OSEnvironment current at: 'DB_HOST' ifAbsent: 'mongodb'.
