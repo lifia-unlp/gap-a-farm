@@ -60,3 +60,4 @@ WAAdmin defaultDispatcher defaultName: GAFLandingComponent applicationName.
 GAFDeployer demoMode: demo.
 
 Transcript cr; show: 'GAP-A-Farm started'; cr; cr.
+Transcript show: 'This line will be lost ... eaten by the container?'
