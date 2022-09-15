@@ -9,8 +9,8 @@ services:
     environment: 
       DB_HOST: your-mongodb-server-ip
       DB: gapafarm
-      ADMIN_Email: admin@email.com
-      DEBUG: true   
+      ADMIN_EMAIL: user@domain.com
+      DEBUG: false   
     ports:
         - "8080:8080"
 
