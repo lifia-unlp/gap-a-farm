@@ -10,7 +10,8 @@ services:
       DB_HOST: your-mongodb-server-ip
       DB: gapafarm
       ADMIN_EMAIL: user@domain.com
-      DEBUG: false   
+      DEBUG: true  
+      DEMO: true 
     ports:
         - "8080:8080"
 
