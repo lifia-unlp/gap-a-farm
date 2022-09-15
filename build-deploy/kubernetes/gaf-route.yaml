@@ -1,0 +1,11 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: gapafarm
+spec:
+  host: gapafarm.lifia.ar
+  port:
+    targetPort: gaf
+  to:
+    kind: Service
+    name: gaf

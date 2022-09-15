@@ -30,4 +30,5 @@ spec:
               value: "admin@mail.com"
             - name: DEBUG
               value: "false"
-
+            - name: DEMO
+              value: "false"
