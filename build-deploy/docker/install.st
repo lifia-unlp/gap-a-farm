@@ -10,3 +10,5 @@ Metacello new
 PharoCommandLineHandler forcePreferencesOmission: true.
 "Disable Epicea"
 EpMonitor reset.
+NoChangesLog install.
+NoPharoFilesOpener install
