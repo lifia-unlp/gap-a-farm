@@ -10,7 +10,7 @@ In your Pharo 10.0 image evaluate the following expresion to install the applica
 ```Smalltalk
 Metacello new
 	baseline: 'GapAFarm';
-	repository: 'github://cientopolis/gap-a-farm';
+	repository: 'github://lifia-unlp/gap-a-farm';
 	onConflictUseLoaded;
 	load.
   ```
@@ -20,7 +20,7 @@ To load the tests evaluate:
 ```Smalltalk
 Metacello new
 	baseline: 'GapAFarmTests';
-	repository: 'github://cientopolis/gap-a-farm';
+	repository: 'github://lifia-unlp/gap-a-farm';
 	onConflictUseLoaded;
 	load.
 ```
