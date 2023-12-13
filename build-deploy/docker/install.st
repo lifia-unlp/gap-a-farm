@@ -2,7 +2,7 @@ Smalltalk vm maxExternalSemaphoresSilently: 1024.
 "Install the app"
 Metacello new
 	baseline: 'GapAFarm';
-	repository: 'github://liifa-unlp/gap-a-farm';
+	repository: 'github://lifia-unlp/gap-a-farm';
 	onConflictUseLoaded;
 	onWarningLog;
 	load.
