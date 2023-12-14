@@ -11,6 +11,7 @@ In your Pharo 10.0 image evaluate the following expresion to install the applica
 Metacello new
 	baseline: 'GapAFarm';
 	repository: 'github://lifia-unlp/gap-a-farm';
+	onWarningLog;
 	onConflictUseLoaded;
 	load.
   ```
@@ -21,6 +22,7 @@ To load the tests evaluate:
 Metacello new
 	baseline: 'GapAFarmTests';
 	repository: 'github://lifia-unlp/gap-a-farm';
+	onWarningLog;
 	onConflictUseLoaded;
 	load.
 ```
