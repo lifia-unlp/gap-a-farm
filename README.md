@@ -29,4 +29,4 @@ Metacello new
 
 # Deployment
 
-To deploy/run the app evaluate the code in /build-deploy/docker/run.st
+To deploy/run the app evaluate the code in [/build-deploy/docker/run.st](/lifia-unlp/gap-a-farm/blob/master/build-deploy/docker/run.st)
