@@ -12,7 +12,7 @@ Metacello new
 	baseline: 'GapAFarm';
 	repository: 'github://lifia-unlp/gap-a-farm';
 	onWarningLog;
-	onConflictUseLoaded;
+	onConflictUseIncoming;
 	load.
   ```
   
@@ -23,7 +23,7 @@ Metacello new
 	baseline: 'GapAFarmTests';
 	repository: 'github://lifia-unlp/gap-a-farm';
 	onWarningLog;
-	onConflictUseLoaded;
+	onConflictUseIncoming;
 	load.
 ```
 
