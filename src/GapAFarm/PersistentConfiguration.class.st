@@ -5,7 +5,8 @@ Class {
 		'blockNewUsers',
 		'smtpServer',
 		'replyToEmail',
-		'superAdminEmail'
+		'superAdminEmail',
+		'telegramToken'
 	],
 	#category : #'GapAFarm-ui-admin'
 }
@@ -59,4 +60,16 @@ PersistentConfiguration >> superAdminEmail [
 { #category : #accessing }
 PersistentConfiguration >> superAdminEmail: anObject [
 	superAdminEmail := anObject
+]
+
+{ #category : #accessing }
+PersistentConfiguration >> telegramToken [
+
+	^ telegramToken
+]
+
+{ #category : #accessing }
+PersistentConfiguration >> telegramToken: anObject [
+
+	telegramToken := anObject
 ]

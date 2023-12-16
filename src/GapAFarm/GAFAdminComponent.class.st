@@ -2,7 +2,8 @@ Class {
 	#name : #GAFAdminComponent,
 	#superclass : #GAFAbstractComponent,
 	#instVars : [
-		'selectedComponent'
+		'selectedComponent',
+		'telegramAdminComponent'
 	],
 	#category : #'GapAFarm-ui-admin'
 }
@@ -23,9 +24,11 @@ GAFAdminComponent >> renderContentOn: html [
 
 { #category : #rendering }
 GAFAdminComponent >> renderNavBarOn: html [
+
 	html anchor
-		callback: [ selectedComponent := ConfigurationEditor
-				subject: self session persistentConfiguration ];
+		callback: [
+			selectedComponent := ConfigurationEditor subject:
+					                     self session persistentConfiguration ];
 		with: [ html formButton bePrimary with: 'Configuración' ].
 	html space.
 	html anchor
@@ -34,5 +37,13 @@ GAFAdminComponent >> renderNavBarOn: html [
 	html space.
 	html anchor
 		callback: [ selectedComponent := FarmsAdminComponent new ];
-		with: [ html formButton bePrimary with: 'Granjas' ]
+		with: [ html formButton bePrimary with: 'Granjas' ].
+	html space.
+	html anchor
+		callback: [
+			selectedComponent := TelegramConfigurationEditor new
+				                     persistentConfiguration:
+					                     self session persistentConfiguration;
+				                     yourself ];
+		with: [ html formButton bePrimary with: 'Telegram bot' ]
 ]

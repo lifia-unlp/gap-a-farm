@@ -23,10 +23,13 @@ ConfigurationEditor >> cancel [
 
 { #category : #initialization }
 ConfigurationEditor >> children [
-	^ {blockNewUsersComponent.
-	smtpServerComponent.
-	replyToEmailComponent.
-	superAdminComponent}
+
+	^ {
+		  blockNewUsersComponent.
+		  smtpServerComponent.
+		  replyToEmailComponent.
+		  superAdminComponent.
+		   }
 ]
 
 { #category : #initialization }
@@ -51,6 +54,7 @@ ConfigurationEditor >> initializeComponents [
 	self initializeSmtpServerComponent.
 	self initializeReplyToEmailComponent.
 	self initializeSuperAdminEmailComponent .
+
 ]
 
 { #category : #initialization }

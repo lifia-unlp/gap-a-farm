@@ -82,6 +82,6 @@ FarmerHomeComponent >> renderRolesMenuBlockOn: html [
 	self session user isAdmin
 		ifTrue: [ html listGroupLinkedItem
 				callback: [ self call: GAFAdminComponent new ];
-				target: 'gaf-admin';
+				target: '_blank';
 				with: 'Administrador' ]
 ]

@@ -9,7 +9,8 @@ Class {
 		'isAdmin',
 		'isExpert',
 		'enabled',
-		'lastConnectedDateAndTime'
+		'lastConnectedDateAndTime',
+		'telegramId'
 	],
 	#category : #'GapAFarm-model'
 }
@@ -123,4 +124,16 @@ GAFUser >> lastConnectedDateAndTime [
 { #category : #accessing }
 GAFUser >> lastConnectedDateAndTime: anObject [
 	lastConnectedDateAndTime := anObject
+]
+
+{ #category : #accessing }
+GAFUser >> telegramId [
+
+	^ telegramId
+]
+
+{ #category : #accessing }
+GAFUser >> telegramId: anObject [
+
+	telegramId := anObject
 ]

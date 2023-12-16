@@ -26,6 +26,13 @@ UsersAdminComponent >> elementClass [
 	^ GAFUser
 ]
 
+{ #category : #hooks }
+UsersAdminComponent >> elementEditorClass [
+	"Returns the class of editor used to edit elements"
+
+	^ UserEditor 
+]
+
 { #category : #accessing }
 UsersAdminComponent >> elements [
 	^ self session gapAFarm users
