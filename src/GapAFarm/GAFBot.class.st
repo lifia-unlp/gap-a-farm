@@ -2,7 +2,7 @@ Class {
 	#name : #GAFBot,
 	#superclass : #PollingTelegramBot,
 	#instVars : [
-		'farmsForTelegramUsers'
+		'farmsForChats'
 	],
 	#classInstVars : [
 		'singleton'
@@ -16,14 +16,35 @@ GAFBot class >> singleton [
 	^ singleton ifNil: [ singleton := self new ]
 ]
 
-{ #category : #private }
-GAFBot >> farmFor: aTelegramUser [
+{ #category : #pushing }
+GAFBot >> broadcast: aString [
 
-	^ farmsForTelegramUsers at: aTelegramUser ifAbsent: [
-		  (self gafUserFor: aTelegramUser)
-			  ifNil: [ nil ]
-			  ifNotNil: [ :it |
-			  farmsForTelegramUsers at: aTelegramUser put: it farms first ] ]
+	farmsForChats keysDo: [ :chat |
+		self sendChatMessage: aString to: chat ]
+]
+
+{ #category : #accessing }
+GAFBot >> chatForFarm: aFarm [
+
+	^ farmsForChats keyAtValue: aFarm ifAbsent: [ nil ]
+]
+
+{ #category : #unsupported }
+GAFBot >> farmForMessage: aMessage [
+
+	| farm |
+	farm := farmsForChats at: aMessage chat ifAbsent: [
+		        (self farmForTelegramUser: aMessage from) ifNotNil: [ :it |
+			        farmsForChats at: aMessage chat put: it ] ].
+	^ farm
+]
+
+{ #category : #private }
+GAFBot >> farmForTelegramUser: aTelegramUser [
+
+	^ (self gafUserFor: aTelegramUser)
+		  ifNil: [ nil ]
+		  ifNotNil: [ :it | it farms first ]
 ]
 
 { #category : #private }
@@ -55,11 +76,12 @@ GAFBot >> handlePhotoMessage: aMessage [
 GAFBot >> handleTextMessage: aMessage [
 
 	| farm |
-	farm := self farmFor: aMessage from.
-	farm ifNil: [ ^ self notifyFarmNotSetFor: aMessage ].
-	
-	self offerActionsForFarm: farm inResponseTo: aMessage.
-	
+	farm := farmsForChats at: aMessage chat ifAbsent: [
+		        (self farmForTelegramUser: aMessage from) ifNotNil: [ :it |
+			        farmsForChats at: aMessage chat put: it ] ].
+	farm ifNil: [
+		^ self notifyFarmNotSetFor: aMessage from inResponseTo: aMessage ].
+	self offerActionsForFarm: farm inResponseTo: aMessage
 ]
 
 { #category : #unsupported }
@@ -79,16 +101,17 @@ GAFBot >> hasElephantMemory [
 GAFBot >> initialize [
 
 	super initialize.
-	farmsForTelegramUsers := Dictionary new
+	farmsForChats := Dictionary new.
+
 ]
 
 { #category : #private }
-GAFBot >> notifyFarmNotSetFor: aMessage [
+GAFBot >> notifyFarmNotSetFor: aTelegramUser inResponseTo: aMessage [
 
-	aMessage answer: 'Lo siento, ' , aMessage from username
+	aMessage answer: 'Lo siento, ' , aTelegramUser username
 		,
 		'. No tengo una granja asociada a su usuario de telegram. Solicite al administrador de GAP-a-Farm que le vincule a una granje (para ello provea su identificador unico de Telegram: '
-		, aMessage from id printString, ')'.
+		, aTelegramUser id printString , ')'
 ]
 
 { #category : #hooks }

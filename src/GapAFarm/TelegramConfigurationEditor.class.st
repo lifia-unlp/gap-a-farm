@@ -51,11 +51,27 @@ TelegramConfigurationEditor >> renderBotStatusOn: html [
 ]
 
 { #category : #initialization }
+TelegramConfigurationEditor >> renderBroadcastMessageFormOn: html [
+
+	html form: [
+		html label: 'Mensaje a enviar '.
+		html break.
+		html textArea
+			callback: [ :value | GAFBot singleton broadcast: value ];
+			rows: 4;
+			columns: 80.
+		html break.
+		html submitButton: 'Enviar a todos' ]
+]
+
+{ #category : #initialization }
 TelegramConfigurationEditor >> renderContentOn: html [
 
 	html container
 		style: 'padding-top: 20px';
-		with: [ self renderBotStatusOn: html ]
+		with: [
+			self renderBotStatusOn: html.
+			self renderBroadcastMessageFormOn: html ]
 ]
 
 { #category : #initialization }

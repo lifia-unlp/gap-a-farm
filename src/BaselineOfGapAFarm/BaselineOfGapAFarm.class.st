@@ -15,7 +15,8 @@ BaselineOfGapAFarm >> baseline: spec [
 				voyage: spec;
 				seaside: spec;
 				bootstrap4: spec;
-				telebots: spec.
+				telebots: spec;
+				mustache: spec.
 			spec
 				package: 'GapAFarm'
 				with: [ spec requires: #('Seaside3' 'Bootstrap4-Core' 'Voyage' 'NeoCSV' 'Telebots-Core') ].
@@ -28,6 +29,14 @@ BaselineOfGapAFarm >> bootstrap4: spec [
 		package: 'Bootstrap4-Core'
 		with: [ spec repository: 'github://astares/Seaside-Bootstrap4:master/src' ].
 
+]
+
+{ #category : #baselines }
+BaselineOfGapAFarm >> mustache: spec [
+
+	spec
+		baseline: 'Mustache'
+		with: [ spec repository: 'github://noha/mustache:v1.2/repository' ]
 ]
 
 { #category : #baselines }
