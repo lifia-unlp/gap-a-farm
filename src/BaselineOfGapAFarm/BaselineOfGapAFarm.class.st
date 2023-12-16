@@ -14,10 +14,11 @@ BaselineOfGapAFarm >> baseline: spec [
 				neoJSON: spec;
 				voyage: spec;
 				seaside: spec;
-				bootstrap4: spec.
+				bootstrap4: spec;
+				telebots: spec.
 			spec
 				package: 'GapAFarm'
-				with: [ spec requires: #('Seaside3' 'Bootstrap4-Core' 'Voyage' 'NeoCSV') ].
+				with: [ spec requires: #('Seaside3' 'Bootstrap4-Core' 'Voyage' 'NeoCSV' 'Telebots-Core') ].
  ]
 ]
 
@@ -96,6 +97,13 @@ BaselineOfGapAFarm >> seaside: spec [
 		package: 'Seaside-REST-Core'
 		with: [ spec repository: 'github://SeasideSt/Seaside:master/repository' ]
 
+]
+
+{ #category : #baselines }
+BaselineOfGapAFarm >> telebots: spec [
+	spec
+		baseline: 'Telebots'
+		with: [ spec repository: 'github://casco/telebots' ]
 ]
 
 { #category : #baselines }
