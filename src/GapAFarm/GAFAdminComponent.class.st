@@ -32,7 +32,7 @@ GAFAdminComponent >> renderNavBarOn: html [
 		with: [ html formButton bePrimary with: 'Configuración' ].
 	html space.
 	html anchor
-		callback: [ selectedComponent := UsersAdminComponent new ];
+		callback: [ selectedComponent := UsersAdminComponent parent: self ];
 		with: [ html formButton bePrimary with: 'Usuarios' ].
 	html space.
 	html anchor

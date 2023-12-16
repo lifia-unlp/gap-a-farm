@@ -53,10 +53,16 @@ UserEditor >> initializeFullnameEditorComponent [
 { #category : #'subclass-responsibility' }
 UserEditor >> initializeTelegramIdEditorComponent [
 
-	telegramIdEditorComponent := TextLinePropertyEditorComponent
+	telegramIdEditorComponent := NumberPropertyEditorComponent
 		                             id: 'telegramId'
 		                             subject: subject
 		                             selector: #telegramId
 		                             label: 'ID de telegram'
 		                             required: false
+]
+
+{ #category : #'subclass-responsibility' }
+UserEditor >> renderContentOn: html [
+
+	html container: [ super renderContentOn: html ]
 ]
