@@ -108,15 +108,24 @@ GAFBot >> initialize [
 { #category : #private }
 GAFBot >> notifyFarmNotSetFor: aTelegramUser inResponseTo: aMessage [
 
-	aMessage answer: 'Lo siento, ' , aTelegramUser username
-		,
-		'. No tengo una granja asociada a su usuario de telegram. Solicite al administrador de GAP-a-Farm que le vincule a una granje (para ello provea su identificador unico de Telegram: '
-		, aTelegramUser id printString , ')'
+	| messageText |
+	messageText := GAFBotMessageTemplateFactory new
+		               farmNotSetNotification asMustacheTemplate value: {
+			               ('username' -> aTelegramUser username).
+			               ('id' -> aTelegramUser id) } asDictionary.
+	aMessage answer: messageText
+]
+
+{ #category : #commands }
+GAFBot >> novedades: aMessage [
+
+	aMessage answer: 'No tenemos novedades para usted ...'
 ]
 
 { #category : #hooks }
 GAFBot >> offerActionsForFarm: farm inResponseTo: aMessage [
 
 	aMessage answer:
-		'Las acciones disponibles para "' , farm name , '" son ...'
+		(GAFBotMessageTemplateFactory new availableCommands
+			 asMustacheTemplate value: {  })
 ]
