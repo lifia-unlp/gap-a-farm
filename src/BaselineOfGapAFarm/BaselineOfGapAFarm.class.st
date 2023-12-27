@@ -19,7 +19,7 @@ BaselineOfGapAFarm >> baseline: spec [
 				mustache: spec.
 			spec
 				package: 'GapAFarm'
-				with: [ spec requires: #('Seaside3' 'Bootstrap4-Core' 'Voyage' 'NeoCSV' 'Telebots-Core') ].
+				with: [ spec requires: #('Seaside3' 'Bootstrap4-Core' 'Voyage' 'NeoCSV') ].
  ]
 ]
 

@@ -23,13 +23,13 @@ GAFBot >> broadcast: aString [
 		self sendChatMessage: aString to: chat ]
 ]
 
-{ #category : #accessing }
+{ #category : #utility }
 GAFBot >> chatForFarm: aFarm [
 
 	^ farmsForChats keyAtValue: aFarm ifAbsent: [ nil ]
 ]
 
-{ #category : #unsupported }
+{ #category : #utility }
 GAFBot >> farmForMessage: aMessage [
 
 	| farm |
@@ -39,7 +39,7 @@ GAFBot >> farmForMessage: aMessage [
 	^ farm
 ]
 
-{ #category : #private }
+{ #category : #utility }
 GAFBot >> farmForTelegramUser: aTelegramUser [
 
 	^ (self gafUserFor: aTelegramUser)
@@ -55,7 +55,7 @@ GAFBot >> gafUserFor: aTelegramUser [
 		  ifNone: [ nil ]
 ]
 
-{ #category : #hooks }
+{ #category : #unsupported }
 GAFBot >> handleDocumentMessage: aMessage [
 
 	aMessage answer:
@@ -72,7 +72,7 @@ GAFBot >> handlePhotoMessage: aMessage [
 
 ]
 
-{ #category : #unsupported }
+{ #category : #hooks }
 GAFBot >> handleTextMessage: aMessage [
 
 	| farm |
@@ -128,4 +128,15 @@ GAFBot >> offerActionsForFarm: farm inResponseTo: aMessage [
 	aMessage answer:
 		(GAFBotMessageTemplateFactory new availableCommands
 			 asMustacheTemplate value: {  })
+]
+
+{ #category : #commands }
+GAFBot >> test: aMessage [
+
+	| farm |
+	farm := self farmForMessage: aMessage.
+
+
+
+	aMessage answer: 'Su granja se llama ' , farm name
 ]
