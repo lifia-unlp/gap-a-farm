@@ -105,17 +105,35 @@ GAFBotMessageTemplateFactory >> plotsInWithdrawalPeriodAsTextMessage: plots [
 ]
 
 { #category : #'as yet unclassified' }
-GAFBotMessageTemplateFactory >> summaryConfigAskHour [
+GAFBotMessageTemplateFactory >> summaryConfigAskHourTextMessage [
 
 	^ 'Bien. Ahora ingresa el horario en el que querés recibir tu resumen con formato 24hs.
 Por ejemplo: 06:00 para la mañana o 18:00 para la tarde.'
 ]
 
 { #category : #'as yet unclassified' }
-GAFBotMessageTemplateFactory >> summaryConfigAskHourTextMessage [
+GAFBotMessageTemplateFactory >> summaryConfigDayConfirmationTextMessage [
 
-	^ 'Bien. Ahora ingresa el horario en el que querés recibir tu resumen con formato 24hs.
-Por ejemplo: 06:00 para la mañana o 18:00 para la tarde.'
+	^ 'El día que indicaste es {{day}}. Si es correcto presiona si. Para seleccionar otro día presiona no.'
+]
+
+{ #category : #'as yet unclassified' }
+GAFBotMessageTemplateFactory >> summaryConfigHourConfirmationTextMessage [
+
+	^ 'El horario que indicaste es {{hour}}. Si querés cambiar el horario indicado respondé no, caso contrario respondé sí.'
+]
+
+{ #category : #'as yet unclassified' }
+GAFBotMessageTemplateFactory >> summaryConfigRequestDayTextMessage [
+
+	^ 'Elegí que día de la semana queres recibir tu notificación:', Character lf asString,
+		'1.Lunes', Character lf asString,
+		'2.Martes', Character lf asString,
+		'3.Miercoles', Character lf asString,
+		'4.Jueves', Character lf asString,
+		'5.Viernes', Character lf asString,
+		'6.Sabado', Character lf asString,
+		'7.Domingo'.
 ]
 
 { #category : #'as yet unclassified' }

@@ -2,7 +2,8 @@ Class {
 	#name : #GAFBot,
 	#superclass : #PollingTelegramBot,
 	#instVars : [
-		'farmsForChats'
+		'farmsForChats',
+		'statesForChats'
 	],
 	#classInstVars : [
 		'singleton'
@@ -75,6 +76,12 @@ GAFBot >> chatForTelegramUserId: anId [
 	^ self chatForFarm: farm .
 ]
 
+{ #category : #accessing }
+GAFBot >> chatStateFromMessage: aMessage [
+
+	^ statesForChats at: aMessage chat id.
+]
+
 { #category : #utility }
 GAFBot >> farmForMessage: aMessage [
 
@@ -111,6 +118,7 @@ GAFBot >> gafUserFor: aTelegramUser [
 GAFBot >> greeting: aMessage [
 
 	| textMessage telegramUser chat messageFactory buttons |
+	"statesForChats := Dictionary new. --> porque no inicializaba el diccionario"
 	chat := aMessage chat.
 	telegramUser := aMessage from.
 	messageFactory := GAFBotMessageTemplateFactory new.
@@ -125,8 +133,24 @@ GAFBot >> greeting: aMessage [
 	buttons add: ({('text' -> 'Semanalmente').('callback_data'->'summaryConfigWeekly')} asDictionary ).
 	self sendChatMessage: messageFactory greetingConfigSummaryFrecuencyTextMessage 
 					withInlineButtons: buttons asArray to: chat.
+	statesForChats at: chat id put: SummaryMessageConfigState new.
 
 
+]
+
+{ #category : #'as yet unclassified' }
+GAFBot >> handleCallbackQueryUpdate: aCallbackQueryUpdate [
+
+	| callback chat chatState|
+	callback := aCallbackQueryUpdate callbackQuery data.
+	chat := self chatForTelegramUserId: aCallbackQueryUpdate callbackQuery from.
+	chatState := statesForChats at: chat id.
+	(chatState class canPerform: callback asValidSelector , ':')
+		ifTrue: [ 
+		chatState perform: callback asValidSelector , ':' with: aCallbackQueryUpdate callbackQuery ]
+		ifFalse: [ 
+		chatState error: 'Mensaje ', callback, ' no implementado.'
+			]
 ]
 
 { #category : #unsupported }
@@ -149,13 +173,15 @@ GAFBot >> handlePhotoMessage: aMessage [
 { #category : #hooks }
 GAFBot >> handleTextMessage: aMessage [
 
-	| farm |
+	| farm state |
 	farm := farmsForChats at: aMessage chat ifAbsent: [
 		        (self farmForTelegramUser: aMessage from) ifNotNil: [ :it |
 			        farmsForChats at: aMessage chat put: it ] ].
 	farm ifNil: [
 		^ self notifyFarmNotSetFor: aMessage from inResponseTo: aMessage ].
-	self offerActionsForFarm: farm inResponseTo: aMessage
+	state := self chatStateFromMessage: aMessage.
+	state ifNotNil: [ state handleTextMessage: aMessage] 
+			ifNil: 	[ self offerActionsForFarm: farm inResponseTo: aMessage].
 ]
 
 { #category : #unsupported }
@@ -176,6 +202,7 @@ GAFBot >> initialize [
 
 	super initialize.
 	farmsForChats := Dictionary new.
+	statesForChats := Dictionary new.
 	
 ]
 
@@ -215,28 +242,28 @@ GAFBot >> scheduledReport [
 ]
 
 { #category : #'as yet unclassified' }
-GAFBot >> summaryConfigAskHour: aCallbackQuery [
+GAFBot >> sendChatMessage: textMessage toUser: user [
 
-	| chat textMessage |
-	chat := self chatForTelegramUserId: aCallbackQuery from.
-	textMessage := GAFBotMessageTemplateFactory new
-						summaryConfigAskHourTextMessage.
-	self sendChatMessage: textMessage to: chat.
+	self sendChatMessage: textMessage to: (self chatForTelegramUserId: user).
 ]
 
 { #category : #'as yet unclassified' }
-GAFBot >> summaryConfigDaily: aCallbackQuery [
+GAFBot >> sendChatMessage: textMessage withInlineButtons: buttons toUser: user [
 
-	| chat textMessage buttons |
-	chat := self chatForTelegramUserId: aCallbackQuery from.
-	textMessage := GAFBotMessageTemplateFactory new
-						summaryConfigSelectedFrecuency asMustacheTemplate value: { 
-									('frecuency' -> 'diariamente' ).
-							 } asDictionary.
-	buttons := OrderedCollection new.
-	buttons add: ({('text' -> 'Si').('callback_data'->'summaryConfigAskHour')} asDictionary ).
-	buttons add: ({('text' -> 'No').('callback_data'->'summaryConfigFrecOptions')} asDictionary ).
-	self sendChatMessage: textMessage  withInlineButtons: buttons to: chat.  
+	self sendChatMessage: textMessage withInlineButtons: buttons  
+							to: (self chatForTelegramUserId: user).
+]
+
+{ #category : #initialization }
+GAFBot >> setState: aState forChat: anId [
+
+	statesForChats at: anId put: aState.
+]
+
+{ #category : #initialization }
+GAFBot >> setState: aState forUser: user [
+
+	statesForChats at: (self chatForTelegramUserId: user) id put: aState.
 ]
 
 { #category : #'as yet unclassified' }
