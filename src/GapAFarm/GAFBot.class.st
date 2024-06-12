@@ -62,6 +62,12 @@ GAFBot >> carencia: aMessage [
 	aMessage answer: (GAFBotMessageTemplateFactory new plotsInWithdrawalPeriodAsTextMessage: plots).
 ]
 
+{ #category : #builder }
+GAFBot >> chatBuilderClass [ 
+
+	^ GAFChatBuilder
+]
+
 { #category : #utility }
 GAFBot >> chatForFarm: aFarm [
 
@@ -170,18 +176,17 @@ GAFBot >> handlePhotoMessage: aMessage [
 
 ]
 
-{ #category : #hooks }
+{ #category : #unsupported }
 GAFBot >> handleTextMessage: aMessage [
 
-	| farm state |
+	| farm |
 	farm := farmsForChats at: aMessage chat ifAbsent: [
 		        (self farmForTelegramUser: aMessage from) ifNotNil: [ :it |
 			        farmsForChats at: aMessage chat put: it ] ].
 	farm ifNil: [
 		^ self notifyFarmNotSetFor: aMessage from inResponseTo: aMessage ].
-	state := self chatStateFromMessage: aMessage.
-	state ifNotNil: [ state handleTextMessage: aMessage] 
-			ifNil: 	[ self offerActionsForFarm: farm inResponseTo: aMessage].
+	aMessage chat handleTextMessage: aMessage forFarm: farm.
+	"self offerActionsForFarm: farm inResponseTo: aMessage"
 ]
 
 { #category : #unsupported }
@@ -224,14 +229,6 @@ GAFBot >> novedades: aMessage [
 	"Paginar noticias?"
 	news := self blogPostsType: 'Noticia' forMessage: aMessage.
 	aMessage answer: (GAFBotMessageTemplateFactory new newsAsTextMessage: news).
-]
-
-{ #category : #hooks }
-GAFBot >> offerActionsForFarm: farm inResponseTo: aMessage [
-
-	aMessage answer:
-		(GAFBotMessageTemplateFactory new availableCommands
-			 asMustacheTemplate value: {  })
 ]
 
 { #category : #'as yet unclassified' }
