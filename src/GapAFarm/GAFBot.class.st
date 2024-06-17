@@ -123,7 +123,7 @@ GAFBot >> gafUserFor: aTelegramUser [
 { #category : #'as yet unclassified' }
 GAFBot >> greeting: aMessage [
 
-	| textMessage telegramUser chat messageFactory buttons |
+	| textMessage telegramUser chat messageFactory inlineKeyboard |
 	"statesForChats := Dictionary new. --> porque no inicializaba el diccionario"
 	chat := aMessage chat.
 	telegramUser := aMessage from.
@@ -134,12 +134,13 @@ GAFBot >> greeting: aMessage [
 	"self sendChatMessage: textMessage to: chat.
 	self sendChatMessage: messageFactory greetingBotDescriptionTextMessage to: chat.
 	self sendChatMessage: messageFactory greetingAvailabilityInfoTextMessage to: chat."
-	buttons := OrderedCollection new.
-	buttons add: ({('text' -> 'Diariamente').('callback_data'->'summaryConfigDaily')} asDictionary ).
-	buttons add: ({('text' -> 'Semanalmente').('callback_data'->'summaryConfigWeekly')} asDictionary ).
+	self sendChatMessage: messageFactory greetingConfigSummaryTextMessage to: chat.
+	inlineKeyboard := TelegramInlineKeyboard new. 
+	inlineKeyboard buttonText: 'Diariamente' callbackData: 'summaryConfigDaily'.
+	inlineKeyboard buttonText: 'Semanalmente' callbackData: 'summaryConfigWeekly'.
 	self sendChatMessage: messageFactory greetingConfigSummaryFrecuencyTextMessage 
-					withInlineButtons: buttons asArray to: chat.
-	statesForChats at: chat id put: SummaryMessageConfigState new.
+					withInlineKeyboard: inlineKeyboard to: chat.
+	chat state: SummaryMessageConfigState new.
 
 
 ]
@@ -147,16 +148,10 @@ GAFBot >> greeting: aMessage [
 { #category : #'as yet unclassified' }
 GAFBot >> handleCallbackQueryUpdate: aCallbackQueryUpdate [
 
-	| callback chat chatState|
-	callback := aCallbackQueryUpdate callbackQuery data.
+	| chat|
+
 	chat := self chatForTelegramUserId: aCallbackQueryUpdate callbackQuery from.
-	chatState := statesForChats at: chat id.
-	(chatState class canPerform: callback asValidSelector , ':')
-		ifTrue: [ 
-		chatState perform: callback asValidSelector , ':' with: aCallbackQueryUpdate callbackQuery ]
-		ifFalse: [ 
-		chatState error: 'Mensaje ', callback, ' no implementado.'
-			]
+	chat handleCallbackQueryUpdate: aCallbackQueryUpdate.
 ]
 
 { #category : #unsupported }
@@ -186,7 +181,6 @@ GAFBot >> handleTextMessage: aMessage [
 	farm ifNil: [
 		^ self notifyFarmNotSetFor: aMessage from inResponseTo: aMessage ].
 	aMessage chat handleTextMessage: aMessage forFarm: farm.
-	"self offerActionsForFarm: farm inResponseTo: aMessage"
 ]
 
 { #category : #unsupported }
@@ -245,9 +239,9 @@ GAFBot >> sendChatMessage: textMessage toUser: user [
 ]
 
 { #category : #'as yet unclassified' }
-GAFBot >> sendChatMessage: textMessage withInlineButtons: buttons toUser: user [
+GAFBot >> sendChatMessage: textMessage withInlineKeyboard: inlineKeyboard toUser: user [
 
-	self sendChatMessage: textMessage withInlineButtons: buttons  
+	self sendChatMessage: textMessage withInlineKeyboard: inlineKeyboard  
 							to: (self chatForTelegramUserId: user).
 ]
 

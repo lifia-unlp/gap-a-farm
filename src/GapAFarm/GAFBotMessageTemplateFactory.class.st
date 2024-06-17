@@ -67,9 +67,15 @@ GAFBotMessageTemplateFactory >> greetingBotDescriptionTextMessage [
 { #category : #'as yet unclassified' }
 GAFBotMessageTemplateFactory >> greetingConfigSummaryFrecuencyTextMessage [
 
-	^'Comencemos configurando con qué frecuencia querés recibir mensajes sobre el estado de tu predio. Seleccioná una de las opciones:', Character lf asString,
+	^'Seleccioná una de las opciones:', Character lf asString,
 	'Diariamente -> una vez por día', Character lf asString,
 	'Semanalmente -> una vez a la semana'.
+]
+
+{ #category : #'as yet unclassified' }
+GAFBotMessageTemplateFactory >> greetingConfigSummaryTextMessage [
+
+	^'Comencemos configurando con qué frecuencia querés recibir mensajes sobre el estado de tu predio.'
 ]
 
 { #category : #'as yet unclassified' }
@@ -134,6 +140,12 @@ GAFBotMessageTemplateFactory >> summaryConfigRequestDayTextMessage [
 		'5.Viernes', Character lf asString,
 		'6.Sabado', Character lf asString,
 		'7.Domingo'.
+]
+
+{ #category : #'as yet unclassified' }
+GAFBotMessageTemplateFactory >> summaryConfigSaveSuccessTextMessage [
+
+	^ 'Perfecto, ya configuraste la frecuencia para recibir los mensajes sobre el estado de tu predio.'
 ]
 
 { #category : #'as yet unclassified' }
