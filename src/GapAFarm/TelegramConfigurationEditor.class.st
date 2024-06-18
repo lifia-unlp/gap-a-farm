@@ -34,7 +34,11 @@ TelegramConfigurationEditor >> renderBotStatusOn: html [
 			ifTrue: [
 				html anchor
 					callback: [ bot stopBot ];
-					with: 'Detener' ]
+					with: 'Detener'.
+					html space.
+					html anchor
+					callback: [ bot reset ];
+					with: 'Reiniciar' ]
 			ifFalse: [
 				html anchor
 					callback: [ self startBot ];

@@ -225,6 +225,13 @@ GAFBot >> novedades: aMessage [
 	aMessage answer: (GAFBotMessageTemplateFactory new newsAsTextMessage: news).
 ]
 
+{ #category : #utility }
+GAFBot >> reset [
+
+	self stopBot.
+	self initialize. 
+]
+
 { #category : #'as yet unclassified' }
 GAFBot >> scheduledReport [
 
