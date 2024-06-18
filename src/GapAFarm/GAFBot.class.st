@@ -75,10 +75,10 @@ GAFBot >> chatForFarm: aFarm [
 ]
 
 { #category : #'as yet unclassified' }
-GAFBot >> chatForTelegramUserId: anId [
+GAFBot >> chatForTelegramUser: anUser [
 
 	| farm |
-	farm:= self farmForTelegramUser: anId.
+	farm:= self farmForTelegramUser: anUser.
 	^ self chatForFarm: farm .
 ]
 
@@ -88,14 +88,29 @@ GAFBot >> chatStateFromMessage: aMessage [
 	^ statesForChats at: aMessage chat id.
 ]
 
-{ #category : #utility }
-GAFBot >> farmForMessage: aMessage [
+{ #category : #'as yet unclassified' }
+GAFBot >> ensureChatFarmAssociationWith: aMessage [
 
 	| farm |
 	farm := farmsForChats at: aMessage chat ifAbsent: [
 		        (self farmForTelegramUser: aMessage from) ifNotNil: [ :it |
 			        farmsForChats at: aMessage chat put: it ] ].
-	^ farm
+	farm ifNil: [
+		self notifyFarmNotSetFor: aMessage from inResponseTo: aMessage. 
+		^ false ].
+	^ true.
+]
+
+{ #category : #utility }
+GAFBot >> farmForChat: aChat [
+
+	^ farmsForChats at: aChat
+]
+
+{ #category : #utility }
+GAFBot >> farmForMessage: aMessage [
+
+	^ self farmForChat: aMessage chat
 ]
 
 { #category : #utility }
@@ -163,6 +178,15 @@ GAFBot >> handleDocumentMessage: aMessage [
 
 ]
 
+{ #category : #'update handling' }
+GAFBot >> handleMessageReceivedUpdate: aMessageReceivedUpdate [
+
+	| msg |
+	msg := aMessageReceivedUpdate message.
+	(self ensureChatFarmAssociationWith: msg) ifFalse: [ ^ self ].
+	super handleMessageReceivedUpdate: aMessageReceivedUpdate
+]
+
 { #category : #unsupported }
 GAFBot >> handlePhotoMessage: aMessage [
 
@@ -175,11 +199,7 @@ GAFBot >> handlePhotoMessage: aMessage [
 GAFBot >> handleTextMessage: aMessage [
 
 	| farm |
-	farm := farmsForChats at: aMessage chat ifAbsent: [
-		        (self farmForTelegramUser: aMessage from) ifNotNil: [ :it |
-			        farmsForChats at: aMessage chat put: it ] ].
-	farm ifNil: [
-		^ self notifyFarmNotSetFor: aMessage from inResponseTo: aMessage ].
+	farm := self farmForMessage: aMessage.
 	aMessage chat handleTextMessage: aMessage forFarm: farm.
 ]
 
