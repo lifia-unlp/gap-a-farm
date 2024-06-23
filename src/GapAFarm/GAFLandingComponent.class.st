@@ -58,16 +58,21 @@ GAFLandingComponent >> login: anEmailAddress withHashedPassword: aHashedPassword
 
 { #category : #callbacks }
 GAFLandingComponent >> proceedWith: aUser [
-	aUser email = (self application preferenceAt: #adminEmail) trimBoth
-		ifTrue: [ aUser
-				isAdmin: true;
-				enabled: true;
-				save ].
+
+	aUser email
+	=
+		((self application preferenceAt: #adminEmail) ifNil: [ aUser email ])
+			trimBoth ifTrue: [
+		aUser
+			isAdmin: true;
+			enabled: true;
+			save ].
 	self session user: aUser.
 	registerComponent := RegisterFormComponent new parent: self.
 	loginComponent := LoginFormComponent new parent: self.
 	aUser enabled
-		ifTrue: [ aUser lastConnectedDateAndTime: DateAndTime now.
+		ifTrue: [
+			aUser lastConnectedDateAndTime: DateAndTime now.
 			aUser save.
 			self call: FarmerHomeComponent new ]
 		ifFalse: [ self call: UserDisabledNoticeComponent new ]

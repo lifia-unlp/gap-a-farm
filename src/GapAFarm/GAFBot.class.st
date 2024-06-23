@@ -203,11 +203,19 @@ GAFBot >> handleTextMessage: aMessage [
 	aMessage chat handleTextMessage: aMessage forFarm: farm.
 ]
 
-{ #category : #unsupported }
+{ #category : #'voice-mesages' }
 GAFBot >> handleVoiceMessage: aMessage [
 
-	aMessage answer:
-		'Perdón, no estoy preparado para responder mensajes de audio.'
+	| sapi bytes text extractedParameters |
+	sapi := SpeechToTextApi new.
+	sapi isProperlyConfigured ifFalse: [
+		aMessage answer:
+			'Al parecer, la API de transcripción no está correctamente configurada.' ].
+	bytes := (aMessage voice readStreamWith: self) contents.
+	text := sapi transcribeByteArray: bytes.
+	extractedParameters := GptDataExtractor new extractHarvestingParametersFrom: text.
+	aMessage answer: 'Usted dijo: ', text.
+	aMessage answer: 'Pude entender que: ', extractedParameters asJson .
 ]
 
 { #category : #private }
