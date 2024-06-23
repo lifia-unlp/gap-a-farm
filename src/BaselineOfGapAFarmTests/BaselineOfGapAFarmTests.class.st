@@ -45,8 +45,5 @@ BaselineOfGapAFarmTests >> parasol: spec [
 { #category : #baselines }
 BaselineOfGapAFarmTests >> postLoadActions [
 
-	GTPlayground
-		edit: ''
 	
-	label: 'Parasol/Selenium test instructions'.
 ]
