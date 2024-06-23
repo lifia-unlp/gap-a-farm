@@ -86,6 +86,14 @@ Farm >> harvestings [
 ]
 
 { #category : #testing }
+Farm >> hasPlantedPlots [
+
+	^ self plots
+		  inject: false
+		  into: [ :result :plot | result | plot currentCrop notNil ]
+]
+
+{ #category : #testing }
 Farm >> haveEventIn: events [
 	^events detect: [ :each | (self events) includes: each  ] ifFound: [ ^true ] ifNone: [ ^false ]  
 ]
