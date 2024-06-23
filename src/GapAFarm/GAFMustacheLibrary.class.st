@@ -13,36 +13,25 @@ GAFMustacheLibrary >> harvestMessageExtractionPrompt [
 
 Los datos a extraer son:
 
-1. El producto cosechado (crop): Puede ser uno de los siguientes: tomate, lechuga (o alguna variante específica de lechuga), berenjena, pimientos o ajíes o morrones, o albahaca.
-2. La cantidad cosechada (quantity): Puede estar en kilos (kilogramos), toneladas, o canastos. La cantidad debe tener un valor y una unidad.
-3. El lugar de la cosecha (plot): Puede referirse como lote o invernadero, indicando un número, nombre, o característica distintiva.
+1. El producto cosechado (crop) debe ser uno de los siguientes: {{crops}}.
+2. La cantidad cosechada (quantity) debe estar expresada en una de las siguientes unidades: {{units}}.
+3. El lugar de la cosecha (plot) debe ser uno de los siguientes: {{plots}}
 
-Si no es posible reconocer alguno de los datos, no incluyas la propiedad en el JSON de salida. A continuación, te doy un ejemplo del formato JSON esperado:
-
-{
-  "crop": "Tomate",
-  "quantity": {
-    "value": "2",
-    "unit": "canastos"
-  },
-  "plot": "Lote del fondo"
-}
+Si no es posible reconocer alguno de los datos, no incluyas la propiedad en el JSON de salida. 
 
 Aquí tienes un ejemplo de el mensaje del agricultor:
 
-"Acabo de cosechar 150 kilos de tomates del invernadero número 3."
+"Acabo de cosechar 150 {{example-unit}} de {{example-crop}} del invernadero {{example-plot}}."
 
----
-
-**Respuesta esperada en formato JSON:**
+Respuesta esperada en formato JSON esperado:
 
 {
-  "crop": "tomates",
+  "crop": "{{example-crop}}",
   "quantity": {
     "value": "150",
-    "unit": "kilos"
+    "unit": "{{example-unit}}"
   },
-  "plot": "invernadero número 3"
+  "plot": "{{example-plot}}"
 }
 
 '

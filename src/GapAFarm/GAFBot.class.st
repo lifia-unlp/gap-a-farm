@@ -209,13 +209,19 @@ GAFBot >> handleVoiceMessage: aMessage [
 	| sapi bytes text extractedParameters |
 	sapi := SpeechToTextApi new.
 	sapi isProperlyConfigured ifFalse: [
-		aMessage answer:
+		^ aMessage answer:
 			'Al parecer, la API de transcripción no está correctamente configurada.' ].
+	(self farmForMessage: aMessage) hasPlantedPlots ifFalse: [
+		^ aMessage answer:
+			'Para registrar cosechas con mensajes de voz, debe tener lotes plantados.' ].
+
 	bytes := (aMessage voice readStreamWith: self) contents.
 	text := sapi transcribeByteArray: bytes.
-	extractedParameters := GptDataExtractor new extractHarvestingParametersFrom: text.
-	aMessage answer: 'Usted dijo: ', text.
-	aMessage answer: 'Pude entender que: ', extractedParameters asJson .
+	extractedParameters := GptDataExtractor new
+		                       extractHarvestingParametersFrom: text
+		                       for: (self farmForMessage: aMessage).
+	aMessage answer: 'Usted dijo: ' , text.
+	aMessage answer: 'Pude entender que: ' , extractedParameters asJson
 ]
 
 { #category : #private }
