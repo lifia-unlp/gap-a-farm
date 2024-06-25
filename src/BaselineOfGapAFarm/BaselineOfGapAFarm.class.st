@@ -6,21 +6,23 @@ Class {
 
 { #category : #baselines }
 BaselineOfGapAFarm >> baseline: spec [
+
 	<baseline>
-	spec
-		for: #common
-		do: [ self
-				neoCSV: spec;
-				neoJSON: spec;
-				voyage: spec;
-				seaside: spec;
-				bootstrap4: spec;
-				telebots: spec;
-				mustache: spec.
-			spec
-				package: 'GapAFarm'
-				with: [ spec requires: #('Seaside3' 'Bootstrap4-Core' 'Voyage' 'NeoCSV') ].
- ]
+	spec for: #common do: [
+		self
+			neoCSV: spec;
+			neoJSON: spec;
+			voyage: spec;
+			seaside: spec;
+			bootstrap4: spec;
+			telebots: spec;
+			mustache: spec;
+			mustacheLibrary: spec;
+			openAiPapi: spec.
+		spec
+			package: 'GapAFarm'
+			with: [
+			spec requires: #( 'Seaside3' 'Bootstrap4-Core' 'Voyage' 'NeoCSV' ) ] ]
 ]
 
 { #category : #baselines }
@@ -40,6 +42,14 @@ BaselineOfGapAFarm >> mustache: spec [
 ]
 
 { #category : #baselines }
+BaselineOfGapAFarm >> mustacheLibrary: spec [
+
+	spec
+		baseline: 'MustacheLibrary'
+		with: [ spec repository: 'github://casco/mustache-library/src:main' ]
+]
+
+{ #category : #baselines }
 BaselineOfGapAFarm >> neoCSV: spec [
 	spec
 		baseline: 'NeoCSV'
@@ -54,6 +64,14 @@ BaselineOfGapAFarm >> neoJSON: spec [
 				className: 'ConfigurationOfNeoJSON';
 				versionString: #stable;
 				repository: 'github://svenvc/NeoJSON/repository' ]
+]
+
+{ #category : #baselines }
+BaselineOfGapAFarm >> openAiPapi: spec [
+	spec
+		package: 'OpenAI-Speech'
+		with: [ spec repository: 'github://casco/openai-papi:main' ].
+
 ]
 
 { #category : #baselines }
