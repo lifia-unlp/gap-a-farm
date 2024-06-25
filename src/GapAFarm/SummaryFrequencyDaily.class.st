@@ -1,5 +1,5 @@
 Class {
-	#name : #SummaryMessageFrequencyDaily,
+	#name : #SummaryFrequencyDaily,
 	#superclass : #Object,
 	#instVars : [
 		'hour'
@@ -8,13 +8,13 @@ Class {
 }
 
 { #category : #accessing }
-SummaryMessageFrequencyDaily >> hour [
+SummaryFrequencyDaily >> hour [
 
 	^ hour
 ]
 
 { #category : #accessing }
-SummaryMessageFrequencyDaily >> hour: anObject [
+SummaryFrequencyDaily >> hour: anObject [
 
 	hour := anObject
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #SummaryMessageConfigState,
+	#name : #SummaryConfigState,
 	#superclass : #Object,
 	#instVars : [
 		'frecuency',
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-SummaryMessageConfigState >> dayInputValidation: aMessage [
+SummaryConfigState >> dayInputValidation: aMessage [
 
 	| regex dayInput inlineKeyboard |
 	regex := '[1-7]' asRegex.
@@ -34,26 +34,26 @@ SummaryMessageConfigState >> dayInputValidation: aMessage [
 ]
 
 { #category : #accessing }
-SummaryMessageConfigState >> frecuency [
+SummaryConfigState >> frecuency [
 
 	^ frecuency
 ]
 
 { #category : #accessing }
-SummaryMessageConfigState >> frecuency: anObject [
+SummaryConfigState >> frecuency: anObject [
 
 	frecuency := anObject
 ]
 
 { #category : #hooks }
-SummaryMessageConfigState >> handleTextMessage: aMessage [
+SummaryConfigState >> handleTextMessage: aMessage [
 
 	hourRequested ifTrue: [ ^self hourInputValidation: aMessage].
 	dayRequested ifTrue: [ ^self dayInputValidation: aMessage ].
 ]
 
 { #category : #'as yet unclassified' }
-SummaryMessageConfigState >> hourInputValidation: aMessage [
+SummaryConfigState >> hourInputValidation: aMessage [
 
 	| regex hourInput inlineKeyboard |
 	regex := '^(0[0-9]|1[0-9]|2[0-3])\:[0-5][0-9]' asRegex.
@@ -85,7 +85,7 @@ SummaryMessageConfigState >> hourInputValidation: aMessage [
 ]
 
 { #category : #initialization }
-SummaryMessageConfigState >> initialize [
+SummaryConfigState >> initialize [
 
 	dayRequested := false.
 	hourRequested := false.
@@ -93,7 +93,7 @@ SummaryMessageConfigState >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
-SummaryMessageConfigState >> requestDay: aCallbackQuery [
+SummaryConfigState >> requestDay: aCallbackQuery [
 
 	| textMessage |
 	textMessage := GAFBotMessageTemplateFactory new
@@ -103,7 +103,7 @@ SummaryMessageConfigState >> requestDay: aCallbackQuery [
 ]
 
 { #category : #'as yet unclassified' }
-SummaryMessageConfigState >> requestHour: aCallbackQuery [
+SummaryConfigState >> requestHour: aCallbackQuery [
 
 	| textMessage |
 	textMessage := GAFBotMessageTemplateFactory new
@@ -113,63 +113,68 @@ SummaryMessageConfigState >> requestHour: aCallbackQuery [
 ]
 
 { #category : #'as yet unclassified' }
-SummaryMessageConfigState >> saveFrecuency: aCallbackQuery [
+SummaryConfigState >> saveFrecuency: aCallbackQuery [
 
 	| chat |
 	
-	chat := GAFBot singleton chatForTelegramUserId: aCallbackQuery from.
+	chat := GAFBot singleton chatForTelegramUser: aCallbackQuery from.
 	chat state: nil.
 	chat summaryFrecuency: self frecuency.
 	GAFBot singleton 
 		sendChatMessage: (GAFBotMessageTemplateFactory new summaryConfigSaveSuccessTextMessage)
 		toUser: aCallbackQuery from.
 	GAFBot singleton 
-		sendChatMessage: (GAFBotMessageTemplateFactory new availableCommands asMustacheTemplate) 		toUser: aCallbackQuery from.
+		sendChatMessage: (GAFBotMessageTemplateFactory new availableCommands)	toUser: aCallbackQuery from.
 ]
 
 { #category : #'as yet unclassified' }
-SummaryMessageConfigState >> showFrecuencies: aCallbackQuery [
+SummaryConfigState >> showFrecuencies: aCallbackQuery [
 
 	| inlineKeyboard |
 	inlineKeyboard := TelegramInlineKeyboard new
-		buttonText: 'Diariamente' callbackData: 'summaryConfigDaily';
-		buttonText: 'Semanalmente' callbackData: 'summaryConfigWeekly'.
-	GAFBot singleton sendChatMessage:  
-						GAFBotMessageTemplateFactory new greetingConfigSummaryFrecuencyTextMessage 
-			withInlineKeyboard: inlineKeyboard
-			toUser: aCallbackQuery from.
+		                  buttonText: 'Diariamente'
+		                  callbackData: 'summaryConfigDaily';
+		                  buttonText: 'Semanalmente'
+		                  callbackData: 'summaryConfigWeekly'.
+	GAFBot singleton
+		sendChatMessage: GAFBotMessageTemplateFactory new
+				greetingConfigSummaryFrecuencyTextMessage
+		withInlineKeyboard: inlineKeyboard
+		toUser: aCallbackQuery from
 ]
 
 { #category : #'as yet unclassified' }
-SummaryMessageConfigState >> summaryConfigDaily: aCallbackQuery [
+SummaryConfigState >> summaryConfigDaily: aCallbackQuery [
 
 	| textMessage inlineKeyboard |
-	self frecuency: SummaryMessageFrequencyDaily new.
+	self frecuency: SummaryFrequencyDaily new.
 	textMessage := GAFBotMessageTemplateFactory new
-						summaryConfigSelectedFrecuency asMustacheTemplate value: { 
-									('frecuency' -> 'diariamente' ).
-							 } asDictionary.
+		               summaryConfigSelectedFrecuency asMustacheTemplate
+		               value:
+		               { ('frecuency' -> 'diariamente') } asDictionary.
 	inlineKeyboard := TelegramInlineKeyboard new
-		buttonText: 'Si' callbackData: 'requestHour';
-		buttonText: 'No' callbackData: 'showFrecuencies'.
-	GAFBot singleton sendChatMessage: textMessage 
-						withInlineKeyboard: inlineKeyboard 
-						toUser: aCallbackQuery from.  
+		                  buttonText: 'Si' callbackData: 'requestHour';
+		                  buttonText: 'No' callbackData: 'showFrecuencies'.
+	GAFBot singleton
+		sendChatMessage: textMessage
+		withInlineKeyboard: inlineKeyboard
+		toUser: aCallbackQuery from
 ]
 
 { #category : #'as yet unclassified' }
-SummaryMessageConfigState >> summaryConfigWeekly: aCallbackQuery [
+SummaryConfigState >> summaryConfigWeekly: aCallbackQuery [
 
 	| textMessage inlineKeyboard |
-	self frecuency: SummaryMessageFrecuencyWeekly new.
+	self frecuency: SummaryFrecuencyWeekly new.
 	textMessage := GAFBotMessageTemplateFactory new
-						summaryConfigSelectedFrecuency asMustacheTemplate value: { 
-									('frecuency' -> 'semanalmente' ).
-							 } asDictionary.
+		               summaryConfigSelectedFrecuency asMustacheTemplate
+		               value:
+		               { ('frecuency' -> 'semanalmente') } asDictionary.
 	inlineKeyboard := TelegramInlineKeyboard new
-		buttonText: 'Si' callbackData: 'requestDay';
-		buttonText: 'No' callbackData: 'showFrecuencies'.
-	GAFBot singleton sendChatMessage: textMessage 
-						withInlineKeyboard: inlineKeyboard  
-						toUser: aCallbackQuery from.  
+		                  buttonText: 'Si' callbackData: 'requestDay';
+		                  buttonText: 'No' callbackData: 'showFrecuencies'.
+	GAFBot singleton
+		sendChatMessage: textMessage
+		withInlineKeyboard: inlineKeyboard
+		toUser: aCallbackQuery from
 ]

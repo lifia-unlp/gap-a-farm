@@ -1,5 +1,5 @@
 Class {
-	#name : #SummaryMessageFrecuencyWeekly,
+	#name : #SummaryFrecuencyWeekly,
 	#superclass : #Object,
 	#instVars : [
 		'day',
@@ -9,25 +9,25 @@ Class {
 }
 
 { #category : #accessing }
-SummaryMessageFrecuencyWeekly >> day [
+SummaryFrecuencyWeekly >> day [
 
 	^ day
 ]
 
 { #category : #accessing }
-SummaryMessageFrecuencyWeekly >> day: anObject [
+SummaryFrecuencyWeekly >> day: anObject [
 
 	day := anObject
 ]
 
 { #category : #accessing }
-SummaryMessageFrecuencyWeekly >> hour [
+SummaryFrecuencyWeekly >> hour [
 
 	^ hour
 ]
 
 { #category : #accessing }
-SummaryMessageFrecuencyWeekly >> hour: anObject [
+SummaryFrecuencyWeekly >> hour: anObject [
 
 	hour := anObject
 ]
