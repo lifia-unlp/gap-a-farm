@@ -40,6 +40,12 @@ GAFChat >> offerActionsForFarm: farm inResponseTo: aMessage [
 			 asMustacheTemplate value: {  })
 ]
 
+{ #category : #initialization }
+GAFChat >> resetState [
+
+	self state: nil
+]
+
 { #category : #accessing }
 GAFChat >> state [
 
