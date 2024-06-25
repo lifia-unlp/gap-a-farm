@@ -2,8 +2,7 @@ Class {
 	#name : #GAFBot,
 	#superclass : #PollingTelegramBot,
 	#instVars : [
-		'farmsForChats',
-		'statesForChats'
+		'farmsForChats'
 	],
 	#classInstVars : [
 		'singleton'
@@ -34,7 +33,7 @@ GAFBot >> blogPostsType: aType forFarm: aFarm [
 	^ blogPosts select: [ :each | aType = each type ].
 ]
 
-{ #category : #utilities }
+{ #category : #utility }
 GAFBot >> blogPostsType: aType forMessage: aMessage [
 
 	| farm |
@@ -75,17 +74,24 @@ GAFBot >> chatForFarm: aFarm [
 ]
 
 { #category : #'as yet unclassified' }
-GAFBot >> chatForTelegramUser: anUser [
+GAFBot >> chatForTelegramUser: aUser [
 
 	| farm |
-	farm:= self farmForTelegramUser: anUser.
+	farm:= self farmForTelegramUser: aUser.
 	^ self chatForFarm: farm .
 ]
 
-{ #category : #accessing }
-GAFBot >> chatStateFromMessage: aMessage [
+{ #category : #'as yet unclassified' }
+GAFBot >> cosechar: aMessage [
 
-	^ statesForChats at: aMessage chat id.
+	| chat |
+	chat := aMessage chat.
+	chat state: HarvestState new.
+	self
+		sendChatMessage:
+		(chat state plotsToHarvestListforFarm:
+			 (self farmForMessage: aMessage))
+		toUser: aMessage from
 ]
 
 { #category : #'as yet unclassified' }
@@ -155,7 +161,7 @@ GAFBot >> greeting: aMessage [
 	inlineKeyboard buttonText: 'Semanalmente' callbackData: 'summaryConfigWeekly'.
 	self sendChatMessage: messageFactory greetingConfigSummaryFrecuencyTextMessage 
 					withInlineKeyboard: inlineKeyboard to: chat.
-	chat state: SummaryMessageConfigState new.
+	chat state: SummaryConfigState new.
 
 
 ]
@@ -163,9 +169,9 @@ GAFBot >> greeting: aMessage [
 { #category : #'as yet unclassified' }
 GAFBot >> handleCallbackQueryUpdate: aCallbackQueryUpdate [
 
-	| chat|
+	| chat |
 
-	chat := self chatForTelegramUserId: aCallbackQueryUpdate callbackQuery from.
+	chat := self chatForTelegramUser: aCallbackQueryUpdate callbackQuery from.
 	chat handleCallbackQueryUpdate: aCallbackQueryUpdate.
 ]
 
@@ -221,8 +227,13 @@ GAFBot >> initialize [
 
 	super initialize.
 	farmsForChats := Dictionary new.
-	statesForChats := Dictionary new.
 	
+]
+
+{ #category : #'as yet unclassified' }
+GAFBot >> miPredio: aMessage [
+
+	aMessage answer: GAFBotMessageTemplateFactory new availableCommandsMiPredio.
 ]
 
 { #category : #private }
@@ -262,26 +273,20 @@ GAFBot >> scheduledReport [
 { #category : #'as yet unclassified' }
 GAFBot >> sendChatMessage: textMessage toUser: user [
 
-	self sendChatMessage: textMessage to: (self chatForTelegramUserId: user).
+	self sendChatMessage: textMessage to: (self chatForTelegramUser: user).
 ]
 
 { #category : #'as yet unclassified' }
 GAFBot >> sendChatMessage: textMessage withInlineKeyboard: inlineKeyboard toUser: user [
 
 	self sendChatMessage: textMessage withInlineKeyboard: inlineKeyboard  
-							to: (self chatForTelegramUserId: user).
-]
-
-{ #category : #initialization }
-GAFBot >> setState: aState forChat: anId [
-
-	statesForChats at: anId put: aState.
+							to: (self chatForTelegramUser: user).
 ]
 
 { #category : #initialization }
 GAFBot >> setState: aState forUser: user [
 
-	statesForChats at: (self chatForTelegramUserId: user) id put: aState.
+	(self chatForTelegramUser: user) state: aState.
 ]
 
 { #category : #'as yet unclassified' }

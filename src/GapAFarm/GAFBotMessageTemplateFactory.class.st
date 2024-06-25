@@ -30,8 +30,21 @@ GAFBotMessageTemplateFactory >> availableCommands [
 	stream nextPutAll: '¿En qué puedo ayudarte?'; lf;
 	nextPutAll: '/alertas -> Para ver las alertas disponibles para tu granja.'; lf;
 	nextPutAll: '/carencia -> Para ver el listado de lotes actualmente en carencia.'; lf;
-	nextPutAll: '/novedades -> Para ver las novedades que aplican a tu granja.'.
+	nextPutAll: '/novedades -> Para ver las novedades que aplican a tu granja.'; lf;
+	nextPutAll: '/miPredio -> Detalles del estado del predio.'.
 	^stream contents.
+]
+
+{ #category : #'as yet unclassified' }
+GAFBotMessageTemplateFactory >> availableCommandsMiPredio [
+
+	^ 	"'/cultivar -> agregar cultivo en un lote.', Character lf asString,"
+		'/cosechar -> registrar cosecha en un lote.'. ", Character lf asString,
+		'/registrarAdversidad -> registrar adversidad en un lote.', Character lf asString,
+		'/realizarAplicacion -> registrar aplicacion ya efectuada en un lote o solicitar ayuda para solucionar el problema.', Character lf asString,
+		'/verLotesEnCarencia -> listado de lotes que aún no pueden utilizarse luego de una aplicación.'."
+
+
 ]
 
 { #category : #utilities }
@@ -82,6 +95,27 @@ GAFBotMessageTemplateFactory >> greetingConfigSummaryTextMessage [
 GAFBotMessageTemplateFactory >> greetingTextMessage [
 
 	^'Hola {{username}}. Soy AgroBot, tu nuevo ayudante!'
+]
+
+{ #category : #'as yet unclassified' }
+GAFBotMessageTemplateFactory >> harvestingPlotConfirmationTextMessage [
+
+	^ 'El lote seleccionado es _{{plot_name}}_ con cultivo {{crop_name}}.'
+]
+
+{ #category : #'as yet unclassified' }
+GAFBotMessageTemplateFactory >> harvestingPlotsList [
+
+	^ '¿Qué lote deseás cosechar?', Character lf asString,
+	'{{# plots }} 
+		{{plot}} con cultivo: {{crop}}', Character lf asString,
+	'{{/ plots }}'.
+]
+
+{ #category : #'as yet unclassified' }
+GAFBotMessageTemplateFactory >> harvestingRequestDateTextMessage [
+
+	^ '¿Qué día realizó la cosecha? Ingrese la fecha en formato día/mes/año.'
 ]
 
 { #category : #'as yet unclassified' }
