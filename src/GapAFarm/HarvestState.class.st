@@ -191,10 +191,9 @@ HarvestState >> requestHarvestQuantity: aCallbackQuery [
 { #category : #'as yet unclassified' }
 HarvestState >> saveHarvest: aUser [
 
-	| farm plot |
+	| farm |
 	farm := GAFBot singleton farmForTelegramUser: aUser.
-	plot := farm plots detect: [ :each | each id == harvestEvent plot id ].
-	plot addEvent: harvestEvent.
+	harvestEvent plot addEvent: harvestEvent.
 	GAFBot singleton
 		setState: nil forUser: aUser;
 		sendChatMessage: 'Perfecto, tu cosecha se registró correctamente.'

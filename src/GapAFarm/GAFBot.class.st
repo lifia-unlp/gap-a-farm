@@ -277,6 +277,15 @@ GAFBot >> reset [
 	self initialize. 
 ]
 
+{ #category : #initialization }
+GAFBot >> reset: aMessage [
+
+	aMessage chat resetState.
+	aMessage answer: 'Reiniciando el estado de este chat.'
+
+	
+]
+
 { #category : #'as yet unclassified' }
 GAFBot >> scheduledReport [
 
