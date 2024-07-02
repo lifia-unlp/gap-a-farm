@@ -11,21 +11,22 @@ Class {
 { #category : #'as yet unclassified' }
 GAFChat >> handleCallbackQueryUpdate: aCallbackQueryUpdate [
 
-		| callback |
-		callback := aCallbackQueryUpdate callbackQuery data.
-		(self state class canPerform: callback asValidSelector , ':')
-		ifTrue: [ 
-		self state perform: callback asValidSelector , ':' with: aCallbackQueryUpdate callbackQuery ]
-		ifFalse: [ 
-		self state error: 'Mensaje ', callback, ' no implementado.'
-			]
+	| callback |
+	callback := aCallbackQueryUpdate callbackQuery data.
+	(self state class canPerform: callback asValidSelector , ':')
+		ifTrue: [
+			self state
+				perform: callback asValidSelector , ':'
+				with: aCallbackQueryUpdate callbackQuery ]
+		ifFalse: [
+		self state error: 'Mensaje ' , callback , ' no implementado.' ]
 ]
 
 { #category : #'as yet unclassified' }
 GAFChat >> handleTextMessage: aMessage forFarm: farm [
 
 	(self state) ifNotNil:[
-			^ self state handleTextMessage: aMessage.
+			^ self state handleTextMessage: aMessage for: self.
 		].
 	self offerActionsForFarm: farm inResponseTo: aMessage.
 
@@ -44,6 +45,13 @@ GAFChat >> offerActionsForFarm: farm inResponseTo: aMessage [
 GAFChat >> resetState [
 
 	self state: nil
+]
+
+{ #category : #'as yet unclassified' }
+GAFChat >> startHarvestingReport: aMessage [
+
+	state := WaitingForPlotState new.
+	state startFrom: aMessage for: self
 ]
 
 { #category : #accessing }

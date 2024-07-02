@@ -98,6 +98,12 @@ GAFBotMessageTemplateFactory >> greetingTextMessage [
 ]
 
 { #category : #'as yet unclassified' }
+GAFBotMessageTemplateFactory >> harvestingConfirmationTextMessage [
+
+	^ 'El lote seleccionado es {{plot}}, con el cultivo {{crop}}. La cosecha fue realizada el día {{date}} a la/s {{hour}}hs, con una cantidad de {{quantity}}KG. La anotación que agregaste es: "{{comment}}" ¿Querés confirmar?'
+]
+
+{ #category : #'as yet unclassified' }
 GAFBotMessageTemplateFactory >> harvestingPlotConfirmationTextMessage [
 
 	^ 'El lote seleccionado es _{{plot_name}}_ con cultivo {{crop_name}}.'
@@ -106,7 +112,7 @@ GAFBotMessageTemplateFactory >> harvestingPlotConfirmationTextMessage [
 { #category : #'as yet unclassified' }
 GAFBotMessageTemplateFactory >> harvestingPlotsList [
 
-	^ '¿Qué lote deseás cosechar?', Character lf asString,
+	^ '¿Qué lote deseás cosechar? Ingresá el nombre.', Character lf asString,
 	'{{# plots }} 
 		{{plot}} con cultivo: {{crop}}', Character lf asString,
 	'{{/ plots }}'.

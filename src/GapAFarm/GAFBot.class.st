@@ -84,14 +84,7 @@ GAFBot >> chatForTelegramUser: aUser [
 { #category : #'as yet unclassified' }
 GAFBot >> cosechar: aMessage [
 
-	| chat |
-	chat := aMessage chat.
-	chat state: HarvestState new.
-	self
-		sendChatMessage:
-		(chat state plotsToHarvestListforFarm:
-			 (self farmForMessage: aMessage))
-		toUser: aMessage from
+	aMessage chat startHarvestingReport: aMessage
 ]
 
 { #category : #'as yet unclassified' }
