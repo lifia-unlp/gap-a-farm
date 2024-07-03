@@ -19,10 +19,10 @@ BaselineOfGapAFarm >> baseline: spec [
 			mustache: spec;
 			mustacheLibrary: spec;
 			openAiPapi: spec.
-		spec
-			package: 'GapAFarm'
-			with: [
-			spec requires: #( 'Seaside3' 'Bootstrap4-Core' 'Voyage' 'NeoCSV' ) ] ]
+		spec package: 'GapAFarm' with: [
+			spec requires:
+				#( 'Seaside3' 'Bootstrap4-Core' 'Voyage' 'NeoCSV' 'Telebots-Core'
+				   'Mustache-Library' ) ] ]
 ]
 
 { #category : #baselines }
@@ -44,10 +44,9 @@ BaselineOfGapAFarm >> mustache: spec [
 { #category : #baselines }
 BaselineOfGapAFarm >> mustacheLibrary: spec [
 
-	spec
-		baseline: 'MustacheLibrary'
-		with: [ spec repository: 'github://casco/mustache-library:main'.
-			spec requires: #( 'Mustache' ) ]
+	spec package: 'Mustache-Library' with: [
+		spec repository: 'github://casco/mustache-library:main'.
+		spec requires: #( 'Mustache' ) ]
 ]
 
 { #category : #baselines }
@@ -92,7 +91,7 @@ BaselineOfGapAFarm >> seaside: spec [
 { #category : #baselines }
 BaselineOfGapAFarm >> telebots: spec [
 
-	spec baseline: 'Telebots' with: [
+	spec package: 'Telebots-Core' with: [
 		spec repository: 'github://casco/telebots'.
 		spec requires: #( 'OpenAI-Speech' 'OpenAI-Speech' ) ]
 ]
