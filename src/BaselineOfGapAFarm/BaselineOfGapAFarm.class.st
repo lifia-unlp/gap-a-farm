@@ -46,7 +46,7 @@ BaselineOfGapAFarm >> mustacheLibrary: spec [
 
 	spec
 		baseline: 'MustacheLibrary'
-		with: [ spec repository: 'github://casco/mustache-library/src:main' ]
+		with: [ spec repository: 'github://casco/mustache-library:main' ]
 ]
 
 { #category : #baselines }
