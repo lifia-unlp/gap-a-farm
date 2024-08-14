@@ -9,9 +9,9 @@ WaitingForPlotState >> handleTextMessage: aMessage for: aChat [
 
 	| plot next bot |
 	bot := GAFBot singleton.
-	plot := (bot farmForMessage: aMessage) plots
-		        detect: [ :each | aMessage text = each id ]
-		        ifNone: [ nil ].
+	plot := self
+		        findPlot: aMessage text
+		        forFarm: (bot farmForMessage: aMessage).
 	plot
 		ifNil: [
 			bot
@@ -19,13 +19,29 @@ WaitingForPlotState >> handleTextMessage: aMessage for: aChat [
 				'El lote ingresado es incorrecto. Intentá nuevamente.'
 				to: aChat ]
 		ifNotNil: [
-			harvestEvent
-				plot: plot;
-				crop: plot currentCrop.
+			self plot: plot crop: plot currentCrop.
 			next := WaitingForDate new.
 			aChat state: next.
 			next event: harvestEvent.
 			next startFrom: aMessage for: aChat ]
+]
+
+{ #category : #'as yet unclassified' }
+WaitingForPlotState >> handleVoiceParams: params for: aChat [
+
+	| plotId bot plot next |
+	bot := GAFBot singleton.
+	plotId := params at: 'plot'.
+	plot := self findPlot: plotId forFarm: (bot farmForChat: aChat).
+	plot
+		ifNil: [
+			self plot: nil crop: nil ]
+		ifNotNil: [
+			self plot: plot crop: plot currentCrop.
+			next := WaitingForDate new.
+			aChat state: next.
+			next event: harvestEvent.
+			next handleVoiceParams: params for: aChat ]
 ]
 
 { #category : #initialization }

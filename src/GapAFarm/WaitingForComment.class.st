@@ -8,7 +8,7 @@ Class {
 WaitingForComment >> handleTextMessage: aMessage for: aChat [
 
 	| next |
-	harvestEvent comment: aMessage text.
+	self comment: aMessage text.
 	next := WaitingConfirmationState new.
 	next event: harvestEvent.
 	aChat state: next.

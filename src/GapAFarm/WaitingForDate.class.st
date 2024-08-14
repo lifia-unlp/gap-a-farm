@@ -7,16 +7,11 @@ Class {
 { #category : #'as yet unclassified' }
 WaitingForDate >> handleTextMessage: aMessage for: aChat [
 
-	| regex dateInput dateStrings next |
-	regex := '([0-2][1-9]|3[0-1])/(0[1-9]|1[0-2])/\d*' asRegex.
+	| dateInput next |
 	dateInput := aMessage text.
-	(regex matches: dateInput)
+	(self dateFormatValidation: dateInput)
 		ifTrue: [
-			dateStrings := dateInput substrings: '/'.
-			harvestEvent date: (Date
-					 newDay: dateStrings first asInteger
-					 month: dateStrings second asInteger
-					 year: dateStrings third asInteger).
+			self date: dateInput.
 			next := WaitingForHour new.
 			next event: harvestEvent.
 			aChat state: next.

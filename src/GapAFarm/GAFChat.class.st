@@ -34,6 +34,41 @@ GAFChat >> handleTextMessage: aMessage forFarm: farm [
 ]
 
 { #category : #hooks }
+GAFChat >> handleVoiceMessage: aMessage [
+
+	self state ifNotNil: [
+		^ self state startFrom: aMessage for: self ].
+	self harvestingforMessage: aMessage
+	"| sapi bytes text |
+	sapi := SpeechToTextApi new.
+	sapi isProperlyConfigured ifFalse: [
+		^ aMessage answer:
+			  'Al parecer, la API de transcripción no está correctamente configurada.' ].
+
+	bytes := (aMessage voice readStreamWith: GAFBot singleton) contents.
+	text := sapi transcribeByteArray: bytes.
+	aMessage answer: 'Usted dijo: ' , text.
+
+	self state ifNotNil: [
+		^ self state handleTranscription: text for: self ].
+	self harvestingText: text forMessage: aMessage"
+]
+
+{ #category : #'as yet unclassified' }
+GAFChat >> harvestingParameters: extractedParameters forMessage: aMessage [
+
+	state := JSONParseState new.
+	state parseParameters: extractedParameters for: self
+]
+
+{ #category : #'as yet unclassified' }
+GAFChat >> harvestingforMessage: aMessage [
+
+	state := JSONParseState new.
+	state startFrom: aMessage for: self.
+]
+
+{ #category : #hooks }
 GAFChat >> offerActionsForFarm: farm inResponseTo: aMessage [
 
 	aMessage answer:

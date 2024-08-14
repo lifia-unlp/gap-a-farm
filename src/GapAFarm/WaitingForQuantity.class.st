@@ -7,12 +7,11 @@ Class {
 { #category : #'as yet unclassified' }
 WaitingForQuantity >> handleTextMessage: aMessage for: aChat [
 
-	| regex input next |
-	regex := '\d*' asRegex.
-	input := aMessage text.
-	(regex matches: input)
+	| quantityInput next |
+	quantityInput := aMessage text.
+	(self quantityFormatValidation: quantityInput)
 		ifTrue: [
-			harvestEvent quantity: aMessage text asInteger.
+			self quantity: quantityInput.
 			next := WaitingForComment new.
 			next event: harvestEvent.
 			aChat state: next.

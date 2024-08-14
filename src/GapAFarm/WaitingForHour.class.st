@@ -7,12 +7,11 @@ Class {
 { #category : #'as yet unclassified' }
 WaitingForHour >> handleTextMessage: aMessage for: aChat [
 
-	| regex hourInput next |
-	regex := '^(0[0-9]|1[0-9]|2[0-3])\:[0-5][0-9]' asRegex.
+	| hourInput next |
 	hourInput := aMessage text.
-	(regex matches: hourInput)
+	(self hourFormatValidation: hourInput)
 		ifTrue: [
-			harvestEvent time: (Time fromString: aMessage text).
+			self hour: hourInput.
 			next := WaitingForQuantity new.
 			next event: harvestEvent.
 			aChat state: next.
