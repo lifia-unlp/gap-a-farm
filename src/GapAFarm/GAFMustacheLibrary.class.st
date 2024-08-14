@@ -39,6 +39,5 @@ Respuesta esperada en formato JSON esperado:
 
 { #category : #templates }
 GAFMustacheLibrary >> harvestMessageExtractionPrompt_exampleContext [
-^'{"name" : "Juan"}'
-
+^'{"crops" : ["Tomate perita"]}'
 ]
