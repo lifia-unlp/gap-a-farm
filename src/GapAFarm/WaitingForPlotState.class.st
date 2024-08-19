@@ -7,68 +7,48 @@ Class {
 { #category : #'as yet unclassified' }
 WaitingForPlotState >> handleTextMessage: aMessage for: aChat [
 
-	| plot next bot |
+	| bot next plot |
 	bot := GAFBot singleton.
 	plot := self
 		        findPlot: aMessage text
 		        forFarm: (bot farmForMessage: aMessage).
-	plot
-		ifNil: [
-			bot
-				sendChatMessage:
-				'El lote ingresado es incorrecto. Intentá nuevamente.'
-				to: aChat ]
-		ifNotNil: [
-			self plot: plot crop: plot currentCrop.
-			next := WaitingForDate new.
-			aChat state: next.
-			next event: harvestEvent.
-			next startFrom: aMessage for: aChat ]
+	plot ifNil: [
+		self failedInputAttempt > 0
+			ifTrue: [
+				^ bot
+					  sendChatMessage:
+					  'El lote ingresado es incorrecto. Intentá nuevamente.'
+					  to: aChat ]
+			ifFalse: [ ^ self tooManyFailedAttemptsFor: aChat ] ].
+	plot currentCrop ifNil: [
+		self failedInputAttempt > 0
+			ifTrue: [
+				^ bot
+					  sendChatMessage:
+					  'El lote ingresado no tiene ningún cultivo asociado.'
+					  to: aChat ]
+			ifFalse: [ ^ self tooManyFailedAttemptsFor: aChat ] ].
+	next := self nextState.
+	self plot: plot crop: plot currentCrop.
+	aChat state: next.
+	next event: harvestEvent.
+	next startFrom: aMessage for: aChat
 ]
 
-{ #category : #'as yet unclassified' }
-WaitingForPlotState >> handleVoiceParams: params for: aChat [
+{ #category : #accessing }
+WaitingForPlotState >> nextState [
 
-	| plotId bot plot next |
-	bot := GAFBot singleton.
-	plotId := params at: 'plot'.
-	plot := self findPlot: plotId forFarm: (bot farmForChat: aChat).
-	plot
-		ifNil: [
-			self plot: nil crop: nil ]
-		ifNotNil: [
-			self plot: plot crop: plot currentCrop.
-			next := WaitingForDate new.
-			aChat state: next.
-			next event: harvestEvent.
-			next handleVoiceParams: params for: aChat ]
-]
-
-{ #category : #initialization }
-WaitingForPlotState >> initialize [
-
-	harvestEvent := Harvesting new.
-]
-
-{ #category : #'as yet unclassified' }
-WaitingForPlotState >> plotsToHarvestListforFarm: aFarm [
-
-	| plots |
-	plots := aFarm plotsWithSowing collect: [ :each |
-		         {
-			         ('plot' -> each id).
-			         ('crop' -> each currentCrop) } asDictionary ].
-	^ GAFBotMessageTemplateFactory new harvestingPlotsList
-		  asMustacheTemplate value: { ('plots' -> plots) } asDictionary
+	harvestEvent plot ifNil: [ ^ WaitingForDate new ].
+	^ WaitingConfirmationState new
 ]
 
 { #category : #'as yet unclassified' }
 WaitingForPlotState >> startFrom: aMessage for: aChat [
 
-		| bot |
-		bot := GAFBot singleton.
-		bot 
+	| bot |
+	bot := GAFBot singleton.
+	bot
 		sendChatMessage:
-		(self plotsToHarvestListforFarm: (bot farmForMessage: aMessage ))
+		(self plotsToHarvestListforFarm: (bot farmForMessage: aMessage))
 		toUser: aMessage from
 ]

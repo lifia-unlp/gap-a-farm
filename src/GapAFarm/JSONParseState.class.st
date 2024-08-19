@@ -23,22 +23,9 @@ JSONParseState >> initialize [
 { #category : #parsing }
 JSONParseState >> parseParameters: extractedParameters for: aChat [
 
-	"| bot plotId dict |"
-	"bot := GAFBot singleton.
-	dict := Dictionary new."
-	self parsePlot: (extractedParameters at: 'plot' ifAbsent: [ nil ]) for: aChat.
-		"crop:
-		(extractedParameters
-			 at: 'crop'
-			 ifAbsent: [ nil ])."
-	"plotId ifNotNil: [
-	self plot: (self findPlot: plotId forFarm: (bot farmForChat: aChat)) ]."
-  "	self date: Date today ddmmyyyy.
-	self hour: Time now hour asString , ':' , Time now minutes asString.
-	self quantity: ((extractedParameters
-			  at: 'quantity'
-			  ifAbsent: [ nil ]) at: 'value')
-			asInteger."
+	self
+		parsePlot: (extractedParameters at: 'plot' ifAbsent: [ nil ])
+		for: aChat
 ]
 
 { #category : #parsing }

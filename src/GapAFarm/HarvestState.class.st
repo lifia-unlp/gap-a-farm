@@ -2,7 +2,8 @@ Class {
 	#name : #HarvestState,
 	#superclass : #GAFChatState,
 	#instVars : [
-		'harvestEvent'
+		'harvestEvent',
+		'inputAttempts'
 	],
 	#category : #'GapAFarm-telegram'
 }
@@ -43,6 +44,13 @@ HarvestState >> event: anEvent [
 ]
 
 { #category : #'as yet unclassified' }
+HarvestState >> failedInputAttempt [
+
+	inputAttempts := inputAttempts - 1.
+	^ inputAttempts
+]
+
+{ #category : #'as yet unclassified' }
 HarvestState >> findPlot: plotId forFarm: aFarm [
 
 	^ aFarm plots detect: [ :each | plotId = each id ] ifNone: [ nil ]
@@ -62,10 +70,28 @@ HarvestState >> hourFormatValidation: hourInput [
 	^ regex matches: hourInput
 ]
 
+{ #category : #initialization }
+HarvestState >> initialize [
+
+	inputAttempts := 3. "Default amount of input attempts"
+]
+
 { #category : #'as yet unclassified' }
 HarvestState >> plot: plot crop: crop [
 
   harvestEvent plot: plot; crop: crop.
+]
+
+{ #category : #'as yet unclassified' }
+HarvestState >> plotsToHarvestListforFarm: aFarm [
+
+	| plots |
+	plots := aFarm plotsWithSowing collect: [ :each |
+		         {
+			         ('plot' -> each id).
+			         ('crop' -> each currentCrop) } asDictionary ].
+	^ GAFBotMessageTemplateFactory new harvestingPlotsList
+		  asMustacheTemplate value: { ('plots' -> plots) } asDictionary
 ]
 
 { #category : #accessing }
@@ -80,4 +106,14 @@ HarvestState >> quantityFormatValidation: quantityInput [
 	| regex |
 	regex := '\d*' asRegex.
 	^ regex matches: quantityInput
+]
+
+{ #category : #'as yet unclassified' }
+HarvestState >> tooManyFailedAttemptsFor: aChat [
+
+	aChat resetState.
+	GAFBot singleton
+		sendChatMessage:
+		'Demasiados intentos fallidos. Intentalo de nuevo después.'
+		to: aChat
 ]

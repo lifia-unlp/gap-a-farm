@@ -21,6 +21,7 @@ WaitingConfirmationState >> confirmHarvest: aCallbackQueryUpdate [
 { #category : #'as yet unclassified' }
 WaitingConfirmationState >> handleTextMessage: aMessage for: aChat [
 
+	aMessage answer: 'Aún no confirmaste la información sobre tu cosecha.'
 ]
 
 { #category : #'as yet unclassified' }
