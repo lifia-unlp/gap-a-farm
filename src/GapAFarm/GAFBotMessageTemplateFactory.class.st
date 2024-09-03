@@ -100,7 +100,10 @@ GAFBotMessageTemplateFactory >> greetingTextMessage [
 { #category : #'as yet unclassified' }
 GAFBotMessageTemplateFactory >> harvestingConfirmationTextMessage [
 
-	^ 'El lote seleccionado es {{plot}}, con el cultivo {{crop}}. La cosecha fue realizada el día {{date}} a la/s {{hour}}hs, con una cantidad de {{quantity}}KG. La anotación que agregaste es: "{{comment}}" ¿Querés confirmar?'
+	^ 'El lote seleccionado es {{plot}}, con el cultivo {{crop}}. La cosecha fue realizada el día {{date}} a la/s {{hour}}hs, con una cantidad de {{quantity}}KG.
+	{{#comment}}
+	La anotación que agregaste es: "{{comment}}." 
+	{{/comment}} Si la información es correcta presiona "Confirmar". Si querés hacer cambios presiona "Modificar".'
 ]
 
 { #category : #'as yet unclassified' }

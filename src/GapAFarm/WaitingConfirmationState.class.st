@@ -29,19 +29,13 @@ WaitingConfirmationState >> startFrom: aMessage for: aChat [
 
 	| inlineKeyboard |
 	inlineKeyboard := TelegramInlineKeyboard new
-		                  buttonText: 'Sí' callbackData: 'confirmHarvest';
-		                  buttonText: 'No' callbackData: 'modifyHarvest'.
+		                  buttonText: 'Confirmar' callbackData: 'confirmHarvest';
+		                  buttonText: 'Modificar' callbackData: 'modifyHarvest'.
 
 	GAFBot singleton
 		sendChatMessage:
 			(GAFBotMessageTemplateFactory new harvestingConfirmationTextMessage
-				 asMustacheTemplate value: {
-					 ('plot' -> harvestEvent plot id).
-					 ('crop' -> harvestEvent crop).
-					 ('date' -> harvestEvent date ddmmyyyy).
-					 ('hour' -> harvestEvent time hour24 ).
-					 ('quantity' -> harvestEvent quantity).
-					 ('comment' -> harvestEvent comment) } asDictionary)
+				 asMustacheTemplate value: self harvestAsDictionary)
 		withInlineKeyboard: inlineKeyboard
 		toUser: aMessage from
 ]

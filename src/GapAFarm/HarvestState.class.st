@@ -16,6 +16,12 @@ HarvestState >> comment: commentInput [
 	
 ]
 
+{ #category : #'as yet unclassified' }
+HarvestState >> cropMatchPlotCurrent: cropName [
+
+	^ harvestEvent plot currentCrop vulgarName  = cropName 
+]
+
 { #category : #accessing }
 HarvestState >> date: aDate [
 
@@ -44,6 +50,12 @@ HarvestState >> event: anEvent [
 ]
 
 { #category : #'as yet unclassified' }
+HarvestState >> eventSetDefaultCrop [
+
+	harvestEvent crop: (harvestEvent plot currentCrop).
+]
+
+{ #category : #'as yet unclassified' }
 HarvestState >> failedInputAttempt [
 
 	inputAttempts := inputAttempts - 1.
@@ -54,6 +66,22 @@ HarvestState >> failedInputAttempt [
 HarvestState >> findPlot: plotId forFarm: aFarm [
 
 	^ aFarm plots detect: [ :each | plotId = each id ] ifNone: [ nil ]
+]
+
+{ #category : #'as yet unclassified' }
+HarvestState >> harvestAsDictionary [
+
+	| arr |
+	arr := {
+		       ('plot' -> harvestEvent plot id).
+		       ('crop' -> harvestEvent crop).
+		       ('date' -> harvestEvent date ddmmyyyy).
+		       ('hour' -> harvestEvent time hour24).
+		       ('quantity' -> harvestEvent quantity) }.
+
+	harvestEvent comment = '' ifFalse: [
+		arr with: 'comment' -> harvestEvent comment ].
+	^ arr asDictionary
 ]
 
 { #category : #accessing }
