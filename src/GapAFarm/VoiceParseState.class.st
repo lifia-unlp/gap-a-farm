@@ -62,7 +62,9 @@ VoiceParseState >> parseCrop: cropName [
 { #category : #parsing }
 VoiceParseState >> parseHour: hourInput [
 
-	hourInput ifNil: [ ^ self hour: (Time now hour24 asString,':',Time now minutes asString ) ].
+	hourInput ifNil: [
+		^ self hour:
+			  Time now hour24 asString , ':' , Time now minutes asString ].
 	(self hourFormatValidation: hourInput) ifFalse: [
 		^ self errorResponseAdd:
 			  'El horario indicado no es correcto, por favor intentalo de nuevo.' ].
@@ -96,7 +98,7 @@ VoiceParseState >> parsePlot: plotId for: aChat [
 			        forFarm: (GAFBot singleton farmForChat: aChat).
 		plot ifNil: [
 			^ self errorResponseAdd:
-				  'El lote indicado no es correcto. Indique nuevamente el nombre.' ].
+				  'El lote indicado no es correcto. Indicá nuevamente el nombre.' ].
 		plot currentCrop ifNil: [
 			^ self errorResponseAdd:
 				  'El lote indicado no tiene ningún cultivo en este momento.' ].
@@ -115,17 +117,16 @@ VoiceParseState >> parseQuantity: quantityInput [
 { #category : #'as yet unclassified' }
 VoiceParseState >> startFrom: aMessage for: aChat [
 
-	| extractedParameters next |
+	| extractedParameters next bot |
+	bot:= GAFBot singleton.
 	extractedParameters := GptDataExtractor new
-		                       extractHarvestingParametersFrom:
-		                       (super
-			                        handleVoiceMessage: aMessage
-			                        for: aChat)
+		                       extractUpdateHarvestingParametersFrom:
+			                       (bot extractTextFrom: aMessage)
 		                       for:
-		                       (GAFBot singleton farmForMessage: aMessage).
+		                       (bot farmForMessage: aMessage).
 	self parseParameters: extractedParameters for: aChat.
 	response = '' ifFalse: [
-		^ GAFBot singleton sendChatMessage: response to: aChat ].
+		^ bot sendChatMessage: response to: aChat ].
 	next := VoiceWaitingConfirmationState new.
 	next event: harvestEvent.
 	aChat state: next.

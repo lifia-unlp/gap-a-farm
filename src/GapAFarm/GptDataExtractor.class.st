@@ -71,6 +71,26 @@ GptDataExtractor >> extractHarvestingParametersFrom: aString for: aFarm [
 	^ responseAsDictionary
 ]
 
+{ #category : #'as yet unclassified' }
+GptDataExtractor >> extractParametersFrom: aString [
+
+	| response responseAsDictionary |
+	self acceptMessageFromUser: aString.
+	self askAssistantToContribute.
+	response := self lastMessage at: 'content'.
+	responseAsDictionary := [ NeoJSONReader fromString: response ]
+		                        on: Error
+		                        do: [ Dictionary new ].
+	^ responseAsDictionary
+]
+
+{ #category : #'as yet unclassified' }
+GptDataExtractor >> extractUpdateHarvestingParametersFrom: aString for: aFarm [
+
+	self acceptMessageFromUser: (self updateHarvestingPromptFor: aFarm).
+	^ self extractParametersFrom: aString
+]
+
 { #category : #'prompt-building' }
 GptDataExtractor >> plotsFor: aFarm [
 
@@ -91,4 +111,15 @@ GptDataExtractor >> unitsFor: aFarm [
 		do: [ :unit | stream nextPutAll: unit ]
 		separatedBy: [ stream nextPutAll: ', ' ].
 	^ stream contents
+]
+
+{ #category : #'as yet unclassified' }
+GptDataExtractor >> updateHarvestingPromptFor: aFarm [
+
+	| mustacheTemplate |
+	mustacheTemplate := GAFMustacheLibrary new
+		                    harvestUpdateMessageExtractionPrompt
+		                    asMustacheTemplate.
+	^ mustacheTemplate value:
+		  (self buildHarvestingTemplateContextWith: aFarm)
 ]

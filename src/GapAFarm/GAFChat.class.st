@@ -37,7 +37,8 @@ GAFChat >> handleTextMessage: aMessage forFarm: farm [
 GAFChat >> handleVoiceMessage: aMessage [
 
 	self state ifNotNil: [
-		^ self state startFrom: aMessage for: self ].
+		^ self state handleVoiceMessage: aMessage for: self
+		"self state startFrom: aMessage for: self" ].
 	self harvestingforVoiceMessage: aMessage
 ]
 

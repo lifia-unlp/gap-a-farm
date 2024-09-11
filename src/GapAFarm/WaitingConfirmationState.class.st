@@ -11,7 +11,7 @@ WaitingConfirmationState >> confirmHarvest: aCallbackQueryUpdate [
 	chat := GAFBot singleton chatForTelegramUser: aCallbackQueryUpdate from.
 	chat state: nil.
 
-	harvestEvent plot addEvent: harvestEvent.
+	"harvestEvent plot addEvent: harvestEvent".
 
 	GAFBot singleton
 		sendChatMessage: 'Se reportó correctamente su cosecha.'

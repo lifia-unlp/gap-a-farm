@@ -48,3 +48,51 @@ Respuesta esperada en formato JSON esperado:
 GAFMustacheLibrary >> harvestMessageExtractionPrompt_exampleContext [
 ^'{"crops" : ["Tomate perita"]}'
 ]
+
+{ #category : #'as yet unclassified' }
+GAFMustacheLibrary >> harvestUpdateMessageExtractionPrompt [
+
+^ 'A continuación te proporcionaré un mensajes de ejemplo para que puedas extraer datos de él. Los datos que deberías poder extraer son: 
+1. plot: lote, 
+2. crop: cultivo, 
+3. hour: hora 
+4. quantity: cantidad.
+
+Ejemplos:
+"Cambio lote por {{example-plot}}",
+"Cambio cultivo por {{example-crop}}", 
+"Cambio hora por 6:30",
+"Cambio cantidad por {{example-quantity}} KG"
+
+Para la hora, en caso de que se haya indicado se debe usar el formato hh:mm. 
+La hora debe encontrarse en formato 24 hs, por lo tanto si el usuario indica "cambio hora por 6:30 de la tarde" el valor esperado para el dato "hour" debería ser 18:30.
+
+Solo debería indicarse uno de los datos. Si no es posible reconocer alguno de los datos indicados, devolve el siguiente json:
+
+{ 
+	"field": "empty"
+} 
+
+Respuestas correctas esperadas (sólo una) en formato JSON esperado:
+
+{
+  "field": "crop",
+  "crop": "{{example-crop}}"
+}
+{
+  "field": "quantity", 
+  "quantity": {
+    "value": "150",
+    "unit": "KG"
+}
+{
+  "field": "plot", 
+  "plot": "{{example-plot}}"
+}
+{ 
+  "field": "hour",
+  "hour": "hh:mm"
+}
+
+'
+]

@@ -100,6 +100,20 @@ GAFBot >> ensureChatFarmAssociationWith: aMessage [
 	^ true.
 ]
 
+{ #category : #'as yet unclassified' }
+GAFBot >> extractTextFrom: aMessage [
+
+	| sapi bytes |
+	sapi := SpeechToTextApi new.
+	sapi isProperlyConfigured ifFalse: [
+		^ aMessage answer:
+			  'Al parecer, la API de transcripción no está correctamente configurada.' ].
+
+	bytes := (aMessage voice readStreamWith: self) contents.
+	^ sapi transcribeByteArray: bytes
+	"aMessage answer: 'Usted dijo: ' , text."
+]
+
 { #category : #utility }
 GAFBot >> farmForChat: aChat [
 
