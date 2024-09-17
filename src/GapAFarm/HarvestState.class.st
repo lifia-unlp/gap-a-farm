@@ -111,6 +111,22 @@ HarvestState >> plot: plot crop: crop [
 ]
 
 { #category : #'as yet unclassified' }
+HarvestState >> plot: plotId for: farm [
+
+	| plot |
+	plot := self findPlot: plotId forFarm: farm.
+
+	plot ifNil: [
+		^ 'El lote ingresado es incorrecto. Intentá nuevamente.' ].
+
+	plot currentCrop ifNil: [
+		^ 'El lote ingresado no tiene ningún cultivo asociado.' ].
+
+	harvestEvent plot: plot.
+	^ nil
+]
+
+{ #category : #'as yet unclassified' }
 HarvestState >> plotsToHarvestListforFarm: aFarm [
 
 	| plots |
@@ -144,4 +160,11 @@ HarvestState >> tooManyFailedAttemptsFor: aChat [
 		sendChatMessage:
 		'Demasiados intentos fallidos. Intentalo de nuevo después.'
 		to: aChat
+]
+
+{ #category : #accessing }
+HarvestState >> useCurrentCrop [
+
+	"Must be the same as the current crop"
+	harvestEvent crop: harvestEvent plot currentCrop.
 ]

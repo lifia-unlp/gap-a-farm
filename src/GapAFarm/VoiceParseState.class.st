@@ -44,7 +44,7 @@ VoiceParseState >> parseCrop: cropName [
 
 	| crop |
 	cropName ifNil: [
-		^ harvestEvent crop ifNil: [ ^ self eventSetDefaultCrop ] ].
+		^ harvestEvent crop ifNil: [ ^ self useCurrentCrop. "eventSetDefaultCrop" ] ].
 
 	crop := GapAFarm singleton cropNamed: cropName.
 	crop ifNil: [
@@ -56,7 +56,8 @@ VoiceParseState >> parseCrop: cropName [
 		^ self errorResponseAdd:
 			  'El nombre del cultivo que indicaste no coincide con el que actualmente se encuentra en tu lote. ' ].
 
-	self eventSetDefaultCrop
+	self useCurrentCrop
+	"self eventSetDefaultCrop"
 ]
 
 { #category : #parsing }
@@ -82,18 +83,23 @@ VoiceParseState >> parseParameters: extractedParameters for: aChat [
 	harvestEvent date: Date today.
 	self parseHour: (extractedParameters at: 'hour' ifAbsent: [ nil ]).
 	self parseQuantity:
-		((extractedParameters at: 'quantity' ifAbsent: [ nil ]) at: 'value').
+		(extractedParameters at: 'quantity' ifAbsent: [ nil ]).
 ]
 
 { #category : #parsing }
 VoiceParseState >> parsePlot: plotId for: aChat [
 
-	| plot |
+	| resp |
 	harvestEvent plot ifNil: [
 		plotId ifNil: [
 			^ self errorResponseAdd: 'Tenés que indicar un lote.' ].
+		
+		resp := self plot: plotId for: (GAFBot singleton farmForChat: aChat).
+		
+		resp ifNotNil: [ self errorResponseAdd: resp ].
+		]
 
-		plot := self
+		"plot := self
 			        findPlot: plotId
 			        forFarm: (GAFBot singleton farmForChat: aChat).
 		plot ifNil: [
@@ -102,14 +108,14 @@ VoiceParseState >> parsePlot: plotId for: aChat [
 		plot currentCrop ifNil: [
 			^ self errorResponseAdd:
 				  'El lote indicado no tiene ningún cultivo en este momento.' ].
-		harvestEvent plot: plot ]
+		harvestEvent plot: plot ]"
 ]
 
 { #category : #parsing }
 VoiceParseState >> parseQuantity: quantityInput [
 
 	quantityInput ifNil:[
-			^ response errorResponseAdd: 'Tenés que indicar la cantidad cosechada.'
+			^ self errorResponseAdd: 'Tenés que indicar la cantidad cosechada.'
 		].
 	self quantity: quantityInput.
 ]
@@ -120,7 +126,7 @@ VoiceParseState >> startFrom: aMessage for: aChat [
 	| extractedParameters next bot |
 	bot:= GAFBot singleton.
 	extractedParameters := GptDataExtractor new
-		                       extractUpdateHarvestingParametersFrom:
+		                       extractHarvestingParametersFrom:
 			                       (bot extractTextFrom: aMessage)
 		                       for:
 		                       (bot farmForMessage: aMessage).

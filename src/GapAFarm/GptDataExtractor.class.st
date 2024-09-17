@@ -21,9 +21,9 @@ GptDataExtractor >> buildHarvestingTemplateContextWith: aFarm [
 	^ Dictionary new
 		  at: 'crops' put: (self cropsFor: aFarm);
 		  at: 'plots' put: (self plotsFor: aFarm);
-		  at: 'units' put: (self unitsFor: aFarm);
+		  "at: 'units' put: (self unitsFor: aFarm);"
 		  at: 'example-crop' put: (self exampleCropFor: aFarm);
-		  at: 'example-unit' put: (self exampleUnitFor: aFarm);
+		  "at: 'example-unit' put: (self exampleUnitFor: aFarm);"
 		  at: 'example-plot' put: (self examplePlotFor: aFarm);
 		  yourself
 ]

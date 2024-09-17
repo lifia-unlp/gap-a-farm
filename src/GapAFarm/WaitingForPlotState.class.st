@@ -7,29 +7,18 @@ Class {
 { #category : #'as yet unclassified' }
 WaitingForPlotState >> handleTextMessage: aMessage for: aChat [
 
-	| bot next plot |
+	| bot next response |
+	
 	bot := GAFBot singleton.
-	plot := self
-		        findPlot: aMessage text
-		        forFarm: (bot farmForMessage: aMessage).
-	plot ifNil: [
-		self failedInputAttempt > 0
+	response := self plot: aMessage text for: (bot farmForMessage: aMessage).
+	response ifNotNil: [ 	
+			self failedInputAttempt > 0
 			ifTrue: [
-				^ bot
-					  sendChatMessage:
-					  'El lote ingresado es incorrecto. Intentá nuevamente.'
+				^ bot sendChatMessage: response
 					  to: aChat ]
 			ifFalse: [ ^ self tooManyFailedAttemptsFor: aChat ] ].
-	plot currentCrop ifNil: [
-		self failedInputAttempt > 0
-			ifTrue: [
-				^ bot
-					  sendChatMessage:
-					  'El lote ingresado no tiene ningún cultivo asociado.'
-					  to: aChat ]
-			ifFalse: [ ^ self tooManyFailedAttemptsFor: aChat ] ].
+	self useCurrentCrop.
 	next := self nextState.
-	self plot: plot crop: plot currentCrop.
 	aChat state: next.
 	next event: harvestEvent.
 	next startFrom: aMessage for: aChat
@@ -38,8 +27,8 @@ WaitingForPlotState >> handleTextMessage: aMessage for: aChat [
 { #category : #accessing }
 WaitingForPlotState >> nextState [
 
-	harvestEvent plot ifNil: [ ^ WaitingForDate new ].
-	^ WaitingConfirmationState new
+	"harvestEvent plot ifNil: [" ^ WaitingForDate new "]."
+	"^ WaitingConfirmationState new"
 ]
 
 { #category : #'as yet unclassified' }
