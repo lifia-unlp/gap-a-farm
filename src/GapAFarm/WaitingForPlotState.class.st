@@ -10,6 +10,7 @@ WaitingForPlotState >> handleTextMessage: aMessage for: aChat [
 	| bot next response |
 	
 	bot := GAFBot singleton.
+	next := self nextState.
 	response := self plot: aMessage text for: (bot farmForMessage: aMessage).
 	response ifNotNil: [ 	
 			self failedInputAttempt > 0
@@ -18,7 +19,6 @@ WaitingForPlotState >> handleTextMessage: aMessage for: aChat [
 					  to: aChat ]
 			ifFalse: [ ^ self tooManyFailedAttemptsFor: aChat ] ].
 	self useCurrentCrop.
-	next := self nextState.
 	aChat state: next.
 	next event: harvestEvent.
 	next startFrom: aMessage for: aChat
@@ -27,8 +27,8 @@ WaitingForPlotState >> handleTextMessage: aMessage for: aChat [
 { #category : #accessing }
 WaitingForPlotState >> nextState [
 
-	"harvestEvent plot ifNil: [" ^ WaitingForDate new "]."
-	"^ WaitingConfirmationState new"
+	harvestEvent plot ifNil: [ ^ WaitingForDate new ].
+	^ WaitingConfirmationState new
 ]
 
 { #category : #'as yet unclassified' }

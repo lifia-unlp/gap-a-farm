@@ -25,6 +25,18 @@ WaitingConfirmationState >> handleTextMessage: aMessage for: aChat [
 ]
 
 { #category : #'as yet unclassified' }
+WaitingConfirmationState >> modifyHarvest: aCallbackQueryUpdate [
+
+	| next bot chat |
+	bot := GAFBot singleton.
+	chat := bot chatForTelegramUser: (aCallbackQueryUpdate from).
+	next := WaitingFieldToUpdateState new.
+	next event: harvestEvent.
+	chat state: next.	
+	next startFrom: aCallbackQueryUpdate for: chat
+]
+
+{ #category : #'as yet unclassified' }
 WaitingConfirmationState >> startFrom: aMessage for: aChat [
 
 	| inlineKeyboard |

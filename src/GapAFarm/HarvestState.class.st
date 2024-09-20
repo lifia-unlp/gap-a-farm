@@ -105,12 +105,6 @@ HarvestState >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
-HarvestState >> plot: plot crop: crop [
-
-  harvestEvent plot: plot; crop: crop.
-]
-
-{ #category : #'as yet unclassified' }
 HarvestState >> plot: plotId for: farm [
 
 	| plot |
@@ -165,6 +159,6 @@ HarvestState >> tooManyFailedAttemptsFor: aChat [
 { #category : #accessing }
 HarvestState >> useCurrentCrop [
 
-	"Must be the same as the current crop"
+	"Event crop MUST be the same as the current crop"
 	harvestEvent crop: harvestEvent plot currentCrop.
 ]
