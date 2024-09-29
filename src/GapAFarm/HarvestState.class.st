@@ -3,7 +3,9 @@ Class {
 	#superclass : #GAFChatState,
 	#instVars : [
 		'harvestEvent',
-		'inputAttempts'
+		'inputAttempts',
+		'errorResponse',
+		'nextState'
 	],
 	#category : #'GapAFarm-telegram'
 }
@@ -19,28 +21,16 @@ HarvestState >> comment: commentInput [
 { #category : #'as yet unclassified' }
 HarvestState >> cropMatchPlotCurrent: cropName [
 
-	^ harvestEvent plot currentCrop vulgarName  = cropName 
-]
-
-{ #category : #accessing }
-HarvestState >> date: aDate [
-
-	| dateStrings |
-
-	dateStrings := aDate substrings: '/'.
-	harvestEvent date: (Date
-			 newDay: dateStrings first asInteger
-			 month: dateStrings second asInteger
-			 year: dateStrings third asInteger)
+	harvestEvent plot ifNotNil: [
+		^ harvestEvent plot currentCrop vulgarName  = cropName ].
+	^ true
 ]
 
 { #category : #'as yet unclassified' }
 HarvestState >> dateFormatValidation: dateInput [
 
-	| regex |
-	
-	regex := '([0-2][1-9]|3[0-1])/(0[1-9]|1[0-2])/\d*' asRegex.
-   ^ regex matches: dateInput 
+	^ '([0-2][1-9]|3[0-1])/(0[1-9]|1[0-2])/\d*' asRegex matches:
+		  dateInput
 ]
 
 { #category : #accessing }
@@ -102,6 +92,7 @@ HarvestState >> hourFormatValidation: hourInput [
 HarvestState >> initialize [
 
 	inputAttempts := 3. "Default amount of input attempts"
+	errorResponse := nil
 ]
 
 { #category : #'as yet unclassified' }
@@ -111,13 +102,12 @@ HarvestState >> plot: plotId for: farm [
 	plot := self findPlot: plotId forFarm: farm.
 
 	plot ifNil: [
-		^ 'El lote ingresado es incorrecto. Intentá nuevamente.' ].
+		^ self setErrorResponse: 'El lote ingresado es incorrecto. Intentá nuevamente.' ].
 
 	plot currentCrop ifNil: [
-		^ 'El lote ingresado no tiene ningún cultivo asociado.' ].
+		^ self setErrorResponse: 'El lote ingresado no tiene ningún cultivo asociado.' ].
 
 	harvestEvent plot: plot.
-	^ nil
 ]
 
 { #category : #'as yet unclassified' }
@@ -144,6 +134,32 @@ HarvestState >> quantityFormatValidation: quantityInput [
 	| regex |
 	regex := '\d*' asRegex.
 	^ regex matches: quantityInput
+]
+
+{ #category : #accessing }
+HarvestState >> setDate: aDate [
+
+	| dateStrings |
+	(self dateFormatValidation: aDate) ifFalse: [
+		^ self setErrorResponse:
+			  'La fecha ingresada no tiene un formato correcto.' ].
+
+	dateStrings := aDate substrings: '/'.
+	harvestEvent date: (Date
+			 newDay: dateStrings first asInteger
+			 month: dateStrings second asInteger
+			 year: dateStrings third asInteger)
+]
+
+{ #category : #initialization }
+HarvestState >> setErrorResponse: aText [
+
+	| errorState |
+
+	errorState := ErrorState new.
+   errorState setMessage: aText.
+	errorState previousState: self.
+	nextState := errorState 
 ]
 
 { #category : #'as yet unclassified' }

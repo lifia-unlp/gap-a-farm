@@ -7,17 +7,12 @@ Class {
 { #category : #'as yet unclassified' }
 WaitingForDate >> handleTextMessage: aMessage for: aChat [
 
-	| dateInput next |
-	dateInput := aMessage text.
-	(self dateFormatValidation: dateInput) ifFalse: [
-		^ GAFBot singleton
-			sendChatMessage: 'La fecha ingresada no tiene un formato correcto.'
-			to: aChat ].
-	next := self nextState.
-	self date: dateInput.
-	next event: harvestEvent.
-	aChat state: next.
-	next startFrom: aMessage for: aChat
+	self setDate: aMessage text.
+	errorResponse ifNotNil: [
+		^ GAFBot singleton sendChatMessage: errorResponse to: aChat ].
+	nextState event: harvestEvent.
+	aChat state: nextState.
+	nextState startFrom: aMessage for: aChat
 ]
 
 { #category : #accessing }
@@ -30,6 +25,7 @@ WaitingForDate >> nextState [
 { #category : #'as yet unclassified' }
 WaitingForDate >> startFrom: aMessage for: aChat [
 
+	nextState := WaitingForHour new.
 	GAFBot singleton
 		sendChatMessage:
 		'¿Qué día realizó la cosecha? Ingrese la fecha en formato día/mes/año.'

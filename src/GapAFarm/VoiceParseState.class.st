@@ -1,16 +1,13 @@
 Class {
 	#name : #VoiceParseState,
 	#superclass : #HarvestState,
-	#instVars : [
-		'response'
-	],
 	#category : #'GapAFarm-telegram'
 }
 
 { #category : #adding }
 VoiceParseState >> errorResponseAdd: text [
 
-	response := response , text
+	errorResponse := errorResponse , text
 ]
 
 { #category : #'as yet unclassified' }
@@ -29,7 +26,7 @@ VoiceParseState >> handleVoiceMessage: aMessage for: aChat [
 VoiceParseState >> initialize [
 
 	harvestEvent := Harvesting new.
-	response := ''
+	errorResponse := ''
 ]
 
 { #category : #'as yet unclassified' }
@@ -47,7 +44,7 @@ VoiceParseState >> parseCrop: cropName [
 		^ harvestEvent crop ifNil: [ ^ self useCurrentCrop. "eventSetDefaultCrop" ] ].
 
 	crop := GapAFarm singleton cropNamed: cropName.
-	crop ifNil: [
+	crop isEmpty ifTrue: [
 		^ self errorResponseAdd:
 			  'No reconozco el nombre de cultivo que indicaste o no se encuentra dentro de los que conozco.' ].
 
@@ -56,7 +53,7 @@ VoiceParseState >> parseCrop: cropName [
 		^ self errorResponseAdd:
 			  'El nombre del cultivo que indicaste no coincide con el que actualmente se encuentra en tu lote. ' ].
 
-	self useCurrentCrop
+	"self useCurrentCrop"
 	"self eventSetDefaultCrop"
 ]
 
@@ -89,26 +86,11 @@ VoiceParseState >> parseParameters: extractedParameters for: aChat [
 { #category : #parsing }
 VoiceParseState >> parsePlot: plotId for: aChat [
 
-	| resp |
 	harvestEvent plot ifNil: [
 		plotId ifNil: [
 			^ self errorResponseAdd: 'Tenés que indicar un lote.' ].
-		
-		resp := self plot: plotId for: (GAFBot singleton farmForChat: aChat).
-		
-		resp ifNotNil: [ self errorResponseAdd: resp ].
-		]
 
-		"plot := self
-			        findPlot: plotId
-			        forFarm: (GAFBot singleton farmForChat: aChat).
-		plot ifNil: [
-			^ self errorResponseAdd:
-				  'El lote indicado no es correcto. Indicá nuevamente el nombre.' ].
-		plot currentCrop ifNil: [
-			^ self errorResponseAdd:
-				  'El lote indicado no tiene ningún cultivo en este momento.' ].
-		harvestEvent plot: plot ]"
+		self plot: plotId for: (GAFBot singleton farmForChat: aChat) ]
 ]
 
 { #category : #parsing }
@@ -118,6 +100,12 @@ VoiceParseState >> parseQuantity: quantityInput [
 			^ self errorResponseAdd: 'Tenés que indicar la cantidad cosechada.'
 		].
 	self quantity: quantityInput.
+]
+
+{ #category : #initialization }
+VoiceParseState >> setErrorResponse: aText [
+
+	self errorResponseAdd: aText
 ]
 
 { #category : #'as yet unclassified' }
@@ -131,8 +119,9 @@ VoiceParseState >> startFrom: aMessage for: aChat [
 		                       for:
 		                       (bot farmForMessage: aMessage).
 	self parseParameters: extractedParameters for: aChat.
-	response = '' ifFalse: [
-		^ bot sendChatMessage: response to: aChat ].
+	errorResponse = '' ifFalse: [
+		aChat state: nil.
+		^ bot sendChatMessage: errorResponse to: aChat ].
 	next := VoiceWaitingConfirmationState new.
 	next event: harvestEvent.
 	aChat state: next.
