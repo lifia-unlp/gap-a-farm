@@ -33,7 +33,7 @@ WaitingFieldToUpdateState >> updatePlot: aMessage for: aChat [
    next := WaitingForPlotState new.
 	next event: harvestEvent.
 	aChat state: next.
-	next startFrom: aMessage for: aChat
+	next updateFrom: aMessage for: aChat
 	
 	
 ]

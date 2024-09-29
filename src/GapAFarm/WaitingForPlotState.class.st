@@ -1,16 +1,18 @@
 Class {
 	#name : #WaitingForPlotState,
 	#superclass : #HarvestState,
+	#instVars : [
+		'nextState'
+	],
 	#category : #'GapAFarm-telegram'
 }
 
 { #category : #'as yet unclassified' }
 WaitingForPlotState >> handleTextMessage: aMessage for: aChat [
 
-	| bot next response |
+	| bot response |
 	
 	bot := GAFBot singleton.
-	next := self nextState.
 	response := self plot: aMessage text for: (bot farmForMessage: aMessage).
 	response ifNotNil: [ 	
 			self failedInputAttempt > 0
@@ -19,20 +21,20 @@ WaitingForPlotState >> handleTextMessage: aMessage for: aChat [
 					  to: aChat ]
 			ifFalse: [ ^ self tooManyFailedAttemptsFor: aChat ] ].
 	self useCurrentCrop.
-	aChat state: next.
-	next event: harvestEvent.
-	next startFrom: aMessage for: aChat
-]
-
-{ #category : #accessing }
-WaitingForPlotState >> nextState [
-
-	harvestEvent plot ifNil: [ ^ WaitingForDate new ].
-	^ WaitingConfirmationState new
+	aChat state: nextState.
+	nextState event: harvestEvent.
+	nextState startFrom: aMessage for: aChat
 ]
 
 { #category : #'as yet unclassified' }
 WaitingForPlotState >> startFrom: aMessage for: aChat [
+
+	nextState := WaitingForDate new.
+	self startMessageFor: aMessage
+]
+
+{ #category : #'as yet unclassified' }
+WaitingForPlotState >> startMessageFor: aMessage [
 
 	| bot |
 	bot := GAFBot singleton.
@@ -40,4 +42,11 @@ WaitingForPlotState >> startFrom: aMessage for: aChat [
 		sendChatMessage:
 		(self plotsToHarvestListforFarm: (bot farmForMessage: aMessage))
 		toUser: aMessage from
+]
+
+{ #category : #'as yet unclassified' }
+WaitingForPlotState >> updateFrom: aMessage for: aChat [
+
+	nextState := WaitingConfirmationState new.
+	self startMessageFor: aMessage 
 ]
