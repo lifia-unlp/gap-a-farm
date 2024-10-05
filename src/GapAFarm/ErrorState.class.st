@@ -24,12 +24,12 @@ ErrorState >> setMessage: aText [
 { #category : #'as yet unclassified' }
 ErrorState >> startFrom: aMessage for: aChat [
 
-	self failedInputAttempt > 0
-		ifTrue: [ GAFBot singleton sendChatMessage: message to: aChat ]
-		ifFalse: [ self tooManyFailedAttemptsFor: aChat ].
-	nextState := previousState.
-	nextState event: harvestEvent.
-	nextState startFrom: aMessage for: aChat
-	
-		
+	previousState failedInputAttempt > 0
+		ifTrue: [
+			nextState := previousState.
+			GAFBot singleton sendChatMessage: message to: aChat.
+			self nextStateStartFrom: aMessage for: aChat ]
+		ifFalse: [
+			aChat state: nil.
+			self tooManyFailedAttemptsFor: aChat ]
 ]

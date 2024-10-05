@@ -8,11 +8,7 @@ Class {
 WaitingForDate >> handleTextMessage: aMessage for: aChat [
 
 	self setDate: aMessage text.
-	errorResponse ifNotNil: [
-		^ GAFBot singleton sendChatMessage: errorResponse to: aChat ].
-	nextState event: harvestEvent.
-	aChat state: nextState.
-	nextState startFrom: aMessage for: aChat
+	self nextStateStartFrom: aMessage for: aChat
 ]
 
 { #category : #accessing }
@@ -26,6 +22,12 @@ WaitingForDate >> nextState [
 WaitingForDate >> startFrom: aMessage for: aChat [
 
 	nextState := WaitingForHour new.
+	self startMessagefor: aChat
+]
+
+{ #category : #'as yet unclassified' }
+WaitingForDate >> startMessagefor: aChat [
+
 	GAFBot singleton
 		sendChatMessage:
 		'¿Qué día realizó la cosecha? Ingrese la fecha en formato día/mes/año.'

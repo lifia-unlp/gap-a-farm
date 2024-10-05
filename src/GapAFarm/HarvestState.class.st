@@ -59,6 +59,13 @@ HarvestState >> findPlot: plotId forFarm: aFarm [
 ]
 
 { #category : #'as yet unclassified' }
+HarvestState >> handleVoiceMessage: aMessage for: aChat [
+
+	aMessage answer:
+		'Perdón, no puedo responder un mensaje de audio en este momento.'
+]
+
+{ #category : #'as yet unclassified' }
 HarvestState >> harvestAsDictionary [
 
 	| arr |
@@ -77,6 +84,10 @@ HarvestState >> harvestAsDictionary [
 { #category : #accessing }
 HarvestState >> hour: hour [
 
+	(self hourFormatValidation: hour) ifFalse: [
+		^ self setErrorResponse:
+			  'El horario que ingresaste es incorrecto. Volvé a intentarlo.' ].
+
 	harvestEvent time: (Time fromString: hour)
 ]
 
@@ -93,6 +104,14 @@ HarvestState >> initialize [
 
 	inputAttempts := 3. "Default amount of input attempts"
 	errorResponse := nil
+]
+
+{ #category : #'as yet unclassified' }
+HarvestState >> nextStateStartFrom: aMessage for: aChat [
+
+	aChat state: nextState.
+	nextState event: harvestEvent.
+	nextState startFrom: aMessage for: aChat
 ]
 
 { #category : #'as yet unclassified' }
@@ -125,7 +144,10 @@ HarvestState >> plotsToHarvestListforFarm: aFarm [
 { #category : #accessing }
 HarvestState >> quantity: quantity [
 
-	harvestEvent quantity: quantity asInteger.
+	(self quantityFormatValidation: quantity) ifFalse: [
+		^ self setErrorResponse: 'La cantidad debe ser un número.' ].
+
+	harvestEvent quantity: quantity asInteger
 ]
 
 { #category : #'as yet unclassified' }

@@ -7,19 +7,11 @@ Class {
 { #category : #'as yet unclassified' }
 WaitingForPlotState >> handleTextMessage: aMessage for: aChat [
 
-	| bot |
-	
-	bot := GAFBot singleton.
-	self plot: aMessage text for: (bot farmForMessage: aMessage).
-	"errorResponse ifNotNil: [ 	
-			self failedInputAttempt > 0
-			ifTrue: [
-				^ bot sendChatMessage: errorResponse 
-					  to: aChat ]
-			ifFalse: [ ^ self tooManyFailedAttemptsFor: aChat ] ]."
-	aChat state: nextState.
-	nextState event: harvestEvent.
-	nextState startFrom: aMessage for: aChat
+	self
+		plot: aMessage text
+		for: (GAFBot singleton farmForMessage: aMessage).
+	self nextStateStartFrom: aMessage for: aChat.
+		
 ]
 
 { #category : #'as yet unclassified' }
@@ -33,11 +25,11 @@ WaitingForPlotState >> plot: aPlot for: farm [
 WaitingForPlotState >> startFrom: aMessage for: aChat [
 
 	nextState := WaitingForDate new.
-	self startMessageFor: aMessage
+	self startMessage: aMessage
 ]
 
 { #category : #'as yet unclassified' }
-WaitingForPlotState >> startMessageFor: aMessage [
+WaitingForPlotState >> startMessage: aMessage [
 
 	| bot |
 	bot := GAFBot singleton.
@@ -51,5 +43,5 @@ WaitingForPlotState >> startMessageFor: aMessage [
 WaitingForPlotState >> updateFrom: aMessage for: aChat [
 
 	nextState := WaitingConfirmationState new.
-	self startMessageFor: aMessage 
+	self startMessage: aMessage 
 ]

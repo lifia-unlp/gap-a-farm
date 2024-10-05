@@ -7,18 +7,8 @@ Class {
 { #category : #'as yet unclassified' }
 WaitingForHour >> handleTextMessage: aMessage for: aChat [
 
-	| hourInput next |
-	hourInput := aMessage text.
-	(self hourFormatValidation: hourInput) ifFalse: [
-		^ GAFBot singleton
-			  sendChatMessage:
-			  'El horario que ingresaste es incorrecto. Volvé a intentarlo.'
-			  to: aChat ].
-	next := self nextState.
-	self hour: hourInput.
-	next event: harvestEvent.
-	aChat state: next.
-	next startFrom: aMessage for: aChat
+	self hour: aMessage text.
+	self nextStateStartFrom: aMessage for: aChat  
 ]
 
 { #category : #accessing }
@@ -31,7 +21,14 @@ WaitingForHour >> nextState [
 { #category : #'as yet unclassified' }
 WaitingForHour >> startFrom: aMessage for: aChat [
 
+	nextState := WaitingForQuantity new.
+	self startMessagefor: aChat
+]
+
+{ #category : #'as yet unclassified' }
+WaitingForHour >> startMessagefor: aChat [
+
 	GAFBot singleton
-		sendChatMessage: 'Ingresá el horario en el que cosechaste.'
+		sendChatMessage: 'Ingresá el horario en el que cosechaste en formato hh:mm.'
 		to: aChat
 ]

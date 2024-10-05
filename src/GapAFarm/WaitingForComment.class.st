@@ -7,16 +7,20 @@ Class {
 { #category : #'as yet unclassified' }
 WaitingForComment >> handleTextMessage: aMessage for: aChat [
 
-	| next |
 	self comment: aMessage text.
-	next := WaitingConfirmationState new.
-	next event: harvestEvent.
-	aChat state: next.
-	next startFrom: aMessage for: aChat
+	self nextStateStartFrom: aMessage for: aChat
 ]
 
 { #category : #'as yet unclassified' }
 WaitingForComment >> startFrom: aMessage for: aChat [
+
+	nextState := WaitingConfirmationState new.
+	self startMessagefor: aChat
+
+]
+
+{ #category : #'as yet unclassified' }
+WaitingForComment >> startMessagefor: aChat [
 
 	GAFBot singleton
 		sendChatMessage: 'Ingresá una nota para esta cosecha.'

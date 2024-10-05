@@ -27,13 +27,12 @@ WaitingConfirmationState >> handleTextMessage: aMessage for: aChat [
 { #category : #'as yet unclassified' }
 WaitingConfirmationState >> modifyHarvest: aCallbackQueryUpdate [
 
-	| next bot chat |
-	bot := GAFBot singleton.
-	chat := bot chatForTelegramUser: (aCallbackQueryUpdate from).
-	next := WaitingFieldToUpdateState new.
-	next event: harvestEvent.
-	chat state: next.	
-	next startFrom: aCallbackQueryUpdate for: chat
+	| chat |
+	chat := GAFBot singleton chatForTelegramUser: (aCallbackQueryUpdate from).
+	nextState := WaitingFieldToUpdateState new.
+	nextState event: harvestEvent.
+	chat state: nextState .	
+	nextState startFrom: aCallbackQueryUpdate for: chat
 ]
 
 { #category : #'as yet unclassified' }

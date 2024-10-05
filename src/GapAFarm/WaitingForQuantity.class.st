@@ -7,17 +7,8 @@ Class {
 { #category : #'as yet unclassified' }
 WaitingForQuantity >> handleTextMessage: aMessage for: aChat [
 
-	| quantityInput next |
-	quantityInput := aMessage text.
-	(self quantityFormatValidation: quantityInput) ifFalse: [
-		^ GAFBot singleton
-			  sendChatMessage: 'La cantidad debe ser un número.'
-			  toUser: aMessage from ].
-	next := self nextState.
-	self quantity: quantityInput.
-	next event: harvestEvent.
-	aChat state: next.
-	next startFrom: aMessage for: aChat
+	self quantity: aMessage text.
+	self nextStateStartFrom: aMessage for: aChat  
 ]
 
 { #category : #accessing }
@@ -29,6 +20,13 @@ WaitingForQuantity >> nextState [
 
 { #category : #'as yet unclassified' }
 WaitingForQuantity >> startFrom: aMessage for: aChat [
+
+	nextState := WaitingForComment new.
+	self startMessagefor: aChat
+]
+
+{ #category : #'as yet unclassified' }
+WaitingForQuantity >> startMessagefor: aChat [
 
 	GAFBot singleton
 		sendChatMessage: 'Ingresá la cantidad cosechada (KG).'
