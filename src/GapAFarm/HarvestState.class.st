@@ -74,10 +74,8 @@ HarvestState >> harvestAsDictionary [
 		       ('crop' -> harvestEvent crop).
 		       ('date' -> harvestEvent date ddmmyyyy).
 		       ('hour' -> harvestEvent time hour24).
-		       ('quantity' -> harvestEvent quantity) }.
-
-	harvestEvent comment = '' ifFalse: [
-		arr with: 'comment' -> harvestEvent comment ].
+		       ('quantity' -> harvestEvent quantity).
+			    "('comment' -> harvestEvent comment)" }.
 	^ arr asDictionary
 ]
 

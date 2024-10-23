@@ -21,7 +21,7 @@ WaitingForQuantity >> nextState [
 { #category : #'as yet unclassified' }
 WaitingForQuantity >> startFrom: aMessage for: aChat [
 
-	nextState := WaitingForComment new.
+	nextState := WaitingConfirmationState new. "WaitingForComment new."
 	self startMessagefor: aChat
 ]
 

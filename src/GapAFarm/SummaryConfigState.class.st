@@ -53,6 +53,13 @@ SummaryConfigState >> handleTextMessage: aMessage [
 ]
 
 { #category : #'as yet unclassified' }
+SummaryConfigState >> handleTextMessage: aMessage for: aChat [
+
+	hourRequested ifTrue: [ ^self hourInputValidation: aMessage].
+	dayRequested ifTrue: [ ^self dayInputValidation: aMessage ].
+]
+
+{ #category : #'as yet unclassified' }
 SummaryConfigState >> hourInputValidation: aMessage [
 
 	| regex hourInput inlineKeyboard |
