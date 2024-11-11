@@ -9,6 +9,25 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+GAFChat >> detectVoiceCommandFor: aMessage [
+
+	| extractedParameters bot command|
+	bot := GAFBot singleton.
+	extractedParameters := GptDataExtractor new
+		                       extractCommandFrom:
+			                       (bot extractTextFrom: aMessage).
+	command := (extractedParameters at: 'command').
+	"aMessage answer: (extractedParameters at: 'command')."
+	(self class canPerform: command asValidSelector , ':')
+		ifTrue: [
+			self
+				perform: command asValidSelector , ':'
+				with: aMessage ]
+		ifFalse: [
+		self error: 'Mensaje ' , command , ' no implementado.' ]
+]
+
+{ #category : #'as yet unclassified' }
 GAFChat >> handleCallbackQueryUpdate: aCallbackQueryUpdate [
 
 	| callback |
@@ -37,9 +56,8 @@ GAFChat >> handleTextMessage: aMessage forFarm: farm [
 GAFChat >> handleVoiceMessage: aMessage [
 
 	self state ifNotNil: [
-		^ self state handleVoiceMessage: aMessage for: self
-		"self state startFrom: aMessage for: self" ].
-	self harvestingforVoiceMessage: aMessage
+		^ self state handleVoiceMessage: aMessage for: self ].
+	self detectVoiceCommandFor: aMessage
 ]
 
 { #category : #'as yet unclassified' }
@@ -57,6 +75,12 @@ GAFChat >> offerActionsForFarm: farm inResponseTo: aMessage [
 	aMessage answer:
 		(GAFBotMessageTemplateFactory new availableCommands
 			 asMustacheTemplate value: {  })
+]
+
+{ #category : #'as yet unclassified' }
+GAFChat >> offerVoiceActions: aMessage [
+
+	aMessage answer: '	Probá pedirme algo como: "Quiero realizar una cosecha."'
 ]
 
 { #category : #initialization }
@@ -97,4 +121,10 @@ GAFChat >> summaryFrecuency [
 GAFChat >> summaryFrecuency: anObject [
 
 	summaryFrecuency := anObject
+]
+
+{ #category : #tests }
+GAFChat >> testGPTMemory: aMessage [
+
+	aMessage answer: GptDataExtractor new memoryTest 
 ]

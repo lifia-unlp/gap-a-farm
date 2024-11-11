@@ -57,6 +57,21 @@ GptDataExtractor >> exampleUnitFor: aFarm [
 	^ aFarm harvestingUnits first
 ]
 
+{ #category : #'as yet unclassified' }
+GptDataExtractor >> extractCommandFrom: aString [
+
+	| response responseAsDictionary |
+	self acceptMessageFromUser:
+		GAFBotMessageTemplateFactory new promptExtractCommand.
+	self acceptMessageFromUser: aString.
+	self askAssistantToContribute.
+	response := self lastMessage at: 'content'.
+	responseAsDictionary := [ NeoJSONReader fromString: response ]
+		                        on: Error
+		                        do: [ Dictionary new ].
+	^ responseAsDictionary
+]
+
 { #category : #api }
 GptDataExtractor >> extractHarvestingParametersFrom: aString for: aFarm [
 
@@ -89,6 +104,14 @@ GptDataExtractor >> extractUpdateHarvestingParametersFrom: aString for: aFarm [
 
 	self acceptMessageFromUser: (self updateHarvestingPromptFor: aFarm).
 	^ self extractParametersFrom: aString
+]
+
+{ #category : #'as yet unclassified' }
+GptDataExtractor >> memoryTest [
+	
+	self acceptMessageFromUser: GAFMustacheLibrary new memoryTestPrompt.
+	self askAssistantToContribute.
+	^ self lastMessage at: 'content'.
 ]
 
 { #category : #'prompt-building' }

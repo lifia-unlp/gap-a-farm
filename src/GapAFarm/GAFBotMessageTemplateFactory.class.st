@@ -154,6 +154,27 @@ GAFBotMessageTemplateFactory >> plotsInWithdrawalPeriodAsTextMessage: plots [
 ]
 
 { #category : #'as yet unclassified' }
+GAFBotMessageTemplateFactory >> promptExtractCommand [
+
+	^ 'Necesito que reconozcas si se menciona una de las siguientes solicitudes dentro del mensaje que te voy a indicar luego:
+	1. Se indica que se realizó una cosecha
+	2. Se solicita ayuda
+		
+	La respuesta que necesito es sólo un json con el formato siguiente:
+	{ "command": "{{ request }}"  } , donde {{ request }} debe ser reemplazado por la palabra que representa al request.
+	
+	Ejemplos de solicitud dónde se indica que se realizó una cosecha:
+	"Hoy realicé una cosecha...", "Cosechar", "Quiero cosechar", "Necesito registrar una cosecha".
+	En estos casos el valor {{ request }} debe ser reemplazado por harvest.
+		
+	Ejemplos de solicitud de ayuda:
+	"Necesito ayuda", "Ayuda", "¿Qué podés hacer?", "¿Cómo podes ayudarme?".
+	En estos casos el valor {{ request }} debe ser reemplazado por offerVoiceActions.
+	
+	Si no podés interpretar correctamente lo que se pide, por defecto {{ request }} debe ser reemplazado por offerVoiceActions.'
+]
+
+{ #category : #'as yet unclassified' }
 GAFBotMessageTemplateFactory >> summaryConfigAskHourTextMessage [
 
 	^ 'Bien. Ahora ingresa el horario en el que querés recibir tu resumen con formato 24hs.

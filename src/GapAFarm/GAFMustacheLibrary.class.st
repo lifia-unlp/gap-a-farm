@@ -93,3 +93,9 @@ Respuestas correctas esperadas (sólo una) en formato JSON esperado:
 
 '
 ]
+
+{ #category : #'as yet unclassified' }
+GAFMustacheLibrary >> memoryTestPrompt [
+
+	^ '¿Podrías decirme que cosas te pedí anteriormente que me ayudes a resolver?'
+]
