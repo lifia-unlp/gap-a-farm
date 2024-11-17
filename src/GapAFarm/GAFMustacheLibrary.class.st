@@ -20,9 +20,10 @@ Los datos a extraer son:
 
 Si no es posible reconocer alguno de los datos, no incluyas la propiedad en el JSON de salida. 
 
-Aquí tienes un ejemplo de el mensaje del agricultor:
+Aquí tienes ejemplos de el mensaje del agricultor:
 
-"Acabo de cosechar 150 de {{example-crop}} del invernadero {{example-plot}}."
+"Acabo de cosechar 150 kilos de {{example-crop}} del invernadero {{example-plot}}."
+"Coseché 15 kilos en el lote {{example-plot}} a las 10 de la mañana." En este ejemplo no se indica el cultivo, por lo que debe dejarse este campo vacío.
 
 Para la hora, en caso de que se haya indicado se debe usar el formato hh:mm.
 

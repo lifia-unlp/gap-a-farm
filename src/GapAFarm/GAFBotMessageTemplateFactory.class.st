@@ -164,8 +164,11 @@ GAFBotMessageTemplateFactory >> promptExtractCommand [
 	{ "command": "{{ request }}"  } , donde {{ request }} debe ser reemplazado por la palabra que representa al request.
 	
 	Ejemplos de solicitud dónde se indica que se realizó una cosecha:
-	"Hoy realicé una cosecha...", "Cosechar", "Quiero cosechar", "Necesito registrar una cosecha".
-	En estos casos el valor {{ request }} debe ser reemplazado por harvest.
+	"Hoy realicé una cosecha", "Cosechar", "Quiero cosechar", "Necesito registrar una cosecha".
+	En estos casos el valor {{ request }} debe ser reemplazado por harvestingForVoiceMessage.
+	
+	En cambio, si se indica que se realizó una cosecha y además se mencionan otros datos cómo:
+	"Acabo de cosechar 150 kilogramos de {{ nombre de un cultivo }} del lote o invernadero {{ nombre de un lote}}." o similares a los ejemplos para la cosecha sin argumentos adicionales, en estos casos el valor {{ request }} debe ser reemplazado por harvestingWithParamsForVoiceMessage.
 		
 	Ejemplos de solicitud de ayuda:
 	"Necesito ayuda", "Ayuda", "¿Qué podés hacer?", "¿Cómo podes ayudarme?".

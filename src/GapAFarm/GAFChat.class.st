@@ -61,7 +61,16 @@ GAFChat >> handleVoiceMessage: aMessage [
 ]
 
 { #category : #'as yet unclassified' }
-GAFChat >> harvestingforVoiceMessage: aMessage [
+GAFChat >> harvestingForVoiceMessage: aMessage [
+
+	(GAFBot singleton farmForMessage: aMessage) hasPlantedPlots ifFalse: [
+		^ aMessage answer: 'No tenés lotes con cultivos.' ].
+	state := WaitingVoiceHarvestParams new.
+	state startFrom: aMessage for: self
+]
+
+{ #category : #'as yet unclassified' }
+GAFChat >> harvestingWithParamsForVoiceMessage: aMessage [
 
 	(GAFBot singleton farmForMessage: aMessage) hasPlantedPlots ifFalse: [
 		^ aMessage answer: 'No tenés lotes con cultivos.' ].

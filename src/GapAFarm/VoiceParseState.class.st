@@ -41,7 +41,9 @@ VoiceParseState >> parseCrop: cropName [
 
 	| crop |
 	cropName ifNil: [
-		^ harvestEvent crop ifNil: [ ^ self useCurrentCrop. "eventSetDefaultCrop" ] ].
+		harvestEvent plot ifNotNil: [
+			harvestEvent crop ifNil: [
+				^ self useCurrentCrop "eventSetDefaultCrop" ] ] ].
 
 	crop := GapAFarm singleton cropNamed: cropName.
 	crop isEmpty ifTrue: [
@@ -52,6 +54,8 @@ VoiceParseState >> parseCrop: cropName [
 	(self cropMatchPlotCurrent: cropName) ifFalse: [
 		^ self errorResponseAdd:
 			  'El nombre del cultivo que indicaste no coincide con el que actualmente se encuentra en tu lote. ' ].
+
+	harvestEvent crop: crop first
 
 	"self useCurrentCrop"
 	"self eventSetDefaultCrop"
@@ -75,7 +79,7 @@ VoiceParseState >> parseParameters: extractedParameters for: aChat [
 	self
 		parsePlot: (extractedParameters at: 'plot' ifAbsent: [ nil ])
 		for: aChat.
-	self parseCrop: (extractedParameters at: 'crop' ifAbsent: [ nil ]).
+	self parseCrop: (extractedParameters at: 'crop').
 	"Date of the day receiving the message"
 	harvestEvent date: Date today.
 	self parseHour: (extractedParameters at: 'hour' ifAbsent: [ nil ]).
