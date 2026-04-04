@@ -31,7 +31,7 @@ GAFBotMessageTemplateFactory >> availableCommands [
 	nextPutAll: '/alertas -> Para ver las alertas disponibles para tu granja.'; lf;
 	nextPutAll: '/carencia -> Para ver el listado de lotes actualmente en carencia.'; lf;
 	nextPutAll: '/novedades -> Para ver las novedades que aplican a tu granja.'; lf;
-	nextPutAll: '/miPredio -> Detalles del estado del predio.'.
+	nextPutAll: '/miPredio -> Para realizar operaciones y ver detalles del estado del predio.'.
 	^stream contents.
 ]
 
@@ -144,10 +144,12 @@ GAFBotMessageTemplateFactory >> plotsInWithdrawalPeriodAsTextMessage: plots [
 					stream nextPutAll: '⏳';  
 					nextPutAll: 'Estos son tus lotes en carencia y los días que faltan hasta completarse el período.'; lf.
 				plots do: [:each |	
-					stream nextPutAll: ' - '; nextPutAll: each id; nextPutAll: ': ';
+					[stream nextPutAll: ' - '; nextPutAll: each id; nextPutAll: ': ';
 					nextPutAll: (each withdrawalPeriodDaysLeft asString);
 					nextPutAll: ((each withdrawalPeriodDaysLeft > 1) 
-						ifTrue: [' días.'] ifFalse:	[' día.']); lf.
+						ifTrue: [' días.'] ifFalse:	[' día.']); lf.]
+					on: MissingWithdrawalInformationException 
+					do: [ stream nextPutAll: 'En carencia por tiempo desconocido.'; lf. ]
 					].
 			].
 	^ string contents.

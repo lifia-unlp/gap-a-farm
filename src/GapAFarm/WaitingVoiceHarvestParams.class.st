@@ -20,7 +20,7 @@ WaitingVoiceHarvestParams >> nextStateStartFrom: aMessage for: aChat [
 { #category : #'as yet unclassified' }
 WaitingVoiceHarvestParams >> startFrom: aMessage for: aChat [
 
-	nextState := VoiceParseState new.
+	nextState := VoiceHarvestState new.
 	aMessage answer:
 		'Para poder registrar tu cosecha necesito que me indiques:
 	- Lote en el cual querés realizar la cosecha

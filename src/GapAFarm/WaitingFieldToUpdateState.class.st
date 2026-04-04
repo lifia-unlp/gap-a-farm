@@ -7,33 +7,43 @@ Class {
 { #category : #'as yet unclassified' }
 WaitingFieldToUpdateState >> handleTextMessage: aMessage for: aChat [
 
-	aMessage text = 'lote' ifTrue: [ self updatePlot: aMessage for: aChat ]
+	| option |
+	option := aMessage text.
+	(self optionValidation: option) ifFalse: [
+		self setErrorResponse:
+			  'El número que indicaste no es una opción válida. Volvé a intentarlo.'.
+			^ self nextStateStartFrom: aMessage  for: aChat  ].
+	nextState := self updateOptions at: option.
+	nextState event: harvestEvent.
+	aChat state: nextState.
+	nextState updateFrom: aMessage for: aChat
+]
+
+{ #category : #'as yet unclassified' }
+WaitingFieldToUpdateState >> optionValidation: option [
+
+	| regex |
+	regex := '[1-4]' asRegex.
+	^ regex matches: option
 ]
 
 { #category : #'as yet unclassified' }
 WaitingFieldToUpdateState >> startFrom: aCallbackQuery for: aChat [
 
-	"| inlineKeyboard |
-	inlineKeyboard := TelegramInlineKeyboard new
-		                  buttonText: 'Lote' callbackData: 'updatePlot';
-		                  buttonText: 'Comentario'
-		                  callbackData: 'nada'."
-
 	GAFBot singleton
 		sendChatMessage:
-		'Decime el nombre del dato que querés modificar: lote, fecha, hora cantidad o comentario.'
-		"withInlineKeyboard: inlineKeyboard"
+		'Indicame el número del dato que querés modificar: 1: lote, 2: fecha, 3: hora o 4: cantidad.'
 		to: aChat
 ]
 
 { #category : #'as yet unclassified' }
-WaitingFieldToUpdateState >> updatePlot: aMessage for: aChat [
+WaitingFieldToUpdateState >> updateOptions [
 
-	| next |
-   next := WaitingForPlotState new.
-	next event: harvestEvent.
-	aChat state: next.
-	next updateFrom: aMessage for: aChat
-	
-	
+	| options |
+	options := {
+		           ('1' -> WaitingForPlotState new).
+		           ('2' -> WaitingForDate new).
+		           ('3' -> WaitingForHour new).
+		           ('4' -> WaitingForQuantity new) }.
+	^ options asDictionary
 ]

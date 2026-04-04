@@ -336,6 +336,5 @@ GAFBot >> updateWithEvent: anAdversityReport [
 { #category : #'as yet unclassified' }
 GAFBot >> withdrawalPlotsForFarm: aFarm [
 
-	^ aFarm plots select: [ :each | 
-				each withdrawalPeriodDaysLeft > 0 ].
+	^ aFarm plots select: [ :each | each isInWithdrawal ].
 ]

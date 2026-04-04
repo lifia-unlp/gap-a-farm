@@ -11,24 +11,25 @@ WaitingForHour >> handleTextMessage: aMessage for: aChat [
 	self nextStateStartFrom: aMessage for: aChat  
 ]
 
-{ #category : #accessing }
-WaitingForHour >> nextState [
-
-	harvestEvent time ifNil: [ ^ WaitingForQuantity new ].
-	^ WaitingConfirmationState new
-]
-
 { #category : #'as yet unclassified' }
 WaitingForHour >> startFrom: aMessage for: aChat [
 
 	nextState := WaitingForQuantity new.
-	self startMessagefor: aChat
+	self startMessageFor: aChat
 ]
 
 { #category : #'as yet unclassified' }
-WaitingForHour >> startMessagefor: aChat [
+WaitingForHour >> startMessageFor: aChat [
 
 	GAFBot singleton
-		sendChatMessage: 'Ingresá el horario en el que cosechaste en formato hh:mm.'
+		sendChatMessage:
+		'Ingresá el horario en el que cosechaste con formato 24hs. Por ejemplo: 06:00 para la mañana o 18:00 para la tarde.'
 		to: aChat
+]
+
+{ #category : #'as yet unclassified' }
+WaitingForHour >> updateFrom: aMessage for: aChat [
+
+	nextState := WaitingConfirmationState new.
+	self startMessageFor: aChat 
 ]

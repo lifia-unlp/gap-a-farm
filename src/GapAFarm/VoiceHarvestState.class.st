@@ -1,43 +1,36 @@
 Class {
-	#name : #VoiceParseState,
+	#name : #VoiceHarvestState,
 	#superclass : #HarvestState,
 	#category : #'GapAFarm-telegram'
 }
 
 { #category : #adding }
-VoiceParseState >> errorResponseAdd: text [
+VoiceHarvestState >> errorResponseAdd: text [
 
 	errorResponse := errorResponse , text
 ]
 
 { #category : #'as yet unclassified' }
-VoiceParseState >> handleTextMessage: aMessage for: aChat [
+VoiceHarvestState >> handleTextMessage: aMessage for: aChat [
 
 	self notProcesingMessages: aMessage
 ]
 
 { #category : #'as yet unclassified' }
-VoiceParseState >> handleVoiceMessage: aMessage for: aChat [
+VoiceHarvestState >> handleVoiceMessage: aMessage for: aChat [
 
 	self notProcesingMessages: aMessage
 ]
 
 { #category : #initialization }
-VoiceParseState >> initialize [
+VoiceHarvestState >> initialize [
 
 	harvestEvent := Harvesting new.
 	errorResponse := ''
 ]
 
-{ #category : #'as yet unclassified' }
-VoiceParseState >> notProcesingMessages: aMessage [
-
-	aMessage answer:
-		'No puedo procesar tu mensaje ahora mismo, estoy completando otra tarea. Volvé a intentarlo luego.'
-]
-
 { #category : #parsing }
-VoiceParseState >> parseCrop: cropName [
+VoiceHarvestState >> parseCrop: cropName [
 
 	| crop |
 	cropName ifNil: [
@@ -62,7 +55,7 @@ VoiceParseState >> parseCrop: cropName [
 ]
 
 { #category : #parsing }
-VoiceParseState >> parseHour: hourInput [
+VoiceHarvestState >> parseHour: hourInput [
 
 	hourInput ifNil: [
 		^ self hour:
@@ -74,7 +67,7 @@ VoiceParseState >> parseHour: hourInput [
 ]
 
 { #category : #parsing }
-VoiceParseState >> parseParameters: extractedParameters for: aChat [
+VoiceHarvestState >> parseParameters: extractedParameters for: aChat [
 
 	self
 		parsePlot: (extractedParameters at: 'plot' ifAbsent: [ nil ])
@@ -88,7 +81,7 @@ VoiceParseState >> parseParameters: extractedParameters for: aChat [
 ]
 
 { #category : #parsing }
-VoiceParseState >> parsePlot: plotId for: aChat [
+VoiceHarvestState >> parsePlot: plotId for: aChat [
 
 	harvestEvent plot ifNil: [
 		plotId ifNil: [
@@ -98,7 +91,7 @@ VoiceParseState >> parsePlot: plotId for: aChat [
 ]
 
 { #category : #parsing }
-VoiceParseState >> parseQuantity: quantityInput [
+VoiceHarvestState >> parseQuantity: quantityInput [
 
 	quantityInput ifNil:[
 			^ self errorResponseAdd: 'Tenés que indicar la cantidad cosechada.'
@@ -107,13 +100,13 @@ VoiceParseState >> parseQuantity: quantityInput [
 ]
 
 { #category : #initialization }
-VoiceParseState >> setErrorResponse: aText [
+VoiceHarvestState >> setErrorResponse: aText [
 
 	self errorResponseAdd: aText
 ]
 
 { #category : #'as yet unclassified' }
-VoiceParseState >> startFrom: aMessage for: aChat [
+VoiceHarvestState >> startFrom: aMessage for: aChat [
 
 	| extractedParameters next bot |
 	bot:= GAFBot singleton.

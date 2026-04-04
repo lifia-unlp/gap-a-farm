@@ -74,7 +74,7 @@ GAFChat >> harvestingWithParamsForVoiceMessage: aMessage [
 
 	(GAFBot singleton farmForMessage: aMessage) hasPlantedPlots ifFalse: [
 		^ aMessage answer: 'No tenés lotes con cultivos.' ].
-	state := VoiceParseState new.
+	state := VoiceHarvestState new.
 	state startFrom: aMessage for: self
 ]
 

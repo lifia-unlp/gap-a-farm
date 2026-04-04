@@ -29,7 +29,7 @@ HarvestState >> cropMatchPlotCurrent: cropName [
 { #category : #'as yet unclassified' }
 HarvestState >> dateFormatValidation: dateInput [
 
-	^ '([0-2][1-9]|3[0-1])/(0[1-9]|1[0-2])/\d*' asRegex matches:
+	^ '([1-9]|0[1-9]|[1-2][0-9]|3[0-1])/([1-9]|0[1-9]|1[0-2])/\d*' asRegex matches:
 		  dateInput
 ]
 
@@ -56,6 +56,13 @@ HarvestState >> failedInputAttempt [
 HarvestState >> findPlot: plotId forFarm: aFarm [
 
 	^ aFarm plots detect: [ :each | plotId = each id ] ifNone: [ nil ]
+]
+
+{ #category : #'as yet unclassified' }
+HarvestState >> handleTextMessage: aMessage for: aChat [
+
+	aMessage answer:
+		'Perdón, no puedo responder un mensaje de texto en este momento.'
 ]
 
 { #category : #'as yet unclassified' }
@@ -107,9 +114,16 @@ HarvestState >> initialize [
 { #category : #'as yet unclassified' }
 HarvestState >> nextStateStartFrom: aMessage for: aChat [
 
-	aChat state: nextState.
 	nextState event: harvestEvent.
+	aChat state: nextState.
 	nextState startFrom: aMessage for: aChat
+]
+
+{ #category : #'as yet unclassified' }
+HarvestState >> notProcesingMessages: aMessage [
+
+	aMessage answer:
+		'No puedo procesar tu mensaje ahora mismo, estoy completando otra tarea. Volvé a intentarlo luego.'
 ]
 
 { #category : #'as yet unclassified' }

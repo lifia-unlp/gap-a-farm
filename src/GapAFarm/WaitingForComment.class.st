@@ -15,12 +15,12 @@ WaitingForComment >> handleTextMessage: aMessage for: aChat [
 WaitingForComment >> startFrom: aMessage for: aChat [
 
 	nextState := WaitingConfirmationState new.
-	self startMessagefor: aChat
+	self startMessageFor: aChat
 
 ]
 
 { #category : #'as yet unclassified' }
-WaitingForComment >> startMessagefor: aChat [
+WaitingForComment >> startMessageFor: aChat [
 
 	GAFBot singleton
 		sendChatMessage: 'Ingresá una nota para esta cosecha.'
